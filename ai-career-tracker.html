@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Career Tracker — Pune to $100K</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #1a1a24;
+  --border: #2a2a3a;
+  --accent: #7c5cfc;
+  --accent2: #00e5a0;
+  --accent3: #ff6b6b;
+  --accent4: #ffd93d;
+  --text: #e8e8f0;
+  --muted: #6b6b80;
+  --card: #14141e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Mono', monospace;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 13px;
+}
+
+/* HEADER */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.logo span { color: var(--accent); }
+
+.goal-badge {
+  background: linear-gradient(135deg, #7c5cfc22, #00e5a022);
+  border: 1px solid var(--accent);
+  color: var(--accent2);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-family: 'Syne', sans-serif;
+}
+
+/* COUNTDOWN */
+.countdown-bar {
+  display: flex;
+  gap: 16px;
+  padding: 8px 0 12px;
+  flex-wrap: wrap;
+}
+.cd-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cd-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--accent);
+  line-height: 1;
+}
+.cd-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.cd-sep { color: var(--border); font-size: 20px; align-self: center; margin-top: -4px; }
+.deadline-label { font-size: 10px; color: var(--accent3); align-self: center; font-family: 'Syne', sans-serif; margin-left: 4px; }
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  padding: 8px 16px;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* CONTENT */
+.content { padding: 20px; max-width: 1000px; margin: 0 auto; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* STATS ROW */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--accent);
+}
+.stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* FORM SECTION */
+.add-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.form-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 12px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+input, select, textarea {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+textarea { resize: vertical; min-height: 60px; }
+select option { background: var(--surface2); }
+
+.btn {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #9b7dff; }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+.btn-danger { background: #ff6b6b22; color: var(--accent3); border: 1px solid var(--accent3); }
+.btn-danger:hover { background: var(--accent3); color: #fff; }
+.btn-success { background: #00e5a022; color: var(--accent2); border: 1px solid var(--accent2); }
+.btn-success:hover { background: var(--accent2); color: #000; }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 12px;
+  text-align: left;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+}
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+tbody tr:hover { background: var(--surface2); }
+tbody td {
+  padding: 10px 12px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+/* STATUS BADGES */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-applied { background: #7c5cfc22; color: #9b7dff; border: 1px solid #7c5cfc44; }
+.badge-interview { background: #ffd93d22; color: #ffd93d; border: 1px solid #ffd93d44; }
+.badge-offer { background: #00e5a022; color: #00e5a0; border: 1px solid #00e5a044; }
+.badge-rejected { background: #ff6b6b22; color: #ff6b6b; border: 1px solid #ff6b6b44; }
+.badge-following-up { background: #ff9f4322; color: #ff9f43; border: 1px solid #ff9f4344; }
+.badge-not-applied { background: #2a2a3a; color: var(--muted); border: 1px solid var(--border); }
+.badge-sent { background: #00e5a022; color: var(--accent2); }
+.badge-pending { background: #ffd93d22; color: var(--accent4); }
+
+/* PRIORITY STARS */
+.stars { color: var(--accent4); font-size: 13px; }
+
+/* FILTER ROW */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-row input, .filter-row select {
+  width: auto;
+  flex: 1;
+  min-width: 120px;
+  max-width: 220px;
+}
+.filter-label {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  white-space: nowrap;
+}
+
+/* LINKEDIN POSTS */
+.post-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: border-color 0.2s;
+}
+.post-card:hover { border-color: var(--accent); }
+.post-day {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--accent);
+  min-width: 36px;
+  text-align: center;
+  line-height: 1;
+}
+.post-info { flex: 1; }
+.post-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 4px; }
+.post-hook { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.post-status { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.post-engagement { font-size: 11px; color: var(--accent2); }
+.toggle-done {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border);
+  background: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; flex-shrink: 0;
+  font-size: 11px;
+}
+.toggle-done.done { background: var(--accent2); border-color: var(--accent2); color: #000; }
+.phase-header {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  margin-top: 20px;
+}
+
+/* PORTAL GRID */
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.portal-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  transition: border-color 0.2s;
+}
+.portal-card:hover { border-color: var(--accent); }
+.portal-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+.portal-meta { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+.portal-link { color: var(--accent); font-size: 11px; text-decoration: none; word-break: break-all; }
+.portal-link:hover { text-decoration: underline; }
+.account-check { margin-top: 8px; display: flex; align-items: center; gap: 6px; font-size: 11px; }
+
+/* COMPANY TARGET CARD */
+.company-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.company-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; flex: 1; min-width: 120px; }
+.company-meta { font-size: 11px; color: var(--muted); }
+.company-actions { display: flex; gap: 6px; align-items: center; }
+
+/* WEEK PROGRESS */
+.week-bar { margin-bottom: 20px; }
+.week-label { font-family: 'Syne', sans-serif; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.progress-track { background: var(--surface2); border-radius: 4px; height: 6px; overflow: hidden; }
+.progress-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .content { padding: 12px; }
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .header { padding: 12px 14px 0; }
+  .cd-num { font-size: 18px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* EMPTY STATE */
+.empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+.empty-icon { font-size: 32px; margin-bottom: 10px; }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8); z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 14px; color: var(--accent); }
+.modal-close { float: right; cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; }
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">AI<span>.</span>tracker</div>
+    <div class="goal-badge">🎯 $100K Remote AI Role</div>
+  </div>
+  <div class="countdown-bar">
+    <div class="cd-item"><div class="cd-num" id="cd-days">0</div><div class="cd-label">days</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-item"><div class="cd-num" id="cd-hrs">0</div><div class="cd-label">hrs</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-item"><div class="cd-num" id="cd-mins">0</div><div class="cd-label">min</div></div>
+    <div class="deadline-label">← Aug 24 deadline (birthday goal)</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('jobs')">📋 Job Applications</button>
+    <button class="tab" onclick="switchTab('companies')">🏢 Target Companies</button>
+    <button class="tab" onclick="switchTab('linkedin')">📣 LinkedIn Posts</button>
+    <button class="tab" onclick="switchTab('portals')">🔗 Job Portals</button>
+    <button class="tab" onclick="switchTab('roadmap')">🗺 Roadmap</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ===== JOBS TAB ===== -->
+<div class="tab-panel active" id="tab-jobs">
+  <div class="stats-row" id="job-stats"></div>
+
+  <div class="add-form">
+    <div class="form-title">+ Add Job Application</div>
+    <div class="form-grid">
+      <input id="j-company" placeholder="Company name" />
+      <input id="j-role" placeholder="Role title" />
+      <input id="j-portal" placeholder="Portal (LinkedIn, Wellfound…)" />
+      <input id="j-date" type="date" />
+      <select id="j-status">
+        <option value="applied">Applied</option>
+        <option value="following-up">Following Up</option>
+        <option value="interview">Interview</option>
+        <option value="offer">Offer 🎉</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <input id="j-salary" placeholder="Salary range ($)" />
+      <input id="j-url" placeholder="Job URL" />
+      <input id="j-followup" type="date" placeholder="Follow-up date" />
+    </div>
+    <textarea id="j-notes" placeholder="Notes (what you said, who you messaged, any context…)"></textarea>
+    <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+      <button class="btn btn-primary" onclick="addJob()">Add Application</button>
+      <span id="j-msg" style="font-size:11px; color:var(--accent2);"></span>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <span class="filter-label">Filter:</span>
+    <input id="j-search" placeholder="Search company…" oninput="renderJobs()" />
+    <select id="j-filter-status" onchange="renderJobs()">
+      <option value="">All status</option>
+      <option value="applied">Applied</option>
+      <option value="following-up">Following Up</option>
+      <option value="interview">Interview</option>
+      <option value="offer">Offer</option>
+      <option value="rejected">Rejected</option>
+    </select>
+    <button class="btn btn-sm" style="background:var(--surface2); color:var(--muted);" onclick="exportJobs()">Export CSV</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Salary</th>
+          <th>Follow-up</th>
+          <th>Portal</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="jobs-table"></tbody>
+    </table>
+  </div>
+  <div id="jobs-empty" class="empty" style="display:none;">
+    <div class="empty-icon">📋</div>
+    <div>No applications yet. Add your first one above.</div>
+    <div style="margin-top:6px; font-size:11px;">Start applying from Week 8 of the roadmap</div>
+  </div>
+</div>
+
+<!-- ===== COMPANIES TAB ===== -->
+<div class="tab-panel" id="tab-companies">
+  <div class="stats-row" id="company-stats"></div>
+
+  <div class="filter-row">
+    <span class="filter-label">Filter:</span>
+    <input id="c-search" placeholder="Search company…" oninput="renderCompanies()" />
+    <select id="c-region" onchange="renderCompanies()">
+      <option value="">All regions</option>
+      <option value="startups">AI Startups (114)</option>
+      <option value="Europe">Europe</option>
+      <option value="Australia & NZ">Australia & NZ</option>
+      <option value="Asia-Pacific">Asia-Pacific</option>
+      <option value="Middle East">Middle East</option>
+    </select>
+    <select id="c-filter-dm" onchange="renderCompanies()">
+      <option value="">All DM status</option>
+      <option value="pending">DM Pending</option>
+      <option value="sent">DM Sent</option>
+      <option value="connected">Connected</option>
+    </select>
+  </div>
+
+  <div id="companies-list"></div>
+</div>
+
+<!-- ===== LINKEDIN TAB ===== -->
+<div class="tab-panel" id="tab-linkedin">
+  <div class="stats-row" id="li-stats"></div>
+
+  <div class="week-bar">
+    <div class="week-label" id="li-progress-label">Loading progress…</div>
+    <div class="progress-track"><div class="progress-fill" id="li-progress-bar" style="width:0%"></div></div>
+  </div>
+
+  <div id="linkedin-posts"></div>
+</div>
+
+<!-- ===== PORTALS TAB ===== -->
+<div class="tab-panel" id="tab-portals">
+  <div class="section-title">78 Job Portals — Track Your Accounts</div>
+  <div class="filter-row">
+    <input id="p-search" placeholder="Search portal…" oninput="renderPortals()" />
+    <select id="p-filter" onchange="renderPortals()">
+      <option value="">All portals</option>
+      <option value="account">Account made</option>
+      <option value="no-account">No account yet</option>
+      <option value="free">Free only</option>
+      <option value="paid">Paid only</option>
+    </select>
+  </div>
+  <div class="portal-grid" id="portals-grid"></div>
+</div>
+
+<!-- ===== ROADMAP TAB ===== -->
+<div class="tab-panel" id="tab-roadmap">
+  <div class="section-title">16-Week Progress Tracker</div>
+  <div id="roadmap-weeks"></div>
+</div>
+
+</div><!-- /content -->
+
+<!-- Notes Modal -->
+<div class="modal-overlay" id="notes-modal" style="display:none;" onclick="closeModal(event)">
+  <div class="modal">
+    <span class="modal-close" onclick="document.getElementById('notes-modal').style.display='none'">✕</span>
+    <div class="modal-title">Notes</div>
+    <div id="modal-notes-content" style="font-size:13px; line-height:1.7; color:var(--text); white-space:pre-wrap;"></div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const STARTUPS = [{"Company":"Relevance AI","Category":"Agentic/Infra","Website":"https://relevance.ai"},{"Company":"Dust.tt","Category":"Agentic","Website":"https://dust.tt"},{"Company":"Fixie.ai","Category":"Agentic","Website":"https://fixie.ai"},{"Company":"Anthropic","Category":"Frontier LLM","Website":"https://www.anthropic.com"},{"Company":"Cohere","Category":"LLM","Website":"https://cohere.com"},{"Company":"Mistral AI","Category":"Frontier LLM","Website":"https://mistral.ai"},{"Company":"Together AI","Category":"LLM Infra","Website":"https://together.ai"},{"Company":"Replicate","Category":"LLM Infra","Website":"https://replicate.com"},{"Company":"Modal","Category":"LLM Infra","Website":"https://modal.com"},{"Company":"Baseten","Category":"LLM Infra","Website":"https://baseten.co"},{"Company":"LangChain","Category":"Agentic/Infra","Website":"https://langchain.com"},{"Company":"LlamaIndex","Category":"Agentic/Infra","Website":"https://llamaindex.ai"},{"Company":"Perplexity AI","Category":"AI Search","Website":"https://perplexity.ai"},{"Company":"You.com","Category":"AI Search","Website":"https://you.com"},{"Company":"Glean","Category":"AI Search","Website":"https://glean.com"},{"Company":"Embra","Category":"Agentic","Website":"https://embra.app"},{"Company":"Lindy AI","Category":"Agentic","Website":"https://lindy.ai"},{"Company":"Cognosys","Category":"Agentic","Website":"https://cognosys.ai"},{"Company":"MultiOn","Category":"Agentic","Website":"https://multion.ai"},{"Company":"Adept AI","Category":"Agentic","Website":"https://adept.ai"},{"Company":"Inflection AI","Category":"Frontier LLM","Website":"https://inflection.ai"},{"Company":"Character.AI","Category":"Conversational AI","Website":"https://character.ai"},{"Company":"Poe","Category":"LLM Tools","Website":"https://poe.com"},{"Company":"Jasper","Category":"GenAI Content","Website":"https://jasper.ai"},{"Company":"Copy.ai","Category":"GenAI Content","Website":"https://copy.ai"},{"Company":"Writer","Category":"GenAI Content","Website":"https://writer.com"},{"Company":"Pinecone","Category":"Vector DB","Website":"https://pinecone.io"},{"Company":"Weaviate","Category":"Vector DB","Website":"https://weaviate.io"},{"Company":"Qdrant","Category":"Vector DB","Website":"https://qdrant.tech"},{"Company":"Chroma","Category":"Vector Search","Website":"https://trychroma.com"},{"Company":"Vectara","Category":"Vector Search","Website":"https://vectara.com"},{"Company":"Runway","Category":"Video AI","Website":"https://runwayml.com"},{"Company":"Pika Labs","Category":"Video AI","Website":"https://pika.art"},{"Company":"Stability AI","Category":"Video AI","Website":"https://stability.ai"},{"Company":"ElevenLabs","Category":"Voice AI","Website":"https://elevenlabs.io"},{"Company":"PlayHT","Category":"Voice Assistants","Website":"https://play.ht"},{"Company":"Deepgram","Category":"Voice AI","Website":"https://deepgram.com"},{"Company":"AssemblyAI","Category":"Voice AI","Website":"https://assemblyai.com"},{"Company":"Scale AI","Category":"AI Data","Website":"https://scale.com"},{"Company":"Labelbox","Category":"AI Data","Website":"https://labelbox.com"},{"Company":"Snorkel AI","Category":"AI Data","Website":"https://snorkel.ai"},{"Company":"Weights & Biases","Category":"MLOps","Website":"https://wandb.ai"},{"Company":"Comet ML","Category":"MLOps","Website":"https://comet.com"},{"Company":"Determined AI","Category":"MLOps","Website":"https://determined.ai"},{"Company":"Hugging Face","Category":"LLM Tools","Website":"https://huggingface.co"},{"Company":"Replicate","Category":"LLM Tools","Website":"https://replicate.com"},{"Company":"Flowise","Category":"LLM Tools","Website":"https://flowiseai.com"},{"Company":"Superwise","Category":"AI Monitoring","Website":"https://superwise.ai"},{"Company":"Fiddler AI","Category":"AI Monitoring","Website":"https://fiddler.ai"},{"Company":"Arize AI","Category":"AI Monitoring","Website":"https://arize.com"},{"Company":"OpenAI","Category":"Frontier LLM","Website":"https://openai.com"},{"Company":"Cohere","Category":"LLM","Website":"https://cohere.com"},{"Company":"AI21 Labs","Category":"LLM","Website":"https://ai21.com"},{"Company":"Aleph Alpha","Category":"LLM","Website":"https://aleph-alpha.com"},{"Company":"Mosaic ML","Category":"LLM Infra","Website":"https://mosaicml.com"},{"Company":"Fireworks AI","Category":"LLM Infra","Website":"https://fireworks.ai"},{"Company":"Groq","Category":"AI Hardware/Infra","Website":"https://groq.com"},{"Company":"Cerebras","Category":"Edge AI Hardware","Website":"https://cerebras.net"},{"Company":"SambaNova","Category":"LLM Infra","Website":"https://sambanova.ai"},{"Company":"Turing","Category":"AI Talent","Website":"https://turing.com"},{"Company":"Kili Technology","Category":"AI Data","Website":"https://kili-technology.com"},{"Company":"Surge AI","Category":"AI Data","Website":"https://surgehq.ai"},{"Company":"Cleanlab","Category":"AI Data","Website":"https://cleanlab.ai"},{"Company":"Valohai","Category":"MLOps","Website":"https://valohai.com"},{"Company":"Gradient","Category":"MLOps","Website":"https://gradient.ai"},{"Company":"Steamship","Category":"Agentic/Infra","Website":"https://steamship.com"},{"Company":"Beam","Category":"Agentic/Infra","Website":"https://beam.cloud"},{"Company":"Superagent","Category":"Agentic","Website":"https://superagent.sh"},{"Company":"AgentGPT","Category":"Agentic","Website":"https://agentgpt.reworkd.ai"},{"Company":"AutoGPT","Category":"Agentic","Website":"https://agpt.co"},{"Company":"Zapier AI","Category":"Workflow Automation","Website":"https://zapier.com"},{"Company":"Make.com","Category":"Workflow Automation","Website":"https://make.com"},{"Company":"n8n","Category":"Workflow Automation","Website":"https://n8n.io"},{"Company":"Activepieces","Category":"Workflow Automation","Website":"https://activepieces.com"},{"Company":"Bardeen","Category":"RPA + AI","Website":"https://bardeen.ai"},{"Company":"Leena AI","Category":"HR AI","Website":"https://leena.ai"},{"Company":"Eightfold AI","Category":"HR AI","Website":"https://eightfold.ai"},{"Company":"Paradox AI","Category":"HR AI","Website":"https://paradox.ai"},{"Company":"Hume AI","Category":"Emotion AI","Website":"https://hume.ai"},{"Company":"Affectiva","Category":"Emotion AI","Website":"https://affectiva.com"},{"Company":"GoodVision","Category":"Computer Vision","Website":"https://goodvision.live"},{"Company":"Landing AI","Category":"Computer Vision","Website":"https://landing.ai"},{"Company":"Tractable","Category":"Computer Vision","Website":"https://tractable.ai"},{"Company":"Causaly","Category":"Healthcare AI","Website":"https://causaly.com"},{"Company":"Insitro","Category":"Healthcare AI","Website":"https://insitro.com"},{"Company":"Recursion","Category":"Healthcare AI","Website":"https://recursion.com"},{"Company":"Wayve","Category":"Autonomous Vehicles","Website":"https://wayve.ai"},{"Company":"Motional","Category":"Autonomous Vehicles","Website":"https://motional.com"},{"Company":"Samsara","Category":"IoT AI","Website":"https://samsara.com"},{"Company":"Verkada","Category":"IoT AI","Website":"https://verkada.com"},{"Company":"Instabase","Category":"Document AI","Website":"https://instabase.com"},{"Company":"Hypatos","Category":"Document AI","Website":"https://hypatos.ai"},{"Company":"Klarna AI","Category":"FinTech AI","Website":"https://klarna.com"},{"Company":"Midjourney","Category":"GenAI Content","Website":"https://midjourney.com"},{"Company":"Leonardo AI","Category":"GenAI Content","Website":"https://leonardo.ai"},{"Company":"Synthesia","Category":"Video AI","Website":"https://synthesia.io"},{"Company":"D-ID","Category":"Video AI","Website":"https://d-id.com"},{"Company":"Sierra AI","Category":"Chat / Support AI","Website":"https://sierra.ai"},{"Company":"Intercom AI","Category":"Chat / Support AI","Website":"https://intercom.com"}];
+
+const REGIONAL = {"Europe":[{"Country":"UK","Company Name":"DeepMind","Focus Area":"AI research"},{"Country":"UK","Company Name":"Graphcore","Focus Area":"AI hardware"},{"Country":"UK","Company Name":"BenevolentAI","Focus Area":"Drug discovery"},{"Country":"UK","Company Name":"Wayve","Focus Area":"Autonomous vehicles"},{"Country":"UK","Company Name":"Synthesia","Focus Area":"AI video generation"},{"Country":"UK","Company Name":"Tractable","Focus Area":"AI for insurance & automotive"},{"Country":"UK","Company Name":"Faculty AI","Focus Area":"Applied AI consulting"},{"Country":"UK","Company Name":"Mind Foundry","Focus Area":"AI platform for enterprises"},{"Country":"UK","Company Name":"Quantexa","Focus Area":"AI for financial crime"},{"Country":"UK","Company Name":"Onfido","Focus Area":"AI identity verification"},{"Country":"France","Company Name":"Hugging Face","Focus Area":"NLP models"},{"Country":"France","Company Name":"Mistral AI","Focus Area":"Open-source LLMs"},{"Country":"France","Company Name":"Holistic AI","Focus Area":"AI governance & audit"},{"Country":"France","Company Name":"Nabla","Focus Area":"AI for healthcare"},{"Country":"France","Company Name":"Prophesee","Focus Area":"Neuromorphic vision AI"},{"Country":"Germany","Company Name":"Aleph Alpha","Focus Area":"European sovereign LLM"},{"Country":"Germany","Company Name":"Celonis","Focus Area":"Process mining + AI"},{"Country":"Germany","Company Name":"Helsing","Focus Area":"Defence AI"},{"Country":"Germany","Company Name":"Merantix","Focus Area":"AI venture studio"},{"Country":"Germany","Company Name":"Parloa","Focus Area":"AI-powered voice agents"},{"Country":"Netherlands","Company Name":"Elastic","Focus Area":"Search & AI observability"},{"Country":"Netherlands","Company Name":"Guerrilla Games AI","Focus Area":"Game AI"},{"Country":"Netherlands","Company Name":"Secfix","Focus Area":"AI security compliance"},{"Country":"Netherlands","Company Name":"Robinhoodie","Focus Area":"AI trading"},{"Country":"Netherlands","Company Name":"Sana Labs","Focus Area":"AI learning platform"},{"Country":"Sweden","Company Name":"Epidemic Sound","Focus Area":"AI music"},{"Country":"Sweden","Company Name":"Klarna","Focus Area":"FinTech AI"},{"Country":"Sweden","Company Name":"Embark Studios","Focus Area":"Game AI"},{"Country":"Sweden","Company Name":"Peltarion","Focus Area":"AI platform"},{"Country":"Sweden","Company Name":"Normative","Focus Area":"AI carbon accounting"},{"Country":"Switzerland","Company Name":"Sophia Genetics","Focus Area":"Healthcare AI genomics"},{"Country":"Switzerland","Company Name":"Teralytics","Focus Area":"AI mobility analytics"},{"Country":"Switzerland","Company Name":"Neural Concept","Focus Area":"Deep learning for engineering"},{"Country":"Denmark","Company Name":"Corti","Focus Area":"AI for emergency medicine"},{"Country":"Denmark","Company Name":"Jabra Engage AI","Focus Area":"AI for call centres"},{"Country":"Denmark","Company Name":"Shape Robotics","Focus Area":"Educational robotics AI"},{"Country":"Finland","Company Name":"Silo AI","Focus Area":"Nordic LLMs"},{"Country":"Finland","Company Name":"Aito.ai","Focus Area":"Predictive AI"},{"Country":"Norway","Company Name":"Cognite","Focus Area":"Industrial AI"},{"Country":"Norway","Company Name":"Boost.ai","Focus Area":"Conversational AI"},{"Country":"Spain","Company Name":"Voicemod","Focus Area":"AI voice tech"},{"Country":"Spain","Company Name":"Strands AI","Focus Area":"Personalization AI"},{"Country":"Spain","Company Name":"Sherpa.ai","Focus Area":"Private AI assistants"},{"Country":"Poland","Company Name":"Brainly","Focus Area":"Education AI"},{"Country":"Poland","Company Name":"Infermedica","Focus Area":"Medical AI"},{"Country":"Czech Republic","Company Name":"Rossum","Focus Area":"Document AI"},{"Country":"Czech Republic","Company Name":"Kiwi.com AI","Focus Area":"Travel AI"},{"Country":"Estonia","Company Name":"Veriff","Focus Area":"AI identity"},{"Country":"Estonia","Company Name":"Pactum","Focus Area":"AI negotiation"},{"Country":"Portugal","Company Name":"Feedzai","Focus Area":"AI fraud prevention"},{"Country":"Portugal","Company Name":"Unbabel","Focus Area":"AI translation"},{"Country":"Italy","Company Name":"Translated","Focus Area":"AI language services"},{"Country":"Italy","Company Name":"Musixmatch AI","Focus Area":"AI music data"},{"Country":"Belgium","Company Name":"ML6","Focus Area":"Applied ML consulting"},{"Country":"Romania","Company Name":"Deepstash","Focus Area":"AI knowledge app"},{"Country":"Ireland","Company Name":"Aylien","Focus Area":"NLP analytics"},{"Country":"Austria","Company Name":"Leftshift One","Focus Area":"AI consulting"},{"Country":"Greece","Company Name":"Workable AI","Focus Area":"HR AI"},{"Country":"Hungary","Company Name":"Turbine AI","Focus Area":"Drug discovery AI"},{"Country":"Croatia","Company Name":"Gideon Brothers","Focus Area":"Autonomous robotics"},{"Country":"Latvia","Company Name":"Anatomy Next","Focus Area":"Medical AI education"},{"Country":"Serbia","Company Name":"Nordeus AI","Focus Area":"Game AI"},{"Country":"Bulgaria","Company Name":"Hypefactors","Focus Area":"PR AI analytics"},{"Country":"UK","Company Name":"Improbable","Focus Area":"Metaverse & AI simulation"},{"Country":"UK","Company Name":"Healx","Focus Area":"AI rare disease drug discovery"},{"Country":"UK","Company Name":"Secondmind","Focus Area":"Decision intelligence AI"},{"Country":"UK","Company Name":"Seldon","Focus Area":"MLOps"},{"Country":"UK","Company Name":"Signal AI","Focus Area":"AI media intelligence"},{"Country":"UK","Company Name":"Relation Therapeutics","Focus Area":"Genomic AI"},{"Country":"France","Company Name":"Shift Technology","Focus Area":"AI insurance fraud"},{"Country":"France","Company Name":"Meero","Focus Area":"AI photo editing"},{"Country":"Germany","Company Name":"Brighter AI","Focus Area":"Privacy AI"},{"Country":"Germany","Company Name":"Contiamo","Focus Area":"AI data platform"},{"Country":"Germany","Company Name":"Riva Health","Focus Area":"AI health monitoring"},{"Country":"Netherlands","Company Name":"OmniIndex","Focus Area":"Confidential AI"},{"Country":"Sweden","Company Name":"Peltarion","Focus Area":"AI for business"},{"Country":"Denmark","Company Name":"Templafy","Focus Area":"Document AI"},{"Country":"Finland","Company Name":"Bitwise","Focus Area":"ML education"},{"Country":"Switzerland","Company Name":"Wluper","Focus Area":"Conversational AI"},{"Country":"Spain","Company Name":"Genially","Focus Area":"Interactive content AI"},{"Country":"Poland","Company Name":"Cosmose AI","Focus Area":"Retail AI analytics"},{"Country":"Austria","Company Name":"Anyline","Focus Area":"Mobile OCR AI"},{"Country":"Israel","Company Name":"Lightricks","Focus Area":"AI photo & video editing"},{"Country":"Israel","Company Name":"Iguazio","Focus Area":"MLOps platform"},{"Country":"Israel","Company Name":"Zoominfo","Focus Area":"AI sales intelligence"},{"Country":"Israel","Company Name":"Gong.io","Focus Area":"Revenue intelligence AI"},{"Country":"Israel","Company Name":"Chorus.ai","Focus Area":"Conversation intelligence"},{"Country":"Israel","Company Name":"Verbit","Focus Area":"AI transcription"},{"Country":"Israel","Company Name":"Deci AI","Focus Area":"Neural network optimization"},{"Country":"Israel","Company Name":"Sight Machine","Focus Area":"Manufacturing AI"},{"Country":"Israel","Company Name":"Oriient","Focus Area":"Indoor navigation AI"},{"Country":"Israel","Company Name":"Mobileye","Focus Area":"Autonomous driving AI"}],"Australia & NZ":[{"Country":"Australia","Company Name":"Appen","Focus Area":"Data annotation & AI training"},{"Country":"Australia","Company Name":"Flamingo AI","Focus Area":"Conversational AI"},{"Country":"Australia","Company Name":"Hyper Anna","Focus Area":"AI analytics"},{"Country":"Australia","Company Name":"Harrison.ai","Focus Area":"Healthcare AI"},{"Country":"Australia","Company Name":"Coviu","Focus Area":"Telehealth AI"},{"Country":"Australia","Company Name":"Fynd","Focus Area":"Retail AI"},{"Country":"Australia","Company Name":"Presagen","Focus Area":"AI for IVF"},{"Country":"Australia","Company Name":"Complexica","Focus Area":"Decision intelligence"},{"Country":"Australia","Company Name":"Kasisto","Focus Area":"Banking AI"},{"Country":"Australia","Company Name":"Aibee","Focus Area":"Retail AI"},{"Country":"Australia","Company Name":"Trace","Focus Area":"Sports AI analytics"},{"Country":"Australia","Company Name":"Tiliter","Focus Area":"Computer vision retail"},{"Country":"Australia","Company Name":"Cluey Learning","Focus Area":"AI tutoring"},{"Country":"Australia","Company Name":"Rezatec","Focus Area":"Geospatial AI"},{"Country":"Australia","Company Name":"Whispir","Focus Area":"AI communications platform"},{"Country":"Australia","Company Name":"Archistar","Focus Area":"AI property intelligence"},{"Country":"Australia","Company Name":"Encode","Focus Area":"AI for investment research"},{"Country":"Australia","Company Name":"Faethm AI","Focus Area":"Workforce AI analytics"},{"Country":"Australia","Company Name":"Leaptel","Focus Area":"AI telecom"},{"Country":"Australia","Company Name":"Oho","Focus Area":"AI HR platform"},{"Country":"New Zealand","Company Name":"Soul Machines","Focus Area":"Digital humans"},{"Country":"New Zealand","Company Name":"Modecai","Focus Area":"AI supply chain"},{"Country":"New Zealand","Company Name":"Imagr","Focus Area":"Smart cart AI"},{"Country":"New Zealand","Company Name":"Valocity","Focus Area":"AI property valuation"},{"Country":"New Zealand","Company Name":"Quantiful","Focus Area":"AI demand forecasting"},{"Country":"New Zealand","Company Name":"Auror","Focus Area":"Crime intelligence AI"},{"Country":"New Zealand","Company Name":"Vxt","Focus Area":"AI phone system"},{"Country":"New Zealand","Company Name":"Raygun","Focus Area":"Error monitoring AI"},{"Country":"New Zealand","Company Name":"Datamine","Focus Area":"Retail AI analytics"},{"Country":"New Zealand","Company Name":"Clevertar","Focus Area":"Conversational AI agents"},{"Country":"Australia","Company Name":"Canva AI","Focus Area":"AI design tools"},{"Country":"Australia","Company Name":"Atlassian AI","Focus Area":"AI for work tools"},{"Country":"Australia","Company Name":"Roamler","Focus Area":"AI task marketplace"},{"Country":"Australia","Company Name":"Peaka","Focus Area":"No-code data AI"},{"Country":"Australia","Company Name":"Proptech AI","Focus Area":"Real estate AI"},{"Country":"Australia","Company Name":"MedRecordAI","Focus Area":"Healthcare records AI"},{"Country":"Australia","Company Name":"Premonition AI","Focus Area":"Legal AI analytics"},{"Country":"Australia","Company Name":"Genie AI","Focus Area":"Legal contract AI"},{"Country":"Australia","Company Name":"Curious Thing","Focus Area":"AI phone agent"},{"Country":"Australia","Company Name":"Tictoc","Focus Area":"AI home loans"},{"Country":"Australia","Company Name":"Evari","Focus Area":"AI insurance"},{"Country":"Australia","Company Name":"Hyper AI","Focus Area":"AI game development"},{"Country":"Australia","Company Name":"Earlybird AI","Focus Area":"AI talent screening"},{"Country":"Australia","Company Name":"Lexer","Focus Area":"Customer data AI"},{"Country":"Australia","Company Name":"Dovetail","Focus Area":"AI research insights"},{"Country":"Australia","Company Name":"SafetyCulture AI","Focus Area":"AI workplace safety"},{"Country":"Australia","Company Name":"Shippit","Focus Area":"Delivery AI"},{"Country":"Australia","Company Name":"MessageMedia AI","Focus Area":"AI messaging"},{"Country":"Australia","Company Name":"Agora AI","Focus Area":"AI procurement"},{"Country":"Australia","Company Name":"Stax AI","Focus Area":"Cloud cost AI"}],"Asia-Pacific":[{"Country":"India","Company Name":"Fractal Analytics","Focus Area":"AI consulting"},{"Country":"India","Company Name":"Mad Street Den","Focus Area":"Computer vision retail"},{"Country":"India","Company Name":"SigTuple","Focus Area":"AI healthcare diagnostics"},{"Country":"India","Company Name":"Haptik","Focus Area":"Conversational AI"},{"Country":"India","Company Name":"Yellow.ai","Focus Area":"Conversational AI platform"},{"Country":"India","Company Name":"Sarvam AI","Focus Area":"Indian language LLMs"},{"Country":"India","Company Name":"Krutrim","Focus Area":"Indian LLM"},{"Country":"India","Company Name":"Niramai","Focus Area":"AI breast cancer screening"},{"Country":"India","Company Name":"Niki.ai","Focus Area":"AI commerce"},{"Country":"India","Company Name":"Uniphore","Focus Area":"Conversational AI"},{"Country":"Singapore","Company Name":"Grab AI Lab","Focus Area":"AI for mobility & payments"},{"Country":"Singapore","Company Name":"Sea AI Lab","Focus Area":"Research AI"},{"Country":"Singapore","Company Name":"Hypotenuse AI","Focus Area":"AI content generation"},{"Country":"Singapore","Company Name":"Basis AI","Focus Area":"Machine learning platform"},{"Country":"Singapore","Company Name":"Taiger","Focus Area":"Document AI"},{"Country":"Japan","Company Name":"Preferred Networks","Focus Area":"Deep learning robotics"},{"Country":"Japan","Company Name":"Elyza","Focus Area":"Japanese LLM"},{"Country":"South Korea","Company Name":"Kakao Brain","Focus Area":"Korean LLM"},{"Country":"South Korea","Company Name":"NAVER AI Lab","Focus Area":"Search & vision AI"},{"Country":"China","Company Name":"Baidu AI","Focus Area":"Search & LLM"},{"Country":"China","Company Name":"ByteDance AI","Focus Area":"Recommendation & LLM"},{"Country":"Taiwan","Company Name":"ASUS AI","Focus Area":"AI hardware"},{"Country":"Hong Kong","Company Name":"SenseTime","Focus Area":"Computer vision AI"},{"Country":"Indonesia","Company Name":"Nodeflux","Focus Area":"Computer vision"},{"Country":"Vietnam","Company Name":"VinAI","Focus Area":"AI R&D"},{"Country":"Thailand","Company Name":"KASIKORN AI","Focus Area":"Banking AI"}],"Middle East":[{"Country":"UAE","Company Name":"G42","Focus Area":"AI cloud, healthcare, genomics"},{"Country":"UAE","Company Name":"Bayanat","Focus Area":"Geospatial AI"},{"Country":"UAE","Company Name":"Derq","Focus Area":"AI for traffic safety"},{"Country":"UAE","Company Name":"Group42","Focus Area":"AI & cloud"},{"Country":"UAE","Company Name":"Presight AI","Focus Area":"Big data analytics AI"},{"Country":"UAE","Company Name":"Alef Education","Focus Area":"AI edtech"},{"Country":"Saudi Arabia","Company Name":"STV","Focus Area":"AI media"},{"Country":"Saudi Arabia","Company Name":"Mozn","Focus Area":"AI for financial crime"},{"Country":"Saudi Arabia","Company Name":"Lean Technologies","Focus Area":"Open banking AI"},{"Country":"Saudi Arabia","Company Name":"Monsha'at AI","Focus Area":"SME AI tools"},{"Country":"Israel","Company Name":"AI21 Labs","Focus Area":"LLMs & NLP"},{"Country":"Israel","Company Name":"RunAI","Focus Area":"GPU orchestration"},{"Country":"Israel","Company Name":"Gong","Focus Area":"Revenue intelligence"},{"Country":"Jordan","Company Name":"Oasis500","Focus Area":"AI startup hub"},{"Country":"Egypt","Company Name":"Instabug","Focus Area":"App quality AI"},{"Country":"Egypt","Company Name":"Paymob AI","Focus Area":"FinTech AI"},{"Country":"Turkey","Company Name":"Getir AI","Focus Area":"Delivery AI"}]};
+
+const PORTALS = [{"Name":"Remote4me","Paid/Free":"free","URL":"https://remote4me.com/"},{"Name":"Working Nomads","Paid/Free":"free","URL":"https://www.workingnomads.com/jobs"},{"Name":"FlexJobs","Paid/Free":"paid","URL":"https://www.flexjobs.com/"},{"Name":"We Work Remotely","Paid/Free":"paid","URL":"https://weworkremotely.com/"},{"Name":"Remotive","Paid/Free":"paid","URL":"https://remotive.com/"},{"Name":"WellFound","Paid/Free":"free","URL":"https://wellfound.com/"},{"Name":"Glassdoor","Paid/Free":"free","URL":"https://glassdoor.com"},{"Name":"Otta","Paid/Free":"free","URL":"https://otta.com"},{"Name":"Remote.co","Paid/Free":"free","URL":"https://remote.co/remote-jobs/"},{"Name":"RemoteOK","Paid/Free":"free","URL":"https://remoteok.com/"},{"Name":"Indeed","Paid/Free":"free","URL":"https://indeed.com"},{"Name":"LinkedIn Jobs","Paid/Free":"free","URL":"https://linkedin.com/jobs"},{"Name":"YCombinator","Paid/Free":"free","URL":"https://ycombinator.com/jobs"},{"Name":"Himalayas","Paid/Free":"free","URL":"https://himalayas.app/"},{"Name":"arc.dev","Paid/Free":"free","URL":"https://arc.dev/"},{"Name":"Jobright","Paid/Free":"free","URL":"https://jobright.ai/"},{"Name":"Contra","Paid/Free":"free","URL":"https://contra.com/"},{"Name":"Dynamite Jobs","Paid/Free":"free","URL":"https://dynamitejobs.com/"},{"Name":"EzTrackr","Paid/Free":"free","URL":"https://eztrackr.app/"},{"Name":"Dealroom.co","Paid/Free":"free","URL":"https://dealroom.co/"},{"Name":"Europe Remotely","Paid/Free":"free","URL":"https://europeremotely.com/"},{"Name":"Hubstaff Talent","Paid/Free":"free","URL":"https://talent.hubstaff.com/"},{"Name":"Gun.io","Paid/Free":"free","URL":"https://gun.io/"},{"Name":"Toptal","Paid/Free":"free","URL":"https://toptal.com/"},{"Name":"Power to Fly","Paid/Free":"free","URL":"https://powertofly.com/"},{"Name":"Daily Remote","Paid/Free":"free","URL":"https://dailyremote.com/"},{"Name":"Just Remote","Paid/Free":"free","URL":"https://justremote.co/"},{"Name":"NoDesk","Paid/Free":"free","URL":"https://nodesk.co/"},{"Name":"Skip the Drive","Paid/Free":"free","URL":"https://www.skipthedrive.com/"},{"Name":"Built In","Paid/Free":"free","URL":"https://builtin.com/jobs"},{"Name":"The Muse","Paid/Free":"free","URL":"https://themuse.com/"},{"Name":"Authentic Jobs","Paid/Free":"free","URL":"https://authenticjobs.com/"},{"Name":"Stack Overflow Jobs","Paid/Free":"free","URL":"https://stackoverflow.com/jobs"},{"Name":"Behance","Paid/Free":"free","URL":"https://behance.net/joblist"},{"Name":"Dribble","Paid/Free":"free","URL":"https://dribbble.com/jobs"},{"Name":"Landing.jobs","Paid/Free":"free","URL":"https://landing.jobs/"},{"Name":"Jobgether","Paid/Free":"free","URL":"https://jobgether.com/"},{"Name":"Underdog.io","Paid/Free":"free","URL":"https://underdog.io/"},{"Name":"Wiseful's The List","Paid/Free":"free","URL":"https://joinwiseful.com/"},{"Name":"StillHiring.today","Paid/Free":"free","URL":"https://stillhiring.today/"},{"Name":"Web3 Jobs","Paid/Free":"free","URL":"https://web3.career/"},{"Name":"HiringCafe","Paid/Free":"free","URL":"https://hiring.cafe/"},{"Name":"Spotly","Paid/Free":"free","URL":"https://spotly.io/"},{"Name":"Monster","Paid/Free":"free","URL":"https://monster.com"},{"Name":"CareerCloud","Paid/Free":"free","URL":"https://careercloud.com/"},{"Name":"SimplyHired","Paid/Free":"free","URL":"https://simplyhired.com"},{"Name":"Dice","Paid/Free":"free","URL":"https://dice.com/"},{"Name":"TryRemotely","Paid/Free":"free","URL":"https://tryremotely.com/"},{"Name":"Outsourcely","Paid/Free":"free","URL":"https://outsourcely.com/"},{"Name":"Panqian","Paid/Free":"free","URL":"https://panqian.com/"}];
+
+const LINKEDIN_POSTS = [
+  // Phase 1: Days 1-10
+  {day:1,phase:"Phase 1: Establish Your Identity",title:"I Build AI Agents — Portfolio Launch",hook:"'I'm a software developer in India. In the last 6 months I built AI agents from scratch. Here's every one of them.'",format:"Carousel"},
+  {day:2,phase:"Phase 1: Establish Your Identity",title:"Why I'm Actively Looking for Remote Agentic AI Role",hook:"'I've spent the last year building AI agents while working full-time. I'm ready for a remote role. Here's what I bring.'",format:"Text post"},
+  {day:3,phase:"Phase 1: Establish Your Identity",title:"My Actual Tech Stack for Agentic AI",hook:"'People ask what I use to build AI agents. Here's my stack — not the buzzword version.'",format:"Carousel"},
+  {day:4,phase:"Phase 1: Establish Your Identity",title:"The Problem I'm Trying to Solve With AI Agents",hook:"'Most knowledge workers spend 30% of their time on tasks an AI agent could handle. I've been building solutions.'",format:"Story text"},
+  {day:5,phase:"Phase 1: Establish Your Identity",title:"I Rebuilt a Workflow Using AI — Before & After",hook:"'Before: 45 minutes of manual work. After: 3 minutes with an agent I built.'",format:"Carousel"},
+  {day:6,phase:"Phase 1: Establish Your Identity",title:"My GitHub for Agentic AI: A Guided Tour",hook:"'Here's a guided tour of my GitHub. Five Agentic AI projects, what each solves.'",format:"Carousel"},
+  {day:7,phase:"Phase 1: Establish Your Identity",title:"What Working at TCS Taught Me About Enterprise AI",hook:"'Working in a 600,000-person company teaches you things about AI deployment that tutorials never cover.'",format:"Numbered list"},
+  {day:8,phase:"Phase 1: Establish Your Identity",title:"The Agent I'm Most Proud Of: Full Technical Breakdown",hook:"'This is the AI agent I'd show in any technical interview. Full breakdown — architecture, stack, what broke.'",format:"Long-form + diagram"},
+  {day:9,phase:"Phase 1: Establish Your Identity",title:"I'm Based in India — Here's Why That's a Feature",hook:"'Yes, I'm based in Pune, India. Here's why that's actually an advantage for US and EU remote teams.'",format:"Punchy text"},
+  {day:10,phase:"Phase 1: Establish Your Identity",title:"My 30-Day Goal: 3 Live Agent Demos",hook:"'For the next 30 days I'm building 3 AI agent demos for problems early-stage startups actually face.'",format:"Announcement"},
+  // Phase 2: Days 11-25
+  {day:11,phase:"Phase 2: Teach Like an Expert",title:"LangChain vs CrewAI vs AutoGen: Honest Comparison",hook:"'If you're a startup building your first Agentic AI product in 2025, which framework do you choose? I've built with all three.'",format:"Comparison carousel"},
+  {day:12,phase:"Phase 2: Teach Like an Expert",title:"What Is Agentic AI? 60-Second Explanation for Non-Tech Founders",hook:"'Most explanations of Agentic AI are written for engineers. Here's one written for founders.'",format:"Clean carousel (5 slides)"},
+  {day:13,phase:"Phase 2: Teach Like an Expert",title:"How RAG Actually Works: Explained With My Project",hook:"'RAG is the most important concept in production AI right now. Here's how it works, through a real project I built.'",format:"Educational + code screenshot"},
+  {day:14,phase:"Phase 2: Teach Like an Expert",title:"5 Agentic AI Use Cases Startups Can Actually Charge For",hook:"'Everyone talks about what AI agents CAN do. Let's talk about what they can charge money for right now.'",format:"5-point text"},
+  {day:15,phase:"Phase 2: Teach Like an Expert",title:"How I Built a Document Intelligence Agent in a Weekend",hook:"'Saturday morning. Coffee. An idea. By Sunday night I had a working Document Intelligence agent.'",format:"Story + GitHub link"},
+  {day:16,phase:"Phase 2: Teach Like an Expert",title:"Prompt Engineer vs AI Agent Engineer: The Difference",hook:"'There's a big difference between prompt engineering and AI agent engineering. The salary difference is just as big.'",format:"Comparison"},
+  {day:17,phase:"Phase 2: Teach Like an Expert",title:"Memory in AI Agents: Why Beginner Agents Are Broken",hook:"'If your AI agent doesn't have properly implemented memory, it's not really an agent. It's an expensive chatbot.'",format:"Technical explainer"},
+  {day:18,phase:"Phase 2: Teach Like an Expert",title:"I Analyzed 50 Agentic AI Job Postings",hook:"'I went through 50 AI agent job postings from US and EU startups. Here are the skills that appeared most often.'",format:"Data carousel"},
+  {day:19,phase:"Phase 2: Teach Like an Expert",title:"How Tool Calling Works: Visual Guide",hook:"'Tool calling is what separates a basic AI chatbot from a real AI agent. Visual breakdown of exactly how it works.'",format:"Diagram carousel"},
+  {day:20,phase:"Phase 2: Teach Like an Expert",title:"Building a Customer Support Agent for a SaaS Startup",hook:"'Customer support is the #1 place startups want to use AI. Here's how I'd build a production-grade support agent.'",format:"Step-by-step"},
+  {day:21,phase:"Phase 2: Teach Like an Expert",title:"My Biggest Technical Failure (And What I Fixed)",hook:"'My AI agent went into an infinite loop at 2 AM and made 200 API calls. Very expensive. Here's what I learned.'",format:"Failure story"},
+  {day:22,phase:"Phase 2: Teach Like an Expert",title:"How I'd Design AI Agent Architecture for an Early Startup",hook:"'If a seed-stage startup hired me tomorrow to build their AI agent infra, here is what I'd propose on Day 1.'",format:"Architecture walkthrough"},
+  {day:23,phase:"Phase 2: Teach Like an Expert",title:"OpenAI vs Anthropic vs Open Source for Production Agents",hook:"'Choosing your LLM provider is the most important infrastructure decision a startup building AI agents will make.'",format:"Structured opinion"},
+  {day:24,phase:"Phase 2: Teach Like an Expert",title:"How to Interview for an Agentic AI Role",hook:"'I've been preparing for Agentic AI interviews at US and EU startups. Here are the 6 questions that keep coming up.'",format:"6-point post"},
+  {day:25,phase:"Phase 2: Teach Like an Expert",title:"What Nobody Tells You About Deploying AI Agents",hook:"'Building an AI agent is easy. Getting it to run reliably in production is a completely different problem.'",format:"Lessons-learned"},
+  // Phase 3: Days 26-42
+  {day:26,phase:"Phase 3: Proof of Work",title:"Demo Day: Live AI Agent Demo Video",hook:"'I built an AI agent that researches any company and delivers a brief in 90 seconds. Here's a live demo.'",format:"Loom video"},
+  {day:27,phase:"Phase 3: Proof of Work",title:"Open Source Drop: Multi-Agent Framework",hook:"'I just open-sourced a multi-agent workflow framework I've been building for 2 months.'",format:"Announcement + GitHub"},
+  {day:28,phase:"Phase 3: Proof of Work",title:"Full Case Study: AI Agent for [Industry]",hook:"'I built a contract review AI agent for a legal-tech startup. Full case study: problem, architecture, demo.'",format:"Carousel (8-10 slides)"},
+  {day:29,phase:"Phase 3: Proof of Work",title:"Week 4 Build Log: What I Shipped, Broke, What's Next",hook:"'Week 4 of building in public. Here's what I shipped, what completely broke, and what's next.'",format:"Short casual post"},
+  {day:30,phase:"Phase 3: Proof of Work",title:"My RAG Pipeline: PDF to Production in 48 Hours",hook:"'48 hours. One PDF ingestion pipeline. Zero tutorials followed. Here's exactly how I built it.'",format:"Step-by-step + GitHub"},
+  {day:31,phase:"Phase 3: Proof of Work",title:"I Connected My AI Agent to 5 Real APIs",hook:"'My agent needed to call Notion, Slack, HubSpot, Gmail, and a custom REST API. Here's what broke.'",format:"Structured lessons"},
+  {day:32,phase:"Phase 3: Proof of Work",title:"Build With Me: SaaS AI Agent Tool in Public",hook:"'I'm building a small SaaS product powered by AI agents. I'll document everything: idea, build, failures, users.'",format:"Announcement"},
+  {day:33,phase:"Phase 3: Proof of Work",title:"How I Handle Agent Failures Gracefully in Production",hook:"'Your AI agent will fail. The question is whether it fails gracefully or catastrophically.'",format:"Technical + code"},
+  {day:34,phase:"Phase 3: Proof of Work",title:"Agent Cost Optimization: Cut My OpenAI Bill by 60%",hook:"'My first AI agent was burning $200/month in API costs for a simple task. I got it down to $80.'",format:"Before/after cost breakdown"},
+  {day:35,phase:"Phase 3: Proof of Work",title:"My Full Portfolio: Visual Gallery of All AI Agents",hook:"'6 months of building AI agents. Here's every project in one place.'",format:"Carousel"},
+  {day:36,phase:"Phase 3: Proof of Work",title:"30 Days Building AI Agents: 7 Things I Wish I Knew",hook:"'30 days. 5 agents built. Dozens of hours debugging. Here are the 7 things I wish someone had told me.'",format:"Numbered list"},
+  {day:37,phase:"Phase 3: Proof of Work",title:"10-Minute Demo of My Best AI Agent",hook:"'I put together a 10-minute walkthrough of my most complex AI agent build. Architecture, code, failures.'",format:"Video link"},
+  {day:38,phase:"Phase 3: Proof of Work",title:"Collaboration: Looking for Dev to Co-Build Open Source Agent",hook:"'I'm looking for 1-2 developers to co-build an open source Agentic AI framework.'",format:"Short direct post"},
+  {day:39,phase:"Phase 3: Proof of Work",title:"I Audited 10 Agentic AI Products on Product Hunt",hook:"'I spent a weekend going through 10 Agentic AI products on Product Hunt. Here's my honest assessment.'",format:"Review post"},
+  {day:40,phase:"Phase 3: Proof of Work",title:"My AI Agent Testing Framework",hook:"'I don't push any AI agent to production without running it through my testing framework first.'",format:"Process post"},
+  {day:41,phase:"Phase 3: Proof of Work",title:"Multi-Agent System: What I Learned Orchestrating 4 Agents",hook:"'Getting one AI agent to work is satisfying. Getting four to collaborate took me 3 weeks to figure out.'",format:"Technical story"},
+  {day:42,phase:"Phase 3: Proof of Work",title:"Phase 3 Wrap-Up: Everything I Built in 2 Weeks",hook:"'Two weeks of building in public. Full summary: what I shipped, what got most engagement, what's coming.'",format:"Summary"},
+  // Phase 4 & 5: Days 43-60
+  {day:43,phase:"Phase 4: Opinions & Thought Leadership",title:"Hot Take: Most Companies Claiming Agentic AI Aren't",hook:"'I've seen 50+ posts about deploying AI agents. After reading carefully: most of them are just prompt chaining.'",format:"Opinion"},
+  {day:44,phase:"Phase 4: Opinions & Thought Leadership",title:"AI Agents Will Hit Enterprise Mainstream in 18 Months",hook:"'I'm making a prediction: enterprise AI agent adoption will hit an inflection point within 18 months.'",format:"Prediction"},
+  {day:45,phase:"Phase 4: Opinions & Thought Leadership",title:"Agentic AI Frameworks Nobody's Talking About",hook:"'Everyone's talking about LangChain. Here are 3 frameworks that are quietly better for specific use cases.'",format:"Short carousel"},
+  {day:46,phase:"Phase 4: Opinions & Thought Leadership",title:"Why Remote AI Engineers from India Are In Demand in 2025",hook:"'Something is quietly shifting in how US and EU startups think about remote AI engineering talent from India.'",format:"Data-informed opinion"},
+  {day:47,phase:"Phase 4: Opinions & Thought Leadership",title:"I Disagree With 'AI Will Take Developer Jobs'",hook:"'After spending a year building AI agents, I have a more nuanced view. Here's what I actually think.'",format:"Essay-style"},
+  {day:48,phase:"Phase 4: Opinions & Thought Leadership",title:"Why Most AI Agent POCs Never Make It to Production",hook:"'I've seen a lot of AI agent demos. Far fewer in production. The gap is always the same problem.'",format:"Problem analysis"},
+  {day:49,phase:"Phase 4: Opinions & Thought Leadership",title:"Agentic AI in APAC: Opportunity Nobody in Silicon Valley Watches",hook:"'The Agentic AI conversation is dominated by US and European perspectives. Here's what's happening in Asia-Pacific.'",format:"Regional insight"},
+  {day:50,phase:"Phase 4: Opinions & Thought Leadership",title:"Honest Assessment: Every Major LLM Provider for Startups",hook:"'I've built agents on OpenAI, Anthropic, Gemini, and open source. Completely honest assessment of each.'",format:"Structured comparison"},
+  {day:51,phase:"Phase 4: Opinions & Thought Leadership",title:"What EU Startups Want vs What US Startups Want",hook:"'I've been studying job postings from EU and US startups. Real differences in what each market prioritizes.'",format:"Comparison"},
+  {day:52,phase:"Phase 4: Opinions & Thought Leadership",title:"Ethics of AI Agents: 4 Questions I Ask Before Shipping",hook:"'As someone building AI agents, I think about ethics more than I expected to. Here are 4 questions I ask.'",format:"Thoughtful measured"},
+  {day:53,phase:"Phase 4: Opinions & Thought Leadership",title:"3 Industries Where AI Agents Will Create $1B+ Companies",hook:"'I've been mapping where AI agents create the most defensible value. Three industries stand out.'",format:"3-point opinion"},
+  {day:54,phase:"Phase 4: Opinions & Thought Leadership",title:"Why I'd Rather Work at 10-Person Startup Than 10,000-Person IT Co",hook:"'After 2 years at one of India's largest IT companies, I know exactly what I'm looking for next.'",format:"Reflective"},
+  {day:55,phase:"Phase 5: Convert to Offers",title:"I'm Available for Remote Agentic AI Roles — My Value Prop",hook:"'I've spent 60 days building AI agents in public. I'm now actively looking for a remote role.'",format:"Structured pitch"},
+  {day:56,phase:"Phase 5: Convert to Offers",title:"Everything I Built in 60 Days: Complete Portfolio",hook:"'60 days of building in public. Here is everything I made, wrote, and shipped — all in one place.'",format:"Carousel"},
+  {day:57,phase:"Phase 5: Convert to Offers",title:"What I Want in My Next Remote Role (And What I Don't)",hook:"'I've thought carefully about what I want in my next role. Here's an honest list.'",format:"Two-column format"},
+  {day:58,phase:"Phase 5: Convert to Offers",title:"To Every Startup Founder Who Read My Posts: The Ask",hook:"'If you've been following my content and you're building in this space — I'd love to hear what you're working on.'",format:"Short personal"},
+  {day:59,phase:"Phase 5: Convert to Offers",title:"AMA for Startup Founders: Ask Me About AI Agents",hook:"'Opening my comments for an AMA for startup founders and CTOs. Questions about implementing AI agents — ask anything.'",format:"AMA invitation"},
+  {day:60,phase:"Phase 5: Convert to Offers",title:"Day 60: What This Journey Taught Me About Building a Career in Public",hook:"'60 days ago I decided to build my Agentic AI career in public. Today I want to share everything that happened.'",format:"Long-form reflection"},
+];
+
+const ROADMAP_WEEKS = [
+  {week:1, phase:"Phase 1", title:"RAG Fundamentals", goal:"Build your first working RAG pipeline from scratch", tasks:["Load PDF with PyPDFLoader + chunk with RecursiveCharacterTextSplitter","Create FAISS vector store, run similarity search","Switch to ChromaDB, persist to disk","Build full RAG chain with LCEL","Add conversation memory (ConversationBufferMemory)","Weekend: Project 1 — working Q&A from 3 docs + GitHub + LinkedIn post"]},
+  {week:2, phase:"Phase 1", title:"Advanced RAG — Pinecone + Hybrid Search", goal:"Deploy to cloud vector DB, add production retrieval patterns", tasks:["Migrate ChromaDB project to Pinecone","Implement BM25 + EnsembleRetriever","Add Cohere reranking after retrieval","Implement ConversationSummaryMemory","Add streaming output with LCEL","Weekend: Project 2 — multi-doc research assistant"]},
+  {week:3, phase:"Phase 1", title:"LangGraph — The Framework That Gets You Hired", goal:"Build your first stateful agent with self-correction", tasks:["Build simplest LangGraph: 3 nodes with state passing","Conditional routing — if topic A → node A else → node B","Add MemorySaver checkpointing","Build CRAG skeleton: retrieve → grade → conditional","Add hallucination grader node","Weekend: Project 3 — Full Agentic RAG with CRAG + adaptive routing"]},
+  {week:4, phase:"Phase 1", title:"FastAPI + Docker + First Live Deployment", goal:"Get your agent live on the internet with a real URL", tasks:["Build FastAPI app: GET /health, POST /chat","Wrap LangGraph agent in FastAPI with streaming","Write Dockerfile, build + test container locally","Deploy Dockerized app to Railway, get HTTPS URL","Add .env management, secure secrets","Weekend: Project 4 — polish deployed agent, record Loom demo, share live URL"]},
+  {week:5, phase:"Phase 2", title:"CrewAI — Multi-Agent Systems", goal:"Build your first crew of collaborating AI agents", tasks:["Install CrewAI, build 2-agent crew (researcher + writer)","Add Tavily web search + file write tools","Convert to hierarchical crew with manager agent","Create 3 custom tools: web_search, read_file, write_file","Build 3-agent crew: Researcher → Analyst → Writer","Weekend: Project 5 — 3-agent Business Intelligence Report system"]},
+  {week:6, phase:"Phase 2", title:"Advanced LangGraph + LangSmith Observability", goal:"Human-in-the-loop + production monitoring", tasks:["Add human approval step with interrupt_before","Build parallel 3-retrieval nodes with Send API","Add LangSmith tracing to ALL previous projects","Add streaming with astream_events to FastAPI","Replace MemorySaver with SqliteSaver","Weekend: Project 6 — Business workflow agent with human approval + LangSmith traces"]},
+  {week:7, phase:"Phase 2", title:"Production: Docker Compose + AWS + Async Python", goal:"Real cloud deployment with monitoring and cost control", tasks:["Write docker-compose.yml with FastAPI + Redis","Launch EC2 t2.micro, deploy docker-compose app","Convert FastAPI endpoints to async, use asyncio.gather","Add Redis caching for LLM responses","Add token counting and cost logging","Weekend: Project 7 — Production Multi-Agent API on AWS (flagship project)"]},
+  {week:8, phase:"Phase 2", title:"SaaS Product + Streamlit + START APPLYING", goal:"First demo-able product + job applications begin", tasks:["Build Streamlit chat UI connecting to FastAPI backend","Add PDF file uploader → embed → chat","Multi-document support, source citation","Deploy to Streamlit Community Cloud, get public URL","Apply to 5 AI jobs on Wellfound + LinkedIn TODAY","Weekend: Launch Document Intelligence SaaS app publicly"]},
+  {week:9, phase:"Phase 2", title:"Evaluation + Observability + Apply 5 Jobs/Week", goal:"Make agents measurably better + stay in job hunt mode", tasks:["Install RAGAS, run eval on Week 2 project (20 Q&A pairs)","Improve lowest-scoring metric, re-run RAGAS","Set up LangSmith dataset + automated evaluation","Add tenacity retry decorator to all OpenAI calls","Apply to 5 more jobs + follow up on Week 8 applications","Weekend: RAGAS report + mock technical interview"]},
+  {week:10, phase:"Phase 3", title:"Multimodal Agents + Voice Input", goal:"GPT-4o vision + Whisper = top 5% of applicants", tasks:["Send screenshot to GPT-4o, extract text from handwritten note","Extract images from PDF → pass to GPT-4o vision","Record voice question → Whisper API → RAG agent answer","Add voice input to Streamlit app","Add table extraction with pdfplumber","Weekend: Upgrade Document Intelligence SaaS with multimodal support"]},
+  {week:11, phase:"Phase 3", title:"Real-World Integrations — Slack + APIs + Webhooks", goal:"Agents that live inside tools people already use", tasks:["Create Slack bot that responds to @mentions with RAG","Handle message.channels events with ngrok","Connect to Gmail API, summarize last 5 emails","Agent reads + updates Notion pages","Build FastAPI webhook endpoint with Background Tasks","Weekend: Complete Slack AI Agent deployed to Railway"]},
+  {week:12, phase:"Phase 3", title:"Capstone Project — Your Best Complete Product", goal:"The project you lead every interview with", tasks:["Choose capstone: AI meeting summarizer OR competitor research agent OR AI code reviewer","Set up project structure, GitHub repo, spec doc","Build core functionality (must work by end of day)","Add LangSmith tracing + error handling + async","Deploy capstone to AWS EC2 or Streamlit Cloud","Weekend: Polish capstone, user-test 3 hours, record 5-min Loom walkthrough"]},
+  {week:13, phase:"Phase 3", title:"Open Source + Profile Polish + 10 Applications", goal:"Maximum visibility + job hunt at full speed", tasks:["Find LangChain GitHub 'good first issue', submit PR","Write 800-1000 word technical article about what you built","Polish ALL GitHub repos: README, requirements.txt, screenshots","Update LinkedIn: new headline, About section, Featured projects","Apply to 10 jobs + send 10 cold outreach messages to founders","Weekend: Publish article on Medium, mock technical interview (30 min LangGraph from scratch)"]},
+  {week:14, phase:"Phase 4", title:"System Design + Live Coding Prep", goal:"Practice explaining your systems out loud every day", tasks:["Out loud: 'Design RAG system for 1M documents' — draw on paper","Out loud: 'Design customer support agent for 10,000 users'","Timed 45-min live coding: LangGraph agent with NO docs open","Prepare 3-min verbal answer: RAG vs Fine-tuning","Cost estimation: price per 1,000 queries for all 7 projects","Weekend: Full mock interview (45 min) — system design + live coding + project deep-dive"]},
+  {week:15, phase:"Phase 4", title:"Behavioral Prep + Aggressive Outreach", goal:"Convert warm followers into conversations and referrals", tasks:["Write 6 STAR stories (failure, proud, learning fast, independent, explain to non-tech, disagreement)","Send 20 personalized LinkedIn DMs to AI startup founders/CTOs","Prepare 3-min verbal answer: remote work best practices","Salary negotiation roleplay: practice never giving a number first","Apply to 10 jobs + follow up on all Week 12-13 applications","Weekend: Full behavioral interview mock (45 min) + record it"]},
+  {week:16, phase:"Phase 4", title:"Full Send — Convert to Offers", goal:"Close the deals. One offer changes everything.", tasks:["Review application tracker, send personalized follow-ups to 5 warmest leads","3-hour take-home simulation: RAG agent for provided document (no clarification)","Apply to 10 more jobs: EU startups on dealroom.co, AU/SG companies","Final mock interview — full 60 min: design + coding + behavioral + negotiation","Update LinkedIn Open to Work (recruiters only), ensure featured section is current","Day 112: Write your career transformation post — the most-viewed post you'll ever write"]},
+];
+
+// ===== STORAGE HELPERS =====
+const load = (k, def) => { try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e) { return def; } };
+const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+let jobs = load('jobs', []);
+let companyStatus = load('companyStatus', {});
+let liStatus = load('liStatus', {});
+let portalStatus = load('portalStatus', {});
+let weekStatus = load('weekStatus', {});
+
+// ===== COUNTDOWN =====
+function updateCountdown() {
+  const target = new Date('2026-08-24T00:00:00+05:30');
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) { document.getElementById('cd-days').textContent = '0'; return; }
+  const days = Math.floor(diff / 86400000);
+  const hrs = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  document.getElementById('cd-days').textContent = days;
+  document.getElementById('cd-hrs').textContent = hrs;
+  document.getElementById('cd-mins').textContent = mins;
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+// ===== TAB SWITCHING =====
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'jobs') renderJobs();
+  if (name === 'companies') renderCompanies();
+  if (name === 'linkedin') renderLinkedIn();
+  if (name === 'portals') renderPortals();
+  if (name === 'roadmap') renderRoadmap();
+}
+
+// ===== JOBS TAB =====
+function addJob() {
+  const company = document.getElementById('j-company').value.trim();
+  if (!company) { document.getElementById('j-msg').textContent = 'Company name required'; return; }
+  const job = {
+    id: Date.now(),
+    company,
+    role: document.getElementById('j-role').value.trim(),
+    portal: document.getElementById('j-portal').value.trim(),
+    date: document.getElementById('j-date').value,
+    status: document.getElementById('j-status').value,
+    salary: document.getElementById('j-salary').value.trim(),
+    url: document.getElementById('j-url').value.trim(),
+    followup: document.getElementById('j-followup').value,
+    notes: document.getElementById('j-notes').value.trim(),
+  };
+  jobs.unshift(job);
+  save('jobs', jobs);
+  ['j-company','j-role','j-portal','j-salary','j-url','j-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('j-msg').textContent = '✓ Added!';
+  setTimeout(() => document.getElementById('j-msg').textContent = '', 2000);
+  renderJobs();
+}
+
+function updateJobStatus(id, status) {
+  const job = jobs.find(j => j.id === id);
+  if (job) { job.status = status; save('jobs', jobs); renderJobs(); }
+}
+
+function deleteJob(id) {
+  jobs = jobs.filter(j => j.id !== id);
+  save('jobs', jobs);
+  renderJobs();
+}
+
+function showNotes(notes) {
+  document.getElementById('modal-notes-content').textContent = notes || 'No notes.';
+  document.getElementById('notes-modal').style.display = 'flex';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('notes-modal')) document.getElementById('notes-modal').style.display = 'none';
+}
+
+function renderJobs() {
+  const search = document.getElementById('j-search').value.toLowerCase();
+  const filterStatus = document.getElementById('j-filter-status').value;
+  let filtered = jobs.filter(j => {
+    const matchSearch = !search || j.company.toLowerCase().includes(search) || (j.role||'').toLowerCase().includes(search);
+    const matchStatus = !filterStatus || j.status === filterStatus;
+    return matchSearch && matchStatus;
+  });
+
+  const stats = { applied:0, interview:0, offer:0, rejected:0, 'following-up':0 };
+  jobs.forEach(j => { if (stats[j.status] !== undefined) stats[j.status]++; });
+
+  document.getElementById('job-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${jobs.length}</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#9b7dff">${stats.applied}</div><div class="stat-label">Applied</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent4)">${stats['following-up']}</div><div class="stat-label">Following Up</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent4)">${stats.interview}</div><div class="stat-label">Interviews</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent2)">${stats.offer}</div><div class="stat-label">Offers 🎉</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent3)">${stats.rejected}</div><div class="stat-label">Rejected</div></div>
+  `;
+
+  const tbody = document.getElementById('jobs-table');
+  const empty = document.getElementById('jobs-empty');
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = filtered.map(j => `
+    <tr>
+      <td><strong>${j.company}</strong></td>
+      <td>${j.role || '—'}</td>
+      <td>${j.date || '—'}</td>
+      <td>
+        <select class="badge" style="background:none;border:none;cursor:pointer;font-size:11px;" onchange="updateJobStatus(${j.id}, this.value)">
+          <option value="applied" ${j.status==='applied'?'selected':''}>Applied</option>
+          <option value="following-up" ${j.status==='following-up'?'selected':''}>Following Up</option>
+          <option value="interview" ${j.status==='interview'?'selected':''}>Interview</option>
+          <option value="offer" ${j.status==='offer'?'selected':''}>Offer 🎉</option>
+          <option value="rejected" ${j.status==='rejected'?'selected':''}>Rejected</option>
+        </select>
+      </td>
+      <td>${j.salary || '—'}</td>
+      <td style="color:${j.followup && new Date(j.followup) <= new Date() ? 'var(--accent3)' : 'inherit'}">${j.followup || '—'}</td>
+      <td>${j.portal || '—'}</td>
+      <td style="display:flex;gap:4px;align-items:center;">
+        ${j.url ? `<a href="${j.url}" target="_blank" class="btn btn-sm" style="background:var(--surface2);color:var(--accent);text-decoration:none;">↗</a>` : ''}
+        ${j.notes ? `<button class="btn btn-sm" style="background:var(--surface2);color:var(--muted);" onclick="showNotes('${j.notes.replace(/'/g,"\\'")}')">📝</button>` : ''}
+        <button class="btn btn-sm btn-danger" onclick="deleteJob(${j.id})">✕</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function exportJobs() {
+  const rows = [['Company','Role','Portal','Date','Status','Salary','Follow-up','URL','Notes']];
+  jobs.forEach(j => rows.push([j.company,j.role,j.portal,j.date,j.status,j.salary,j.followup,j.url,j.notes]));
+  const csv = rows.map(r => r.map(c => `"${(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'job-applications.csv';
+  a.click();
+}
+
+// ===== COMPANIES TAB =====
+function renderCompanies() {
+  const search = document.getElementById('c-search').value.toLowerCase();
+  const region = document.getElementById('c-region').value;
+  const dmFilter = document.getElementById('c-filter-dm').value;
+
+  let companies = [];
+  if (!region || region === 'startups') {
+    STARTUPS.forEach(c => companies.push({name: c.Company, meta: c.Category, url: c.Website, source: 'startup'}));
+  }
+  if (!region || (region !== 'startups' && REGIONAL[region])) {
+    const src = region && region !== 'startups' ? {[region]: REGIONAL[region]} : REGIONAL;
+    Object.entries(src).forEach(([reg, list]) => list.forEach(c => companies.push({name: c['Company Name'], meta: `${c.Country} · ${c['Focus Area']}`, url: '', source: reg})));
+  }
+
+  if (search) companies = companies.filter(c => c.name.toLowerCase().includes(search) || c.meta.toLowerCase().includes(search));
+  if (dmFilter) companies = companies.filter(c => (companyStatus[c.name]?.dm || 'pending') === dmFilter);
+
+  const dmSent = Object.values(companyStatus).filter(s => s.dm === 'sent').length;
+  const connected = Object.values(companyStatus).filter(s => s.dm === 'connected').length;
+  document.getElementById('company-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${companies.length}</div><div class="stat-label">Showing</div></div>
+    <div class="stat-card"><div class="stat-num">${STARTUPS.length + Object.values(REGIONAL).reduce((a,b)=>a+b.length,0)}</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent2)">${dmSent}</div><div class="stat-label">DMs Sent</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent4)">${connected}</div><div class="stat-label">Connected</div></div>
+  `;
+
+  const list = document.getElementById('companies-list');
+  if (companies.length === 0) { list.innerHTML = '<div class="empty"><div class="empty-icon">🏢</div>No companies match your filter.</div>'; return; }
+
+  list.innerHTML = companies.slice(0, 200).map(c => {
+    const s = companyStatus[c.name] || {};
+    const dm = s.dm || 'pending';
+    return `
+    <div class="company-card">
+      <div>
+        <div class="company-name">${c.name}</div>
+        <div class="company-meta">${c.meta}</div>
+      </div>
+      <div class="company-actions">
+        <span class="badge ${dm === 'connected' ? 'badge-offer' : dm === 'sent' ? 'badge-applied' : 'badge-not-applied'}">${dm === 'connected' ? '✓ Connected' : dm === 'sent' ? 'DM Sent' : 'Pending'}</span>
+        <select onchange="setCompanyDM('${c.name.replace(/'/g,"\\'")}', this.value)" style="width:auto;padding:4px 8px;font-size:11px;">
+          <option value="pending" ${dm==='pending'?'selected':''}>Pending</option>
+          <option value="sent" ${dm==='sent'?'selected':''}>DM Sent</option>
+          <option value="connected" ${dm==='connected'?'selected':''}>Connected</option>
+        </select>
+        ${c.url ? `<a href="${c.url}" target="_blank" class="btn btn-sm" style="background:var(--surface2);color:var(--accent);text-decoration:none;">↗</a>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  if (companies.length > 200) list.innerHTML += `<div style="text-align:center;padding:16px;color:var(--muted);font-size:11px;">Showing 200 of ${companies.length} — use filters to narrow down</div>`;
+}
+
+function setCompanyDM(name, status) {
+  if (!companyStatus[name]) companyStatus[name] = {};
+  companyStatus[name].dm = status;
+  save('companyStatus', companyStatus);
+  renderCompanies();
+}
+
+// ===== LINKEDIN TAB =====
+function renderLinkedIn() {
+  const done = Object.values(liStatus).filter(s => s.done).length;
+  const posted = Object.values(liStatus).filter(s => s.done).length;
+  document.getElementById('li-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent2)">${done}</div><div class="stat-label">Posted</div></div>
+    <div class="stat-card"><div class="stat-num">${60 - done}</div><div class="stat-label">Remaining</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent4)">${Object.values(liStatus).filter(s=>s.engagement).length}</div><div class="stat-label">Tracked Engagement</div></div>
+    <div class="stat-card"><div class="stat-num">${Math.round(done/60*100)}%</div><div class="stat-label">Complete</div></div>
+  `;
+  document.getElementById('li-progress-label').textContent = `Progress: ${done} of 60 posts done`;
+  document.getElementById('li-progress-bar').style.width = (done/60*100) + '%';
+
+  let currentPhase = '';
+  const container = document.getElementById('linkedin-posts');
+  container.innerHTML = LINKEDIN_POSTS.map(p => {
+    const s = liStatus[p.day] || {};
+    let phaseHeader = '';
+    if (p.phase !== currentPhase) { currentPhase = p.phase; phaseHeader = `<div class="phase-header">${p.phase}</div>`; }
+    return `${phaseHeader}
+    <div class="post-card" style="${s.done ? 'opacity:0.6;' : ''}">
+      <button class="toggle-done ${s.done ? 'done' : ''}" onclick="togglePost(${p.day})">✓</button>
+      <div class="post-info">
+        <div class="post-title">Day ${p.day}: ${p.title}</div>
+        <div class="post-hook">${p.hook}</div>
+        <div class="post-status">
+          <span class="badge" style="background:var(--surface2);color:var(--muted);">${p.format}</span>
+          ${s.done ? '<span class="badge badge-offer">✓ Posted</span>' : ''}
+          <input placeholder="Likes / engagement notes" value="${s.engagement||''}" oninput="saveEngagement(${p.day}, this.value)" style="width:160px;font-size:11px;padding:3px 8px;" />
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togglePost(day) {
+  if (!liStatus[day]) liStatus[day] = {};
+  liStatus[day].done = !liStatus[day].done;
+  save('liStatus', liStatus);
+  renderLinkedIn();
+}
+
+function saveEngagement(day, val) {
+  if (!liStatus[day]) liStatus[day] = {};
+  liStatus[day].engagement = val;
+  save('liStatus', liStatus);
+}
+
+// ===== PORTALS TAB =====
+function renderPortals() {
+  const search = document.getElementById('p-search').value.toLowerCase();
+  const filter = document.getElementById('p-filter').value;
+
+  let filtered = PORTALS.filter(p => {
+    const ps = portalStatus[p.Name] || {};
+    const matchSearch = !search || p.Name.toLowerCase().includes(search);
+    const matchFilter = !filter ||
+      (filter === 'account' && ps.account) ||
+      (filter === 'no-account' && !ps.account) ||
+      (filter === 'free' && p['Paid/Free'] === 'free') ||
+      (filter === 'paid' && p['Paid/Free'] === 'paid');
+    return matchSearch && matchFilter;
+  });
+
+  const accountCount = Object.values(portalStatus).filter(s => s.account).length;
+  document.getElementById('portals-grid').innerHTML = filtered.map(p => {
+    const ps = portalStatus[p.Name] || {};
+    return `
+    <div class="portal-card">
+      <div class="portal-name">${p.Name}</div>
+      <div class="portal-meta">${p['Paid/Free'] || 'free'}</div>
+      ${p.URL && p.URL !== '' ? `<a href="${p.URL}" target="_blank" class="portal-link">${p.URL.replace('https://','')}</a>` : '<span style="color:var(--muted);font-size:11px;">URL not listed</span>'}
+      <div class="account-check">
+        <input type="checkbox" id="portal-${p.Name.replace(/\s/g,'_')}" ${ps.account?'checked':''} onchange="togglePortal('${p.Name.replace(/'/g,"\\'")}', this.checked)" />
+        <label for="portal-${p.Name.replace(/\s/g,'_')}" style="cursor:pointer;color:${ps.account ? 'var(--accent2)' : 'var(--muted)'}">Account made</label>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togglePortal(name, val) {
+  if (!portalStatus[name]) portalStatus[name] = {};
+  portalStatus[name].account = val;
+  save('portalStatus', portalStatus);
+}
+
+// ===== ROADMAP TAB =====
+function renderRoadmap() {
+  const today = new Date('2026-03-23');
+  const startDate = new Date('2026-03-24');
+  const weeksElapsed = Math.floor((today - startDate) / (7 * 86400000));
+
+  const container = document.getElementById('roadmap-weeks');
+  container.innerHTML = ROADMAP_WEEKS.map((w, i) => {
+    const ws = weekStatus[w.week] || {};
+    const tasksComplete = ws.tasks || [];
+    const pct = Math.round(tasksComplete.length / w.tasks.length * 100);
+    const isCurrent = i === weeksElapsed;
+    const isPast = i < weeksElapsed;
+
+    return `
+    <div style="background:var(--card);border:1px solid ${isCurrent ? 'var(--accent)' : 'var(--border)'};border-radius:12px;padding:16px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:${isCurrent?'var(--accent)':isPast?'var(--accent2)':'var(--muted)'}">W${w.week}</div>
+        <div style="flex:1;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">${w.title}</div>
+          <div style="font-size:11px;color:var(--muted);">${w.phase} · ${w.goal}</div>
+        </div>
+        ${isCurrent ? '<span class="badge badge-interview">← Current Week</span>' : ''}
+        ${isPast && pct === 100 ? '<span class="badge badge-offer">✓ Done</span>' : ''}
+        <div style="font-size:12px;color:var(--accent2);">${pct}%</div>
+      </div>
+      <div class="progress-track" style="margin-bottom:10px;"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        ${w.tasks.map((task, ti) => `
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;line-height:1.4;">
+            <input type="checkbox" ${tasksComplete.includes(ti)?'checked':''} onchange="toggleTask(${w.week},${ti},this.checked)" style="width:auto;margin-top:2px;flex-shrink:0;" />
+            <span style="color:${tasksComplete.includes(ti)?'var(--muted)':'var(--text)'};text-decoration:${tasksComplete.includes(ti)?'line-through':'none'}">${task}</span>
+          </label>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleTask(week, taskIdx, checked) {
+  if (!weekStatus[week]) weekStatus[week] = { tasks: [] };
+  const tasks = weekStatus[week].tasks;
+  if (checked && !tasks.includes(taskIdx)) tasks.push(taskIdx);
+  if (!checked) weekStatus[week].tasks = tasks.filter(t => t !== taskIdx);
+  save('weekStatus', weekStatus);
+  renderRoadmap();
+}
+
+// ===== INIT =====
+renderJobs();
+</script>
+</body>
+</html>
