@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Career Tracker — Pune to $100K</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --surface2: #1a1a24;
+  --border: #2a2a3a;
+  --accent: #7c5cfc;
+  --accent2: #00e5a0;
+  --accent3: #ff6b6b;
+  --accent4: #ffd93d;
+  --text: #e8e8f0;
+  --muted: #6b6b80;
+  --card: #14141e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Mono', monospace;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 13px;
+}
+
+/* HEADER */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+
+.logo span { color: var(--accent); }
+
+.goal-badge {
+  background: linear-gradient(135deg, #7c5cfc22, #00e5a022);
+  border: 1px solid var(--accent);
+  color: var(--accent2);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-family: 'Syne', sans-serif;
+}
+
+/* COUNTDOWN */
+.countdown-bar {
+  display: flex;
+  gap: 16px;
+  padding: 8px 0 12px;
+  flex-wrap: wrap;
+}
+.cd-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cd-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--accent);
+  line-height: 1;
+}
+.cd-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.cd-sep { color: var(--border); font-size: 20px; align-self: center; margin-top: -4px; }
+.deadline-label { font-size: 10px; color: var(--accent3); align-self: center; font-family: 'Syne', sans-serif; margin-left: 4px; }
+
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  padding: 8px 16px;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* CONTENT */
+.content { padding: 20px; max-width: 1000px; margin: 0 auto; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* STATS ROW */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--accent);
+}
+.stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* FORM SECTION */
+.add-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+.form-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 12px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+input, select, textarea {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+textarea { resize: vertical; min-height: 60px; }
+select option { background: var(--surface2); }
+
+.btn {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #9b7dff; }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+.btn-danger { background: #ff6b6b22; color: var(--accent3); border: 1px solid var(--accent3); }
+.btn-danger:hover { background: var(--accent3); color: #fff; }
+.btn-success { background: #00e5a022; color: var(--accent2); border: 1px solid var(--accent2); }
+.btn-success:hover { background: var(--accent2); color: #000; }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 12px;
+  text-align: left;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+}
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+tbody tr:hover { background: var(--surface2); }
+tbody td {
+  padding: 10px 12px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+/* STATUS BADGES */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-applied { background: #7c5cfc22; color: #9b7dff; border: 1px solid #7c5cfc44; }
+.badge-interview { background: #ffd93d22; color: #ffd93d; border: 1px solid #ffd93d44; }
+.badge-offer { background: #00e5a022; color: #00e5a0; border: 1px solid #00e5a044; }
+.badge-rejected { background: #ff6b6b22; color: #ff6b6b; border: 1px solid #ff6b6b44; }
+.badge-following-up { background: #ff9f4322; color: #ff9f43; border: 1px solid #ff9f4344; }
+.badge-not-applied { background: #2a2a3a; color: var(--muted); border: 1px solid var(--border); }
+.badge-sent { background: #00e5a022; color: var(--accent2); }
+.badge-pending { background: #ffd93d22; color: var(--accent4); }
+
+/* PRIORITY STARS */
+.stars { color: var(--accent4); font-size: 13px; }
+
+/* FILTER ROW */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-row input, .filter-row select {
+  width: auto;
+  flex: 1;
+  min-width: 120px;
+  max-width: 220px;
+}
+.filter-label {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'Syne', sans-serif;
+  white-space: nowrap;
+}
+
+/* LINKEDIN POSTS */
+.post-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: border-color 0.2s;
+}
+.post-card:hover { border-color: var(--accent); }
+.post-day {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--accent);
+  min-width: 36px;
+  text-align: center;
+  line-height: 1;
+}
+.post-info { flex: 1; }
+.post-title { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 4px; }
+.post-hook { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.post-status { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.post-engagement { font-size: 11px; color: var(--accent2); }
+.toggle-done {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border);
+  background: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; flex-shrink: 0;
+  font-size: 11px;
+}
+.toggle-done.done { background: var(--accent2); border-color: var(--accent2); color: #000; }
+.phase-header {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 10px 0 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+  margin-top: 20px;
+}
+
+/* PORTAL GRID */
+.portal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.portal-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  transition: border-color 0.2s;
+}
+.portal-card:hover { border-color: var(--accent); }
+.portal-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+.portal-meta { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+.portal-link { color: var(--accent); font-size: 11px; text-decoration: none; word-break: break-all; }
+.portal-link:hover { text-decoration: underline; }
+.account-check { margin-top: 8px; display: flex; align-items: center; gap: 6px; font-size: 11px; }
+
+/* COMPANY TARGET CARD */
+.company-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.company-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; flex: 1; min-width: 120px; }
+.company-meta { font-size: 11px; color: var(--muted); }
+.company-actions { display: flex; gap: 6px; align-items: center; }
+
+/* WEEK PROGRESS */
+.week-bar { margin-bottom: 20px; }
+.week-label { font-family: 'Syne', sans-serif; font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+.progress-track { background: var(--surface2); border-radius: 4px; height: 6px; overflow: hidden; }
+.progress-fill { background: linear-gradient(90deg, var(--accent), var(--accent2)); height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .content { padding: 12px; }
+  .form-grid { grid-template-columns: 1fr 1fr; }
+  .header { padding: 12px 14px 0; }
+  .cd-num { font-size: 18px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* EMPTY STATE */
+.empty { text-align: center; padding: 40px 20px; color: var(--muted); }
+.empty-icon { font-size: 32px; margin-bottom: 10px; }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8); z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 14px; color: var(--accent); }
+.modal-close { float: right; cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; }
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="logo">AI<span>.</span>tracker</div>
+    <div class="goal-badge">🎯 $100K Remote AI Role</div>
+  </div>
+  <div class="countdown-bar">
+    <div class="cd-item"><div class="cd-num" id="cd-days">0</div><div class="cd-label">days</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-item"><div class="cd-num" id="cd-hrs">0</div><div class="cd-label">hrs</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-item"><div class="cd-num" id="cd-mins">0</div><div class="cd-label">min</div></div>
+    <div class="deadline-label">← Aug 24 deadline (birthday goal)</div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('jobs')">📋 Job Applications</button>
+    <button class="tab" onclick="switchTab('companies')">🏢 Target Companies</button>
+    <button class="tab" onclick="switchTab('linkedin')">📣 LinkedIn Posts</button>
+    <button class="tab" onclick="switchTab('portals')">🔗 Job Portals</button>
+    <button class="tab" onclick="switchTab('roadmap')">🗺 Roadmap</button>
+    <button class="tab" onclick="switchTab('daily')">⚡ Daily Tasks</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ===== JOBS TAB ===== -->
+<div class="tab-panel active" id="tab-jobs">
+  <div class="stats-row" id="job-stats"></div>
+
+  <div class="add-form">
+    <div class="form-title">+ Add Job Application</div>
+    <div class="form-grid">
+      <input id="j-company" placeholder="Company name" />
+      <input id="j-role" placeholder="Role title" />
+      <input id="j-portal" placeholder="Portal (LinkedIn, Wellfound…)" />
+      <input id="j-date" type="date" />
+      <select id="j-status">
+        <option value="applied">Applied</option>
+        <option value="following-up">Following Up</option>
+        <option value="interview">Interview</option>
+        <option value="offer">Offer 🎉</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <input id="j-salary" placeholder="Salary range ($)" />
+      <input id="j-url" placeholder="Job URL" />
+      <input id="j-followup" type="date" placeholder="Follow-up date" />
+    </div>
+    <textarea id="j-notes" placeholder="Notes (what you said, who you messaged, any context…)"></textarea>
+    <div style="margin-top:10px; display:flex; gap:8px; align-items:center;">
+      <button class="btn btn-primary" onclick="addJob()">Add Application</button>
+      <span id="j-msg" style="font-size:11px; color:var(--accent2);"></span>
+    </div>
+  </div>
+
+  <div class="filter-row">
+    <span class="filter-label">Filter:</span>
+    <input id="j-search" placeholder="Search company…" oninput="renderJobs()" />
+    <select id="j-filter-status" onchange="renderJobs()">
+      <option value="">All status</option>
+      <option value="applied">Applied</option>
+      <option value="following-up">Following Up</option>
+      <option value="interview">Interview</option>
+      <option value="offer">Offer</option>
+      <option value="rejected">Rejected</option>
+    </select>
+    <button class="btn btn-sm" style="background:var(--surface2); color:var(--muted);" onclick="exportJobs()">Export CSV</button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Salary</th>
+          <th>Follow-up</th>
+          <th>Portal</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="jobs-table"></tbody>
+    </table>
+  </div>
+  <div id="jobs-empty" class="empty" style="display:none;">
+    <div class="empty-icon">📋</div>
+    <div>No applications yet. Add your first one above.</div>
+    <div style="margin-top:6px; font-size:11px;">Start applying from Week 8 of the roadmap</div>
+  </div>
+</div>
+
+<!-- ===== COMPANIES TAB ===== -->
+<div class="tab-panel" id="tab-companies">
+  <div class="stats-row" id="company-stats"></div>
+
+  <div class="filter-row">
+    <span class="filter-label">Filter:</span>
+    <input id="c-search" placeholder="Search company…" oninput="renderCompanies()" />
+    <select id="c-region" onchange="renderCompanies()">
+      <option value="">All regions</option>
+      <option value="startups">AI Startups (114)</option>
+      <option value="Europe">Europe</option>
+      <option value="Australia & NZ">Australia & NZ</option>
+      <option value="Asia-Pacific">Asia-Pacific</option>
+      <option value="Middle East">Middle East</option>
+    </select>
+    <select id="c-filter-dm" onchange="renderCompanies()">
+      <option value="">All DM status</option>
+      <option value="pending">DM Pending</option>
+      <option value="sent">DM Sent</option>
+      <option value="connected">Connected</option>
+    </select>
+  </div>
+
+  <div id="companies-list"></div>
+</div>
+
+<!-- ===== LINKEDIN TAB ===== -->
+<div class="tab-panel" id="tab-linkedin">
+  <div class="stats-row" id="li-stats"></div>
+
+  <div class="week-bar">
+    <div class="week-label" id="li-progress-label">Loading progress…</div>
+    <div class="progress-track"><div class="progress-fill" id="li-progress-bar" style="width:0%"></div></div>
+  </div>
+
+  <div id="linkedin-posts"></div>
+</div>
+
+<!-- ===== PORTALS TAB ===== -->
+<div class="tab-panel" id="tab-portals">
+  <div class="section-title">78 Job Portals — Track Your Accounts</div>
+  <div class="filter-row">
+    <input id="p-search" placeholder="Search portal…" oninput="renderPortals()" />
+    <select id="p-filter" onchange="renderPortals()">
+      <option value="">All portals</option>
+      <option value="account">Account made</option>
+      <option value="no-account">No account yet</option>
+      <option value="free">Free only</option>
+      <option value="paid">Paid only</option>
+    </select>
+  </div>
+  <div class="portal-grid" id="portals-grid"></div>
+</div>
+
+<!-- ===== ROADMAP TAB ===== -->
+<div class="tab-panel" id="tab-roadmap">
+  <div class="section-title">16-Week Progress Tracker</div>
+  <div id="roadmap-weeks"></div>
+</div>
+
+</div><!-- /content -->
+
+
+<!-- ===== DAILY TASKS TAB ===== -->
+<div class="tab-panel" id="tab-daily">
+  <div id="daily-header-stats"></div>
+  <div id="daily-nav-row" style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;"></div>
+  <div id="daily-main-card"></div>
+  <div id="daily-streak-row" style="margin-top:16px;"></div>
+</div>
+
+<!-- Notes Modal -->
+<div class="modal-overlay" id="notes-modal" style="display:none;" onclick="closeModal(event)">
+  <div class="modal">
+    <span class="modal-close" onclick="document.getElementById('notes-modal').style.display='none'">✕</span>
+    <div class="modal-title">Notes</div>
+    <div id="modal-notes-content" style="font-size:13px; line-height:1.7; color:var(--text); white-space:pre-wrap;"></div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const STARTUPS = [{"Company":"Relevance AI","Category":"Agentic/Infra","Website":"https://relevance.ai"},{"Company":"Dust.tt","Category":"Agentic","Website":"https://dust.tt"},{"Company":"Fixie.ai","Category":"Agentic","Website":"https://fixie.ai"},{"Company":"Anthropic","Category":"Frontier LLM","Website":"https://www.anthropic.com"},{"Company":"Cohere","Category":"LLM","Website":"https://cohere.com"},{"Company":"Mistral AI","Category":"Frontier LLM","Website":"https://mistral.ai"},{"Company":"Together AI","Category":"LLM Infra","Website":"https://together.ai"},{"Company":"Replicate","Category":"LLM Infra","Website":"https://replicate.com"},{"Company":"Modal","Category":"LLM Infra","Website":"https://modal.com"},{"Company":"Baseten","Category":"LLM Infra","Website":"https://baseten.co"},{"Company":"LangChain","Category":"Agentic/Infra","Website":"https://langchain.com"},{"Company":"LlamaIndex","Category":"Agentic/Infra","Website":"https://llamaindex.ai"},{"Company":"Perplexity AI","Category":"AI Search","Website":"https://perplexity.ai"},{"Company":"You.com","Category":"AI Search","Website":"https://you.com"},{"Company":"Glean","Category":"AI Search","Website":"https://glean.com"},{"Company":"Embra","Category":"Agentic","Website":"https://embra.app"},{"Company":"Lindy AI","Category":"Agentic","Website":"https://lindy.ai"},{"Company":"Cognosys","Category":"Agentic","Website":"https://cognosys.ai"},{"Company":"MultiOn","Category":"Agentic","Website":"https://multion.ai"},{"Company":"Adept AI","Category":"Agentic","Website":"https://adept.ai"},{"Company":"Inflection AI","Category":"Frontier LLM","Website":"https://inflection.ai"},{"Company":"Character.AI","Category":"Conversational AI","Website":"https://character.ai"},{"Company":"Poe","Category":"LLM Tools","Website":"https://poe.com"},{"Company":"Jasper","Category":"GenAI Content","Website":"https://jasper.ai"},{"Company":"Copy.ai","Category":"GenAI Content","Website":"https://copy.ai"},{"Company":"Writer","Category":"GenAI Content","Website":"https://writer.com"},{"Company":"Pinecone","Category":"Vector DB","Website":"https://pinecone.io"},{"Company":"Weaviate","Category":"Vector DB","Website":"https://weaviate.io"},{"Company":"Qdrant","Category":"Vector DB","Website":"https://qdrant.tech"},{"Company":"Chroma","Category":"Vector Search","Website":"https://trychroma.com"},{"Company":"Vectara","Category":"Vector Search","Website":"https://vectara.com"},{"Company":"Runway","Category":"Video AI","Website":"https://runwayml.com"},{"Company":"Pika Labs","Category":"Video AI","Website":"https://pika.art"},{"Company":"Stability AI","Category":"Video AI","Website":"https://stability.ai"},{"Company":"ElevenLabs","Category":"Voice AI","Website":"https://elevenlabs.io"},{"Company":"PlayHT","Category":"Voice Assistants","Website":"https://play.ht"},{"Company":"Deepgram","Category":"Voice AI","Website":"https://deepgram.com"},{"Company":"AssemblyAI","Category":"Voice AI","Website":"https://assemblyai.com"},{"Company":"Scale AI","Category":"AI Data","Website":"https://scale.com"},{"Company":"Labelbox","Category":"AI Data","Website":"https://labelbox.com"},{"Company":"Snorkel AI","Category":"AI Data","Website":"https://snorkel.ai"},{"Company":"Weights & Biases","Category":"MLOps","Website":"https://wandb.ai"},{"Company":"Comet ML","Category":"MLOps","Website":"https://comet.com"},{"Company":"Determined AI","Category":"MLOps","Website":"https://determined.ai"},{"Company":"Hugging Face","Category":"LLM Tools","Website":"https://huggingface.co"},{"Company":"Replicate","Category":"LLM Tools","Website":"https://replicate.com"},{"Company":"Flowise","Category":"LLM Tools","Website":"https://flowiseai.com"},{"Company":"Superwise","Category":"AI Monitoring","Website":"https://superwise.ai"},{"Company":"Fiddler AI","Category":"AI Monitoring","Website":"https://fiddler.ai"},{"Company":"Arize AI","Category":"AI Monitoring","Website":"https://arize.com"},{"Company":"OpenAI","Category":"Frontier LLM","Website":"https://openai.com"},{"Company":"Cohere","Category":"LLM","Website":"https://cohere.com"},{"Company":"AI21 Labs","Category":"LLM","Website":"https://ai21.com"},{"Company":"Aleph Alpha","Category":"LLM","Website":"https://aleph-alpha.com"},{"Company":"Mosaic ML","Category":"LLM Infra","Website":"https://mosaicml.com"},{"Company":"Fireworks AI","Category":"LLM Infra","Website":"https://fireworks.ai"},{"Company":"Groq","Category":"AI Hardware/Infra","Website":"https://groq.com"},{"Company":"Cerebras","Category":"Edge AI Hardware","Website":"https://cerebras.net"},{"Company":"SambaNova","Category":"LLM Infra","Website":"https://sambanova.ai"},{"Company":"Turing","Category":"AI Talent","Website":"https://turing.com"},{"Company":"Kili Technology","Category":"AI Data","Website":"https://kili-technology.com"},{"Company":"Surge AI","Category":"AI Data","Website":"https://surgehq.ai"},{"Company":"Cleanlab","Category":"AI Data","Website":"https://cleanlab.ai"},{"Company":"Valohai","Category":"MLOps","Website":"https://valohai.com"},{"Company":"Gradient","Category":"MLOps","Website":"https://gradient.ai"},{"Company":"Steamship","Category":"Agentic/Infra","Website":"https://steamship.com"},{"Company":"Beam","Category":"Agentic/Infra","Website":"https://beam.cloud"},{"Company":"Superagent","Category":"Agentic","Website":"https://superagent.sh"},{"Company":"AgentGPT","Category":"Agentic","Website":"https://agentgpt.reworkd.ai"},{"Company":"AutoGPT","Category":"Agentic","Website":"https://agpt.co"},{"Company":"Zapier AI","Category":"Workflow Automation","Website":"https://zapier.com"},{"Company":"Make.com","Category":"Workflow Automation","Website":"https://make.com"},{"Company":"n8n","Category":"Workflow Automation","Website":"https://n8n.io"},{"Company":"Activepieces","Category":"Workflow Automation","Website":"https://activepieces.com"},{"Company":"Bardeen","Category":"RPA + AI","Website":"https://bardeen.ai"},{"Company":"Leena AI","Category":"HR AI","Website":"https://leena.ai"},{"Company":"Eightfold AI","Category":"HR AI","Website":"https://eightfold.ai"},{"Company":"Paradox AI","Category":"HR AI","Website":"https://paradox.ai"},{"Company":"Hume AI","Category":"Emotion AI","Website":"https://hume.ai"},{"Company":"Affectiva","Category":"Emotion AI","Website":"https://affectiva.com"},{"Company":"GoodVision","Category":"Computer Vision","Website":"https://goodvision.live"},{"Company":"Landing AI","Category":"Computer Vision","Website":"https://landing.ai"},{"Company":"Tractable","Category":"Computer Vision","Website":"https://tractable.ai"},{"Company":"Causaly","Category":"Healthcare AI","Website":"https://causaly.com"},{"Company":"Insitro","Category":"Healthcare AI","Website":"https://insitro.com"},{"Company":"Recursion","Category":"Healthcare AI","Website":"https://recursion.com"},{"Company":"Wayve","Category":"Autonomous Vehicles","Website":"https://wayve.ai"},{"Company":"Motional","Category":"Autonomous Vehicles","Website":"https://motional.com"},{"Company":"Samsara","Category":"IoT AI","Website":"https://samsara.com"},{"Company":"Verkada","Category":"IoT AI","Website":"https://verkada.com"},{"Company":"Instabase","Category":"Document AI","Website":"https://instabase.com"},{"Company":"Hypatos","Category":"Document AI","Website":"https://hypatos.ai"},{"Company":"Klarna AI","Category":"FinTech AI","Website":"https://klarna.com"},{"Company":"Midjourney","Category":"GenAI Content","Website":"https://midjourney.com"},{"Company":"Leonardo AI","Category":"GenAI Content","Website":"https://leonardo.ai"},{"Company":"Synthesia","Category":"Video AI","Website":"https://synthesia.io"},{"Company":"D-ID","Category":"Video AI","Website":"https://d-id.com"},{"Company":"Sierra AI","Category":"Chat / Support AI","Website":"https://sierra.ai"},{"Company":"Intercom AI","Category":"Chat / Support AI","Website":"https://intercom.com"}];
+
+const REGIONAL = {"Europe":[{"Country":"UK","Company Name":"DeepMind","Focus Area":"AI research"},{"Country":"UK","Company Name":"Graphcore","Focus Area":"AI hardware"},{"Country":"UK","Company Name":"BenevolentAI","Focus Area":"Drug discovery"},{"Country":"UK","Company Name":"Wayve","Focus Area":"Autonomous vehicles"},{"Country":"UK","Company Name":"Synthesia","Focus Area":"AI video generation"},{"Country":"UK","Company Name":"Tractable","Focus Area":"AI for insurance & automotive"},{"Country":"UK","Company Name":"Faculty AI","Focus Area":"Applied AI consulting"},{"Country":"UK","Company Name":"Mind Foundry","Focus Area":"AI platform for enterprises"},{"Country":"UK","Company Name":"Quantexa","Focus Area":"AI for financial crime"},{"Country":"UK","Company Name":"Onfido","Focus Area":"AI identity verification"},{"Country":"France","Company Name":"Hugging Face","Focus Area":"NLP models"},{"Country":"France","Company Name":"Mistral AI","Focus Area":"Open-source LLMs"},{"Country":"France","Company Name":"Holistic AI","Focus Area":"AI governance & audit"},{"Country":"France","Company Name":"Nabla","Focus Area":"AI for healthcare"},{"Country":"France","Company Name":"Prophesee","Focus Area":"Neuromorphic vision AI"},{"Country":"Germany","Company Name":"Aleph Alpha","Focus Area":"European sovereign LLM"},{"Country":"Germany","Company Name":"Celonis","Focus Area":"Process mining + AI"},{"Country":"Germany","Company Name":"Helsing","Focus Area":"Defence AI"},{"Country":"Germany","Company Name":"Merantix","Focus Area":"AI venture studio"},{"Country":"Germany","Company Name":"Parloa","Focus Area":"AI-powered voice agents"},{"Country":"Netherlands","Company Name":"Elastic","Focus Area":"Search & AI observability"},{"Country":"Netherlands","Company Name":"Guerrilla Games AI","Focus Area":"Game AI"},{"Country":"Netherlands","Company Name":"Secfix","Focus Area":"AI security compliance"},{"Country":"Netherlands","Company Name":"Robinhoodie","Focus Area":"AI trading"},{"Country":"Netherlands","Company Name":"Sana Labs","Focus Area":"AI learning platform"},{"Country":"Sweden","Company Name":"Epidemic Sound","Focus Area":"AI music"},{"Country":"Sweden","Company Name":"Klarna","Focus Area":"FinTech AI"},{"Country":"Sweden","Company Name":"Embark Studios","Focus Area":"Game AI"},{"Country":"Sweden","Company Name":"Peltarion","Focus Area":"AI platform"},{"Country":"Sweden","Company Name":"Normative","Focus Area":"AI carbon accounting"},{"Country":"Switzerland","Company Name":"Sophia Genetics","Focus Area":"Healthcare AI genomics"},{"Country":"Switzerland","Company Name":"Teralytics","Focus Area":"AI mobility analytics"},{"Country":"Switzerland","Company Name":"Neural Concept","Focus Area":"Deep learning for engineering"},{"Country":"Denmark","Company Name":"Corti","Focus Area":"AI for emergency medicine"},{"Country":"Denmark","Company Name":"Jabra Engage AI","Focus Area":"AI for call centres"},{"Country":"Denmark","Company Name":"Shape Robotics","Focus Area":"Educational robotics AI"},{"Country":"Finland","Company Name":"Silo AI","Focus Area":"Nordic LLMs"},{"Country":"Finland","Company Name":"Aito.ai","Focus Area":"Predictive AI"},{"Country":"Norway","Company Name":"Cognite","Focus Area":"Industrial AI"},{"Country":"Norway","Company Name":"Boost.ai","Focus Area":"Conversational AI"},{"Country":"Spain","Company Name":"Voicemod","Focus Area":"AI voice tech"},{"Country":"Spain","Company Name":"Strands AI","Focus Area":"Personalization AI"},{"Country":"Spain","Company Name":"Sherpa.ai","Focus Area":"Private AI assistants"},{"Country":"Poland","Company Name":"Brainly","Focus Area":"Education AI"},{"Country":"Poland","Company Name":"Infermedica","Focus Area":"Medical AI"},{"Country":"Czech Republic","Company Name":"Rossum","Focus Area":"Document AI"},{"Country":"Czech Republic","Company Name":"Kiwi.com AI","Focus Area":"Travel AI"},{"Country":"Estonia","Company Name":"Veriff","Focus Area":"AI identity"},{"Country":"Estonia","Company Name":"Pactum","Focus Area":"AI negotiation"},{"Country":"Portugal","Company Name":"Feedzai","Focus Area":"AI fraud prevention"},{"Country":"Portugal","Company Name":"Unbabel","Focus Area":"AI translation"},{"Country":"Italy","Company Name":"Translated","Focus Area":"AI language services"},{"Country":"Italy","Company Name":"Musixmatch AI","Focus Area":"AI music data"},{"Country":"Belgium","Company Name":"ML6","Focus Area":"Applied ML consulting"},{"Country":"Romania","Company Name":"Deepstash","Focus Area":"AI knowledge app"},{"Country":"Ireland","Company Name":"Aylien","Focus Area":"NLP analytics"},{"Country":"Austria","Company Name":"Leftshift One","Focus Area":"AI consulting"},{"Country":"Greece","Company Name":"Workable AI","Focus Area":"HR AI"},{"Country":"Hungary","Company Name":"Turbine AI","Focus Area":"Drug discovery AI"},{"Country":"Croatia","Company Name":"Gideon Brothers","Focus Area":"Autonomous robotics"},{"Country":"Latvia","Company Name":"Anatomy Next","Focus Area":"Medical AI education"},{"Country":"Serbia","Company Name":"Nordeus AI","Focus Area":"Game AI"},{"Country":"Bulgaria","Company Name":"Hypefactors","Focus Area":"PR AI analytics"},{"Country":"UK","Company Name":"Improbable","Focus Area":"Metaverse & AI simulation"},{"Country":"UK","Company Name":"Healx","Focus Area":"AI rare disease drug discovery"},{"Country":"UK","Company Name":"Secondmind","Focus Area":"Decision intelligence AI"},{"Country":"UK","Company Name":"Seldon","Focus Area":"MLOps"},{"Country":"UK","Company Name":"Signal AI","Focus Area":"AI media intelligence"},{"Country":"UK","Company Name":"Relation Therapeutics","Focus Area":"Genomic AI"},{"Country":"France","Company Name":"Shift Technology","Focus Area":"AI insurance fraud"},{"Country":"France","Company Name":"Meero","Focus Area":"AI photo editing"},{"Country":"Germany","Company Name":"Brighter AI","Focus Area":"Privacy AI"},{"Country":"Germany","Company Name":"Contiamo","Focus Area":"AI data platform"},{"Country":"Germany","Company Name":"Riva Health","Focus Area":"AI health monitoring"},{"Country":"Netherlands","Company Name":"OmniIndex","Focus Area":"Confidential AI"},{"Country":"Sweden","Company Name":"Peltarion","Focus Area":"AI for business"},{"Country":"Denmark","Company Name":"Templafy","Focus Area":"Document AI"},{"Country":"Finland","Company Name":"Bitwise","Focus Area":"ML education"},{"Country":"Switzerland","Company Name":"Wluper","Focus Area":"Conversational AI"},{"Country":"Spain","Company Name":"Genially","Focus Area":"Interactive content AI"},{"Country":"Poland","Company Name":"Cosmose AI","Focus Area":"Retail AI analytics"},{"Country":"Austria","Company Name":"Anyline","Focus Area":"Mobile OCR AI"},{"Country":"Israel","Company Name":"Lightricks","Focus Area":"AI photo & video editing"},{"Country":"Israel","Company Name":"Iguazio","Focus Area":"MLOps platform"},{"Country":"Israel","Company Name":"Zoominfo","Focus Area":"AI sales intelligence"},{"Country":"Israel","Company Name":"Gong.io","Focus Area":"Revenue intelligence AI"},{"Country":"Israel","Company Name":"Chorus.ai","Focus Area":"Conversation intelligence"},{"Country":"Israel","Company Name":"Verbit","Focus Area":"AI transcription"},{"Country":"Israel","Company Name":"Deci AI","Focus Area":"Neural network optimization"},{"Country":"Israel","Company Name":"Sight Machine","Focus Area":"Manufacturing AI"},{"Country":"Israel","Company Name":"Oriient","Focus Area":"Indoor navigation AI"},{"Country":"Israel","Company Name":"Mobileye","Focus Area":"Autonomous driving AI"}],"Australia & NZ":[{"Country":"Australia","Company Name":"Appen","Focus Area":"Data annotation & AI training"},{"Country":"Australia","Company Name":"Flamingo AI","Focus Area":"Conversational AI"},{"Country":"Australia","Company Name":"Hyper Anna","Focus Area":"AI analytics"},{"Country":"Australia","Company Name":"Harrison.ai","Focus Area":"Healthcare AI"},{"Country":"Australia","Company Name":"Coviu","Focus Area":"Telehealth AI"},{"Country":"Australia","Company Name":"Fynd","Focus Area":"Retail AI"},{"Country":"Australia","Company Name":"Presagen","Focus Area":"AI for IVF"},{"Country":"Australia","Company Name":"Complexica","Focus Area":"Decision intelligence"},{"Country":"Australia","Company Name":"Kasisto","Focus Area":"Banking AI"},{"Country":"Australia","Company Name":"Aibee","Focus Area":"Retail AI"},{"Country":"Australia","Company Name":"Trace","Focus Area":"Sports AI analytics"},{"Country":"Australia","Company Name":"Tiliter","Focus Area":"Computer vision retail"},{"Country":"Australia","Company Name":"Cluey Learning","Focus Area":"AI tutoring"},{"Country":"Australia","Company Name":"Rezatec","Focus Area":"Geospatial AI"},{"Country":"Australia","Company Name":"Whispir","Focus Area":"AI communications platform"},{"Country":"Australia","Company Name":"Archistar","Focus Area":"AI property intelligence"},{"Country":"Australia","Company Name":"Encode","Focus Area":"AI for investment research"},{"Country":"Australia","Company Name":"Faethm AI","Focus Area":"Workforce AI analytics"},{"Country":"Australia","Company Name":"Leaptel","Focus Area":"AI telecom"},{"Country":"Australia","Company Name":"Oho","Focus Area":"AI HR platform"},{"Country":"New Zealand","Company Name":"Soul Machines","Focus Area":"Digital humans"},{"Country":"New Zealand","Company Name":"Modecai","Focus Area":"AI supply chain"},{"Country":"New Zealand","Company Name":"Imagr","Focus Area":"Smart cart AI"},{"Country":"New Zealand","Company Name":"Valocity","Focus Area":"AI property valuation"},{"Country":"New Zealand","Company Name":"Quantiful","Focus Area":"AI demand forecasting"},{"Country":"New Zealand","Company Name":"Auror","Focus Area":"Crime intelligence AI"},{"Country":"New Zealand","Company Name":"Vxt","Focus Area":"AI phone system"},{"Country":"New Zealand","Company Name":"Raygun","Focus Area":"Error monitoring AI"},{"Country":"New Zealand","Company Name":"Datamine","Focus Area":"Retail AI analytics"},{"Country":"New Zealand","Company Name":"Clevertar","Focus Area":"Conversational AI agents"},{"Country":"Australia","Company Name":"Canva AI","Focus Area":"AI design tools"},{"Country":"Australia","Company Name":"Atlassian AI","Focus Area":"AI for work tools"},{"Country":"Australia","Company Name":"Roamler","Focus Area":"AI task marketplace"},{"Country":"Australia","Company Name":"Peaka","Focus Area":"No-code data AI"},{"Country":"Australia","Company Name":"Proptech AI","Focus Area":"Real estate AI"},{"Country":"Australia","Company Name":"MedRecordAI","Focus Area":"Healthcare records AI"},{"Country":"Australia","Company Name":"Premonition AI","Focus Area":"Legal AI analytics"},{"Country":"Australia","Company Name":"Genie AI","Focus Area":"Legal contract AI"},{"Country":"Australia","Company Name":"Curious Thing","Focus Area":"AI phone agent"},{"Country":"Australia","Company Name":"Tictoc","Focus Area":"AI home loans"},{"Country":"Australia","Company Name":"Evari","Focus Area":"AI insurance"},{"Country":"Australia","Company Name":"Hyper AI","Focus Area":"AI game development"},{"Country":"Australia","Company Name":"Earlybird AI","Focus Area":"AI talent screening"},{"Country":"Australia","Company Name":"Lexer","Focus Area":"Customer data AI"},{"Country":"Australia","Company Name":"Dovetail","Focus Area":"AI research insights"},{"Country":"Australia","Company Name":"SafetyCulture AI","Focus Area":"AI workplace safety"},{"Country":"Australia","Company Name":"Shippit","Focus Area":"Delivery AI"},{"Country":"Australia","Company Name":"MessageMedia AI","Focus Area":"AI messaging"},{"Country":"Australia","Company Name":"Agora AI","Focus Area":"AI procurement"},{"Country":"Australia","Company Name":"Stax AI","Focus Area":"Cloud cost AI"}],"Asia-Pacific":[{"Country":"India","Company Name":"Fractal Analytics","Focus Area":"AI consulting"},{"Country":"India","Company Name":"Mad Street Den","Focus Area":"Computer vision retail"},{"Country":"India","Company Name":"SigTuple","Focus Area":"AI healthcare diagnostics"},{"Country":"India","Company Name":"Haptik","Focus Area":"Conversational AI"},{"Country":"India","Company Name":"Yellow.ai","Focus Area":"Conversational AI platform"},{"Country":"India","Company Name":"Sarvam AI","Focus Area":"Indian language LLMs"},{"Country":"India","Company Name":"Krutrim","Focus Area":"Indian LLM"},{"Country":"India","Company Name":"Niramai","Focus Area":"AI breast cancer screening"},{"Country":"India","Company Name":"Niki.ai","Focus Area":"AI commerce"},{"Country":"India","Company Name":"Uniphore","Focus Area":"Conversational AI"},{"Country":"Singapore","Company Name":"Grab AI Lab","Focus Area":"AI for mobility & payments"},{"Country":"Singapore","Company Name":"Sea AI Lab","Focus Area":"Research AI"},{"Country":"Singapore","Company Name":"Hypotenuse AI","Focus Area":"AI content generation"},{"Country":"Singapore","Company Name":"Basis AI","Focus Area":"Machine learning platform"},{"Country":"Singapore","Company Name":"Taiger","Focus Area":"Document AI"},{"Country":"Japan","Company Name":"Preferred Networks","Focus Area":"Deep learning robotics"},{"Country":"Japan","Company Name":"Elyza","Focus Area":"Japanese LLM"},{"Country":"South Korea","Company Name":"Kakao Brain","Focus Area":"Korean LLM"},{"Country":"South Korea","Company Name":"NAVER AI Lab","Focus Area":"Search & vision AI"},{"Country":"China","Company Name":"Baidu AI","Focus Area":"Search & LLM"},{"Country":"China","Company Name":"ByteDance AI","Focus Area":"Recommendation & LLM"},{"Country":"Taiwan","Company Name":"ASUS AI","Focus Area":"AI hardware"},{"Country":"Hong Kong","Company Name":"SenseTime","Focus Area":"Computer vision AI"},{"Country":"Indonesia","Company Name":"Nodeflux","Focus Area":"Computer vision"},{"Country":"Vietnam","Company Name":"VinAI","Focus Area":"AI R&D"},{"Country":"Thailand","Company Name":"KASIKORN AI","Focus Area":"Banking AI"}],"Middle East":[{"Country":"UAE","Company Name":"G42","Focus Area":"AI cloud, healthcare, genomics"},{"Country":"UAE","Company Name":"Bayanat","Focus Area":"Geospatial AI"},{"Country":"UAE","Company Name":"Derq","Focus Area":"AI for traffic safety"},{"Country":"UAE","Company Name":"Group42","Focus Area":"AI & cloud"},{"Country":"UAE","Company Name":"Presight AI","Focus Area":"Big data analytics AI"},{"Country":"UAE","Company Name":"Alef Education","Focus Area":"AI edtech"},{"Country":"Saudi Arabia","Company Name":"STV","Focus Area":"AI media"},{"Country":"Saudi Arabia","Company Name":"Mozn","Focus Area":"AI for financial crime"},{"Country":"Saudi Arabia","Company Name":"Lean Technologies","Focus Area":"Open banking AI"},{"Country":"Saudi Arabia","Company Name":"Monsha'at AI","Focus Area":"SME AI tools"},{"Country":"Israel","Company Name":"AI21 Labs","Focus Area":"LLMs & NLP"},{"Country":"Israel","Company Name":"RunAI","Focus Area":"GPU orchestration"},{"Country":"Israel","Company Name":"Gong","Focus Area":"Revenue intelligence"},{"Country":"Jordan","Company Name":"Oasis500","Focus Area":"AI startup hub"},{"Country":"Egypt","Company Name":"Instabug","Focus Area":"App quality AI"},{"Country":"Egypt","Company Name":"Paymob AI","Focus Area":"FinTech AI"},{"Country":"Turkey","Company Name":"Getir AI","Focus Area":"Delivery AI"}]};
+
+const PORTALS = [{"Name":"Remote4me","Paid/Free":"free","URL":"https://remote4me.com/"},{"Name":"Working Nomads","Paid/Free":"free","URL":"https://www.workingnomads.com/jobs"},{"Name":"FlexJobs","Paid/Free":"paid","URL":"https://www.flexjobs.com/"},{"Name":"We Work Remotely","Paid/Free":"paid","URL":"https://weworkremotely.com/"},{"Name":"Remotive","Paid/Free":"paid","URL":"https://remotive.com/"},{"Name":"WellFound","Paid/Free":"free","URL":"https://wellfound.com/"},{"Name":"Glassdoor","Paid/Free":"free","URL":"https://glassdoor.com"},{"Name":"Otta","Paid/Free":"free","URL":"https://otta.com"},{"Name":"Remote.co","Paid/Free":"free","URL":"https://remote.co/remote-jobs/"},{"Name":"RemoteOK","Paid/Free":"free","URL":"https://remoteok.com/"},{"Name":"Indeed","Paid/Free":"free","URL":"https://indeed.com"},{"Name":"LinkedIn Jobs","Paid/Free":"free","URL":"https://linkedin.com/jobs"},{"Name":"YCombinator","Paid/Free":"free","URL":"https://ycombinator.com/jobs"},{"Name":"Himalayas","Paid/Free":"free","URL":"https://himalayas.app/"},{"Name":"arc.dev","Paid/Free":"free","URL":"https://arc.dev/"},{"Name":"Jobright","Paid/Free":"free","URL":"https://jobright.ai/"},{"Name":"Contra","Paid/Free":"free","URL":"https://contra.com/"},{"Name":"Dynamite Jobs","Paid/Free":"free","URL":"https://dynamitejobs.com/"},{"Name":"EzTrackr","Paid/Free":"free","URL":"https://eztrackr.app/"},{"Name":"Dealroom.co","Paid/Free":"free","URL":"https://dealroom.co/"},{"Name":"Europe Remotely","Paid/Free":"free","URL":"https://europeremotely.com/"},{"Name":"Hubstaff Talent","Paid/Free":"free","URL":"https://talent.hubstaff.com/"},{"Name":"Gun.io","Paid/Free":"free","URL":"https://gun.io/"},{"Name":"Toptal","Paid/Free":"free","URL":"https://toptal.com/"},{"Name":"Power to Fly","Paid/Free":"free","URL":"https://powertofly.com/"},{"Name":"Daily Remote","Paid/Free":"free","URL":"https://dailyremote.com/"},{"Name":"Just Remote","Paid/Free":"free","URL":"https://justremote.co/"},{"Name":"NoDesk","Paid/Free":"free","URL":"https://nodesk.co/"},{"Name":"Skip the Drive","Paid/Free":"free","URL":"https://www.skipthedrive.com/"},{"Name":"Built In","Paid/Free":"free","URL":"https://builtin.com/jobs"},{"Name":"The Muse","Paid/Free":"free","URL":"https://themuse.com/"},{"Name":"Authentic Jobs","Paid/Free":"free","URL":"https://authenticjobs.com/"},{"Name":"Stack Overflow Jobs","Paid/Free":"free","URL":"https://stackoverflow.com/jobs"},{"Name":"Behance","Paid/Free":"free","URL":"https://behance.net/joblist"},{"Name":"Dribble","Paid/Free":"free","URL":"https://dribbble.com/jobs"},{"Name":"Landing.jobs","Paid/Free":"free","URL":"https://landing.jobs/"},{"Name":"Jobgether","Paid/Free":"free","URL":"https://jobgether.com/"},{"Name":"Underdog.io","Paid/Free":"free","URL":"https://underdog.io/"},{"Name":"Wiseful's The List","Paid/Free":"free","URL":"https://joinwiseful.com/"},{"Name":"StillHiring.today","Paid/Free":"free","URL":"https://stillhiring.today/"},{"Name":"Web3 Jobs","Paid/Free":"free","URL":"https://web3.career/"},{"Name":"HiringCafe","Paid/Free":"free","URL":"https://hiring.cafe/"},{"Name":"Spotly","Paid/Free":"free","URL":"https://spotly.io/"},{"Name":"Monster","Paid/Free":"free","URL":"https://monster.com"},{"Name":"CareerCloud","Paid/Free":"free","URL":"https://careercloud.com/"},{"Name":"SimplyHired","Paid/Free":"free","URL":"https://simplyhired.com"},{"Name":"Dice","Paid/Free":"free","URL":"https://dice.com/"},{"Name":"TryRemotely","Paid/Free":"free","URL":"https://tryremotely.com/"},{"Name":"Outsourcely","Paid/Free":"free","URL":"https://outsourcely.com/"},{"Name":"Panqian","Paid/Free":"free","URL":"https://panqian.com/"}];
+
+const LINKEDIN_POSTS = [
+  // Phase 1: Days 1-10
+  {day:1,phase:"Phase 1: Establish Your Identity",title:"I Build AI Agents — Portfolio Launch",hook:"'I'm a software developer in India. In the last 6 months I built AI agents from scratch. Here's every one of them.'",format:"Carousel"},
+  {day:2,phase:"Phase 1: Establish Your Identity",title:"Why I'm Actively Looking for Remote Agentic AI Role",hook:"'I've spent the last year building AI agents while working full-time. I'm ready for a remote role. Here's what I bring.'",format:"Text post"},
+  {day:3,phase:"Phase 1: Establish Your Identity",title:"My Actual Tech Stack for Agentic AI",hook:"'People ask what I use to build AI agents. Here's my stack — not the buzzword version.'",format:"Carousel"},
+  {day:4,phase:"Phase 1: Establish Your Identity",title:"The Problem I'm Trying to Solve With AI Agents",hook:"'Most knowledge workers spend 30% of their time on tasks an AI agent could handle. I've been building solutions.'",format:"Story text"},
+  {day:5,phase:"Phase 1: Establish Your Identity",title:"I Rebuilt a Workflow Using AI — Before & After",hook:"'Before: 45 minutes of manual work. After: 3 minutes with an agent I built.'",format:"Carousel"},
+  {day:6,phase:"Phase 1: Establish Your Identity",title:"My GitHub for Agentic AI: A Guided Tour",hook:"'Here's a guided tour of my GitHub. Five Agentic AI projects, what each solves.'",format:"Carousel"},
+  {day:7,phase:"Phase 1: Establish Your Identity",title:"What Working at TCS Taught Me About Enterprise AI",hook:"'Working in a 600,000-person company teaches you things about AI deployment that tutorials never cover.'",format:"Numbered list"},
+  {day:8,phase:"Phase 1: Establish Your Identity",title:"The Agent I'm Most Proud Of: Full Technical Breakdown",hook:"'This is the AI agent I'd show in any technical interview. Full breakdown — architecture, stack, what broke.'",format:"Long-form + diagram"},
+  {day:9,phase:"Phase 1: Establish Your Identity",title:"I'm Based in India — Here's Why That's a Feature",hook:"'Yes, I'm based in Pune, India. Here's why that's actually an advantage for US and EU remote teams.'",format:"Punchy text"},
+  {day:10,phase:"Phase 1: Establish Your Identity",title:"My 30-Day Goal: 3 Live Agent Demos",hook:"'For the next 30 days I'm building 3 AI agent demos for problems early-stage startups actually face.'",format:"Announcement"},
+  // Phase 2: Days 11-25
+  {day:11,phase:"Phase 2: Teach Like an Expert",title:"LangChain vs CrewAI vs AutoGen: Honest Comparison",hook:"'If you're a startup building your first Agentic AI product in 2025, which framework do you choose? I've built with all three.'",format:"Comparison carousel"},
+  {day:12,phase:"Phase 2: Teach Like an Expert",title:"What Is Agentic AI? 60-Second Explanation for Non-Tech Founders",hook:"'Most explanations of Agentic AI are written for engineers. Here's one written for founders.'",format:"Clean carousel (5 slides)"},
+  {day:13,phase:"Phase 2: Teach Like an Expert",title:"How RAG Actually Works: Explained With My Project",hook:"'RAG is the most important concept in production AI right now. Here's how it works, through a real project I built.'",format:"Educational + code screenshot"},
+  {day:14,phase:"Phase 2: Teach Like an Expert",title:"5 Agentic AI Use Cases Startups Can Actually Charge For",hook:"'Everyone talks about what AI agents CAN do. Let's talk about what they can charge money for right now.'",format:"5-point text"},
+  {day:15,phase:"Phase 2: Teach Like an Expert",title:"How I Built a Document Intelligence Agent in a Weekend",hook:"'Saturday morning. Coffee. An idea. By Sunday night I had a working Document Intelligence agent.'",format:"Story + GitHub link"},
+  {day:16,phase:"Phase 2: Teach Like an Expert",title:"Prompt Engineer vs AI Agent Engineer: The Difference",hook:"'There's a big difference between prompt engineering and AI agent engineering. The salary difference is just as big.'",format:"Comparison"},
+  {day:17,phase:"Phase 2: Teach Like an Expert",title:"Memory in AI Agents: Why Beginner Agents Are Broken",hook:"'If your AI agent doesn't have properly implemented memory, it's not really an agent. It's an expensive chatbot.'",format:"Technical explainer"},
+  {day:18,phase:"Phase 2: Teach Like an Expert",title:"I Analyzed 50 Agentic AI Job Postings",hook:"'I went through 50 AI agent job postings from US and EU startups. Here are the skills that appeared most often.'",format:"Data carousel"},
+  {day:19,phase:"Phase 2: Teach Like an Expert",title:"How Tool Calling Works: Visual Guide",hook:"'Tool calling is what separates a basic AI chatbot from a real AI agent. Visual breakdown of exactly how it works.'",format:"Diagram carousel"},
+  {day:20,phase:"Phase 2: Teach Like an Expert",title:"Building a Customer Support Agent for a SaaS Startup",hook:"'Customer support is the #1 place startups want to use AI. Here's how I'd build a production-grade support agent.'",format:"Step-by-step"},
+  {day:21,phase:"Phase 2: Teach Like an Expert",title:"My Biggest Technical Failure (And What I Fixed)",hook:"'My AI agent went into an infinite loop at 2 AM and made 200 API calls. Very expensive. Here's what I learned.'",format:"Failure story"},
+  {day:22,phase:"Phase 2: Teach Like an Expert",title:"How I'd Design AI Agent Architecture for an Early Startup",hook:"'If a seed-stage startup hired me tomorrow to build their AI agent infra, here is what I'd propose on Day 1.'",format:"Architecture walkthrough"},
+  {day:23,phase:"Phase 2: Teach Like an Expert",title:"OpenAI vs Anthropic vs Open Source for Production Agents",hook:"'Choosing your LLM provider is the most important infrastructure decision a startup building AI agents will make.'",format:"Structured opinion"},
+  {day:24,phase:"Phase 2: Teach Like an Expert",title:"How to Interview for an Agentic AI Role",hook:"'I've been preparing for Agentic AI interviews at US and EU startups. Here are the 6 questions that keep coming up.'",format:"6-point post"},
+  {day:25,phase:"Phase 2: Teach Like an Expert",title:"What Nobody Tells You About Deploying AI Agents",hook:"'Building an AI agent is easy. Getting it to run reliably in production is a completely different problem.'",format:"Lessons-learned"},
+  // Phase 3: Days 26-42
+  {day:26,phase:"Phase 3: Proof of Work",title:"Demo Day: Live AI Agent Demo Video",hook:"'I built an AI agent that researches any company and delivers a brief in 90 seconds. Here's a live demo.'",format:"Loom video"},
+  {day:27,phase:"Phase 3: Proof of Work",title:"Open Source Drop: Multi-Agent Framework",hook:"'I just open-sourced a multi-agent workflow framework I've been building for 2 months.'",format:"Announcement + GitHub"},
+  {day:28,phase:"Phase 3: Proof of Work",title:"Full Case Study: AI Agent for [Industry]",hook:"'I built a contract review AI agent for a legal-tech startup. Full case study: problem, architecture, demo.'",format:"Carousel (8-10 slides)"},
+  {day:29,phase:"Phase 3: Proof of Work",title:"Week 4 Build Log: What I Shipped, Broke, What's Next",hook:"'Week 4 of building in public. Here's what I shipped, what completely broke, and what's next.'",format:"Short casual post"},
+  {day:30,phase:"Phase 3: Proof of Work",title:"My RAG Pipeline: PDF to Production in 48 Hours",hook:"'48 hours. One PDF ingestion pipeline. Zero tutorials followed. Here's exactly how I built it.'",format:"Step-by-step + GitHub"},
+  {day:31,phase:"Phase 3: Proof of Work",title:"I Connected My AI Agent to 5 Real APIs",hook:"'My agent needed to call Notion, Slack, HubSpot, Gmail, and a custom REST API. Here's what broke.'",format:"Structured lessons"},
+  {day:32,phase:"Phase 3: Proof of Work",title:"Build With Me: SaaS AI Agent Tool in Public",hook:"'I'm building a small SaaS product powered by AI agents. I'll document everything: idea, build, failures, users.'",format:"Announcement"},
+  {day:33,phase:"Phase 3: Proof of Work",title:"How I Handle Agent Failures Gracefully in Production",hook:"'Your AI agent will fail. The question is whether it fails gracefully or catastrophically.'",format:"Technical + code"},
+  {day:34,phase:"Phase 3: Proof of Work",title:"Agent Cost Optimization: Cut My OpenAI Bill by 60%",hook:"'My first AI agent was burning $200/month in API costs for a simple task. I got it down to $80.'",format:"Before/after cost breakdown"},
+  {day:35,phase:"Phase 3: Proof of Work",title:"My Full Portfolio: Visual Gallery of All AI Agents",hook:"'6 months of building AI agents. Here's every project in one place.'",format:"Carousel"},
+  {day:36,phase:"Phase 3: Proof of Work",title:"30 Days Building AI Agents: 7 Things I Wish I Knew",hook:"'30 days. 5 agents built. Dozens of hours debugging. Here are the 7 things I wish someone had told me.'",format:"Numbered list"},
+  {day:37,phase:"Phase 3: Proof of Work",title:"10-Minute Demo of My Best AI Agent",hook:"'I put together a 10-minute walkthrough of my most complex AI agent build. Architecture, code, failures.'",format:"Video link"},
+  {day:38,phase:"Phase 3: Proof of Work",title:"Collaboration: Looking for Dev to Co-Build Open Source Agent",hook:"'I'm looking for 1-2 developers to co-build an open source Agentic AI framework.'",format:"Short direct post"},
+  {day:39,phase:"Phase 3: Proof of Work",title:"I Audited 10 Agentic AI Products on Product Hunt",hook:"'I spent a weekend going through 10 Agentic AI products on Product Hunt. Here's my honest assessment.'",format:"Review post"},
+  {day:40,phase:"Phase 3: Proof of Work",title:"My AI Agent Testing Framework",hook:"'I don't push any AI agent to production without running it through my testing framework first.'",format:"Process post"},
+  {day:41,phase:"Phase 3: Proof of Work",title:"Multi-Agent System: What I Learned Orchestrating 4 Agents",hook:"'Getting one AI agent to work is satisfying. Getting four to collaborate took me 3 weeks to figure out.'",format:"Technical story"},
+  {day:42,phase:"Phase 3: Proof of Work",title:"Phase 3 Wrap-Up: Everything I Built in 2 Weeks",hook:"'Two weeks of building in public. Full summary: what I shipped, what got most engagement, what's coming.'",format:"Summary"},
+  // Phase 4 & 5: Days 43-60
+  {day:43,phase:"Phase 4: Opinions & Thought Leadership",title:"Hot Take: Most Companies Claiming Agentic AI Aren't",hook:"'I've seen 50+ posts about deploying AI agents. After reading carefully: most of them are just prompt chaining.'",format:"Opinion"},
+  {day:44,phase:"Phase 4: Opinions & Thought Leadership",title:"AI Agents Will Hit Enterprise Mainstream in 18 Months",hook:"'I'm making a prediction: enterprise AI agent adoption will hit an inflection point within 18 months.'",format:"Prediction"},
+  {day:45,phase:"Phase 4: Opinions & Thought Leadership",title:"Agentic AI Frameworks Nobody's Talking About",hook:"'Everyone's talking about LangChain. Here are 3 frameworks that are quietly better for specific use cases.'",format:"Short carousel"},
+  {day:46,phase:"Phase 4: Opinions & Thought Leadership",title:"Why Remote AI Engineers from India Are In Demand in 2025",hook:"'Something is quietly shifting in how US and EU startups think about remote AI engineering talent from India.'",format:"Data-informed opinion"},
+  {day:47,phase:"Phase 4: Opinions & Thought Leadership",title:"I Disagree With 'AI Will Take Developer Jobs'",hook:"'After spending a year building AI agents, I have a more nuanced view. Here's what I actually think.'",format:"Essay-style"},
+  {day:48,phase:"Phase 4: Opinions & Thought Leadership",title:"Why Most AI Agent POCs Never Make It to Production",hook:"'I've seen a lot of AI agent demos. Far fewer in production. The gap is always the same problem.'",format:"Problem analysis"},
+  {day:49,phase:"Phase 4: Opinions & Thought Leadership",title:"Agentic AI in APAC: Opportunity Nobody in Silicon Valley Watches",hook:"'The Agentic AI conversation is dominated by US and European perspectives. Here's what's happening in Asia-Pacific.'",format:"Regional insight"},
+  {day:50,phase:"Phase 4: Opinions & Thought Leadership",title:"Honest Assessment: Every Major LLM Provider for Startups",hook:"'I've built agents on OpenAI, Anthropic, Gemini, and open source. Completely honest assessment of each.'",format:"Structured comparison"},
+  {day:51,phase:"Phase 4: Opinions & Thought Leadership",title:"What EU Startups Want vs What US Startups Want",hook:"'I've been studying job postings from EU and US startups. Real differences in what each market prioritizes.'",format:"Comparison"},
+  {day:52,phase:"Phase 4: Opinions & Thought Leadership",title:"Ethics of AI Agents: 4 Questions I Ask Before Shipping",hook:"'As someone building AI agents, I think about ethics more than I expected to. Here are 4 questions I ask.'",format:"Thoughtful measured"},
+  {day:53,phase:"Phase 4: Opinions & Thought Leadership",title:"3 Industries Where AI Agents Will Create $1B+ Companies",hook:"'I've been mapping where AI agents create the most defensible value. Three industries stand out.'",format:"3-point opinion"},
+  {day:54,phase:"Phase 4: Opinions & Thought Leadership",title:"Why I'd Rather Work at 10-Person Startup Than 10,000-Person IT Co",hook:"'After 2 years at one of India's largest IT companies, I know exactly what I'm looking for next.'",format:"Reflective"},
+  {day:55,phase:"Phase 5: Convert to Offers",title:"I'm Available for Remote Agentic AI Roles — My Value Prop",hook:"'I've spent 60 days building AI agents in public. I'm now actively looking for a remote role.'",format:"Structured pitch"},
+  {day:56,phase:"Phase 5: Convert to Offers",title:"Everything I Built in 60 Days: Complete Portfolio",hook:"'60 days of building in public. Here is everything I made, wrote, and shipped — all in one place.'",format:"Carousel"},
+  {day:57,phase:"Phase 5: Convert to Offers",title:"What I Want in My Next Remote Role (And What I Don't)",hook:"'I've thought carefully about what I want in my next role. Here's an honest list.'",format:"Two-column format"},
+  {day:58,phase:"Phase 5: Convert to Offers",title:"To Every Startup Founder Who Read My Posts: The Ask",hook:"'If you've been following my content and you're building in this space — I'd love to hear what you're working on.'",format:"Short personal"},
+  {day:59,phase:"Phase 5: Convert to Offers",title:"AMA for Startup Founders: Ask Me About AI Agents",hook:"'Opening my comments for an AMA for startup founders and CTOs. Questions about implementing AI agents — ask anything.'",format:"AMA invitation"},
+  {day:60,phase:"Phase 5: Convert to Offers",title:"Day 60: What This Journey Taught Me About Building a Career in Public",hook:"'60 days ago I decided to build my Agentic AI career in public. Today I want to share everything that happened.'",format:"Long-form reflection"},
+];
+
+const ROADMAP_DAYS_FULL = [{"day": 1, "date": "2026-03-24", "phase": "Pre-Week", "week": "Pre-Week", "title": "Python Warmup Day 1", "learn": "Read: Python functions, file I/O, list comprehensions \u2014 30min", "code": "Code: Write function to read text file, count words, print top 10 words. No tutorial.", "linkedin": "Update LinkedIn headline to: Agentic AI Engineer | LangChain \u00b7 LangGraph \u00b7 RAG | Python | Open to Remote Roles", "apply": null, "resource": "docs.python.org/3/tutorial", "project": "RAG Pipeline v1"}, {"day": 2, "date": "2026-03-25", "phase": "Pre-Week", "week": "Pre-Week", "title": "Python Warmup Day 2", "learn": "Read: Python classes, decorators, error handling \u2014 30min", "code": "Code: Call OpenAI API, print a response. Then call it 3 times with different prompts.", "linkedin": null, "apply": null, "resource": "platform.openai.com/docs/api-reference", "project": "RAG Pipeline v1"}, {"day": 3, "date": "2026-03-26", "phase": "Pre-Week", "week": "Pre-Week", "title": "Python Warmup Day 3", "learn": "Read: LangChain basics \u2014 what is a chain, what is a prompt template", "code": "Code: Load a PDF with PyPDFLoader. Split with RecursiveCharacterTextSplitter. Print first 5 chunks.", "linkedin": "Write LinkedIn 'About' section draft \u2014 3 paragraphs, under 200 words", "apply": null, "resource": "python.langchain.com/docs/tutorials/rag", "project": "RAG Pipeline v1"}, {"day": 4, "date": "2026-03-27", "phase": "Pre-Week", "week": "Pre-Week", "title": "Python Warmup Day 4", "learn": "Read: What is a vector embedding? Watch 3Blue1Brown Neural Networks Ep1 (15min)", "code": "Code: Create FAISS vector store from your PDF chunks. Run a similarity search. Print top 3 results.", "linkedin": null, "apply": null, "resource": "youtube.com \u2014 3Blue1Brown Neural Networks playlist", "project": "RAG Pipeline v1"}, {"day": 5, "date": "2026-03-28", "phase": "Pre-Week", "week": "Pre-Week", "title": "Python Warmup Day 5", "learn": "Read: OpenAI embeddings docs. Understand what a vector actually is.", "code": "Code: Build a basic Q&A from a PDF end-to-end. No LCEL yet \u2014 just retriever + prompt + llm manually.", "linkedin": "Post LinkedIn Day 1: 'I Build AI Agents \u2014 Here's Everything I've Made'", "apply": null, "resource": "platform.openai.com/docs/guides/embeddings", "project": "RAG Pipeline v1"}, {"day": 6, "date": "2026-03-29", "phase": "Pre-Week", "week": "Pre-Week", "title": "Python Warmup Day 6 \u2014 Weekend Build", "learn": "Review everything from Days 1-5. Read LangChain LCEL intro.", "code": "Build: Full RAG pipeline from memory. PDF \u2192 chunks \u2192 embeddings \u2192 FAISS \u2192 Q&A chain. Push to GitHub.", "linkedin": null, "apply": null, "resource": "python.langchain.com/docs/expression_language", "project": "RAG Pipeline v1"}, {"day": 7, "date": "2026-03-30", "phase": "Pre-Week", "week": "Pre-Week", "title": "Python Warmup Day 7 \u2014 Weekend Build", "learn": "Review: What worked, what didn't. Read LangChain LCEL pipe syntax.", "code": "Build: Clean up your Day 6 code. Write README.md. Push to GitHub. This is your first public AI repo.", "linkedin": "Post LinkedIn Day 2: 'Why I'm Actively Looking for Remote Agentic AI Role'", "apply": null, "resource": "github.com \u2014 write README", "project": "RAG Pipeline v1"}, {"day": 8, "date": "2026-03-31", "phase": "Phase 1: RAG Mastery", "week": "Week 1", "title": "W1 Mon \u2014 RAG: Docs + Chunking", "learn": "Read: LangChain RAG tutorial docs end to end. Understand chunk_size vs overlap.", "code": "Code: Rebuild PyPDFLoader + RecursiveCharacterTextSplitter. Try chunk_size=500 vs 1000. Compare chunks.", "linkedin": null, "apply": null, "resource": "docs.langchain.com/docs/tutorials/rag", "project": "Project 1 \u2014 RAG Q&A"}, {"day": 9, "date": "2026-04-01", "phase": "Phase 1: RAG Mastery", "week": "Week 1", "title": "W1 Tue \u2014 RAG: FAISS Vector Store", "learn": "Watch: Krish Naik Section 16 \u2014 first 2 videos. Take notes on FAISS setup.", "code": "Code: Create FAISS vector store from PDF chunks. Run similarity search. Print top 3 results with scores.", "linkedin": "Post LinkedIn Day 3: My Actual Tech Stack for Agentic AI", "apply": null, "resource": "Krish Naik Agentic AI Bootcamp \u2014 Section 16 (Udemy)", "project": "Project 1 \u2014 RAG Q&A"}, {"day": 10, "date": "2026-04-02", "phase": "Phase 1: RAG Mastery", "week": "Week 1", "title": "W1 Wed \u2014 RAG: ChromaDB + Persistence", "learn": "Read: OpenAI embeddings docs. Watch 3Blue1Brown 'Attention' 10min clip.", "code": "Code: Switch from FAISS to ChromaDB. Persist the database to disk. Reload it next session without re-embedding.", "linkedin": null, "apply": null, "resource": "FREE: youtube.com \u2014 3Blue1Brown Neural Networks (Ep 1)", "project": "Project 1 \u2014 RAG Q&A"}, {"day": 11, "date": "2026-04-03", "phase": "Phase 1: RAG Mastery", "week": "Week 1", "title": "W1 Thu \u2014 RAG: LCEL Chain", "learn": "Watch: Krish Naik Section 16 \u2014 RAG chain videos. Understand LCEL pipe syntax.", "code": "Code: Build full RAG chain: retriever | prompt | llm | StrOutputParser. Ask 5 different questions. Print all.", "linkedin": "Post LinkedIn Day 4: The Problem I'm Trying to Solve With AI Agents", "apply": null, "resource": "Krish Naik \u2014 Section 16 RAG chain videos", "project": "Project 1 \u2014 RAG Q&A"}, {"day": 12, "date": "2026-04-04", "phase": "Phase 1: RAG Mastery", "week": "Week 1", "title": "W1 Fri \u2014 RAG: Conversation Memory", "learn": "Read: LangChain LCEL \u2014 RunnablePassthrough and RunnableParallel docs.", "code": "Code: Add ConversationBufferMemory to your RAG chain. Have a 3-turn conversation with your PDF.", "linkedin": null, "apply": null, "resource": "python.langchain.com/docs/expression_language", "project": "Project 1 \u2014 RAG Q&A"}, {"day": 13, "date": "2026-04-05", "phase": "Phase 1: RAG Mastery", "week": "Week 1", "title": "W1 Sat \u2014 Project 1 Part A", "learn": "Review Mon-Fri code. Plan your 3-doc Q&A project.", "code": "BUILD (6hrs): Load 3 PDFs, embed with OpenAI, store in ChromaDB, build LCEL RAG chain. Working Q&A by EOD.", "linkedin": "Post LinkedIn Day 5: I Rebuilt a Workflow Using AI \u2014 Before & After", "apply": null, "resource": "BUILD \u2014 use everything from Mon-Fri. No tutorials.", "project": "Project 1 \u2014 RAG Q&A"}, {"day": 14, "date": "2026-04-06", "phase": "Phase 1: RAG Mastery", "week": "Week 1", "title": "W1 Sun \u2014 Project 1 Part B + GitHub", "learn": "Review your code for bugs and edge cases.", "code": "BUILD (6hrs): Add conversation memory. Clean up code. Write README.md with architecture. Push to GitHub.", "linkedin": "Post LinkedIn Day 6: My GitHub for Agentic AI: A Guided Tour", "apply": null, "resource": "github.com \u2014 create repo, write README. linkedin.com \u2014 post.", "project": "Project 1 \u2014 RAG Q&A"}, {"day": 15, "date": "2026-04-07", "phase": "Phase 1: RAG Mastery", "week": "Week 2", "title": "W2 Mon \u2014 Pinecone Setup", "learn": "Read: Pinecone quickstart docs. Understand indexes, namespaces, upsert vs query. Create free account.", "code": "Code: Create Pinecone index. Migrate your Week 1 ChromaDB project to Pinecone. Verify vectors stored.", "linkedin": null, "apply": null, "resource": "docs.pinecone.io/guides/get-started/quickstart", "project": "Project 2 \u2014 Multi-doc Research"}, {"day": 16, "date": "2026-04-08", "phase": "Phase 1: RAG Mastery", "week": "Week 2", "title": "W2 Tue \u2014 Hybrid Search", "learn": "Watch: Krish Naik Section 16 \u2014 advanced retrieval videos. Note hybrid search concept.", "code": "Code: Implement BM25 keyword retriever alongside Pinecone. Build EnsembleRetriever combining both.", "linkedin": "Post LinkedIn Day 7: What Working at TCS Taught Me About Enterprise AI", "apply": null, "resource": "Krish Naik \u2014 advanced retrieval section", "project": "Project 2 \u2014 Multi-doc Research"}, {"day": 17, "date": "2026-04-09", "phase": "Phase 1: RAG Mastery", "week": "Week 2", "title": "W2 Wed \u2014 Cohere Reranking", "learn": "Read: Cohere Rerank API docs. Understand cross-encoder vs bi-encoder. Create free Cohere account.", "code": "Code: Add Cohere reranking after retrieval. Before: top 10 chunks. After rerank: top 3 best. Print comparison.", "linkedin": null, "apply": null, "resource": "docs.cohere.com/docs/reranking", "project": "Project 2 \u2014 Multi-doc Research"}, {"day": 18, "date": "2026-04-10", "phase": "Phase 1: RAG Mastery", "week": "Week 2", "title": "W2 Thu \u2014 Advanced Memory", "learn": "Watch: Krish Naik \u2014 conversation memory advanced. Read LangChain memory types.", "code": "Code: Implement ConversationSummaryMemory for long conversations. Test with 10-turn conversation.", "linkedin": "Post LinkedIn Day 8: The Agent I'm Most Proud Of: Full Technical Breakdown", "apply": null, "resource": "Krish Naik \u2014 memory section", "project": "Project 2 \u2014 Multi-doc Research"}, {"day": 19, "date": "2026-04-11", "phase": "Phase 1: RAG Mastery", "week": "Week 2", "title": "W2 Fri \u2014 LCEL Streaming", "learn": "Read: LangChain LCEL advanced \u2014 RunnableLambda, RunnableParallel, stream vs batch.", "code": "Code: Refactor RAG chain to use LCEL properly. Add streaming output. Print tokens as they arrive.", "linkedin": null, "apply": null, "resource": "python.langchain.com/docs/expression_language/how_to/streaming", "project": "Project 2 \u2014 Multi-doc Research"}, {"day": 20, "date": "2026-04-12", "phase": "Phase 1: RAG Mastery", "week": "Week 2", "title": "W2 Sat \u2014 Project 2 Part A", "learn": "Review Week 2 concepts. Plan multi-doc research assistant.", "code": "BUILD (6hrs): 5+ articles on one topic into Pinecone. Hybrid search + reranking. Q&A interface. Better answers.", "linkedin": "Post LinkedIn Day 9: I'm Based in India \u2014 Here's Why That's a Feature", "apply": null, "resource": "Pinecone + Cohere + LangChain LCEL. No tutorials.", "project": "Project 2 \u2014 Multi-doc Research"}, {"day": 21, "date": "2026-04-13", "phase": "Phase 1: RAG Mastery", "week": "Week 2", "title": "W2 Sun \u2014 Project 2 Part B + Architecture", "learn": "Review and stress test your project with edge-case questions.", "code": "BUILD (6hrs): Add streaming + conversation memory. Draw architecture diagram in draw.io. Push to GitHub.", "linkedin": "Post LinkedIn Day 10: My 30-Day Goal: 3 Live Agent Demos", "apply": null, "resource": "app.diagrams.net (draw.io) for architecture diagram.", "project": "Project 2 \u2014 Multi-doc Research"}, {"day": 22, "date": "2026-04-14", "phase": "Phase 1: RAG Mastery", "week": "Week 3", "title": "W3 Mon \u2014 LangGraph Basics", "learn": "Read: LangGraph conceptual overview \u2014 StateGraph, nodes, edges, END.", "code": "Code: Build simplest LangGraph: 3 nodes (start \u2192 process \u2192 end). Pass state between them. Print state each step.", "linkedin": null, "apply": null, "resource": "langchain-ai.github.io/langgraph/tutorials/introduction", "project": "Project 3 \u2014 Agentic RAG"}, {"day": 23, "date": "2026-04-15", "phase": "Phase 1: RAG Mastery", "week": "Week 3", "title": "W3 Tue \u2014 Conditional Routing", "learn": "Watch: LangChain Academy \u2014 Introduction to LangGraph (FREE). Watch first 3 modules.", "code": "Code: Build LangGraph agent with conditional routing. Topic A \u2192 node A. Else \u2192 node B. Test both paths.", "linkedin": "Post LinkedIn Day 11: LangChain vs CrewAI vs AutoGen: Honest Comparison", "apply": null, "resource": "academy.langchain.com \u2014 Introduction to LangGraph (100% free)", "project": "Project 3 \u2014 Agentic RAG"}, {"day": 24, "date": "2026-04-16", "phase": "Phase 1: RAG Mastery", "week": "Week 3", "title": "W3 Wed \u2014 MemorySaver Checkpointing", "learn": "Watch: LangChain Academy \u2014 LangGraph modules 4-6. Focus on MemorySaver.", "code": "Code: Add MemorySaver to your graph. Run same graph twice with same thread_id. Verify it remembers state.", "linkedin": null, "apply": null, "resource": "academy.langchain.com \u2014 Introduction to LangGraph (continued)", "project": "Project 3 \u2014 Agentic RAG"}, {"day": 25, "date": "2026-04-17", "phase": "Phase 1: RAG Mastery", "week": "Week 3", "title": "W3 Thu \u2014 CRAG Pattern", "learn": "Read: LangGraph tutorials \u2014 Agentic RAG (CRAG). Read fully before coding.", "code": "Code: Build CRAG skeleton: retrieve \u2192 grade_docs \u2192 conditional: answer if good, rewrite+retrieve if bad.", "linkedin": "Post LinkedIn Day 12: What Is Agentic AI? 60-Second Explanation for Founders", "apply": null, "resource": "langchain-ai.github.io/langgraph/tutorials/rag/langgraph_crag", "project": "Project 3 \u2014 Agentic RAG"}, {"day": 26, "date": "2026-04-18", "phase": "Phase 1: RAG Mastery", "week": "Week 3", "title": "W3 Fri \u2014 Hallucination Grader", "learn": "Read: LangGraph tutorials \u2014 Adaptive RAG. Understand query routing.", "code": "Code: Add hallucination grader node to CRAG. Agent checks its own answer before returning to user.", "linkedin": null, "apply": null, "resource": "langchain-ai.github.io/langgraph/tutorials/rag/langgraph_adaptive_rag", "project": "Project 3 \u2014 Agentic RAG"}, {"day": 27, "date": "2026-04-19", "phase": "Phase 1: RAG Mastery", "week": "Week 3", "title": "W3 Sat \u2014 Project 3 Part A", "learn": "Review CRAG pattern thoroughly. Understand each node's purpose.", "code": "BUILD (6hrs): Full Agentic RAG with CRAG. Nodes: retrieve\u2192grade_docs\u2192[rewrite OR generate]\u2192grade_answer\u2192return.", "linkedin": "Post LinkedIn Day 13: How RAG Actually Works: Explained With My Project", "apply": null, "resource": "langchain-ai.github.io/langgraph/tutorials/rag/langgraph_crag (your blueprint)", "project": "Project 3 \u2014 Agentic RAG"}, {"day": 28, "date": "2026-04-20", "phase": "Phase 1: RAG Mastery", "week": "Week 3", "title": "W3 Sun \u2014 Project 3 Part B + Tavily", "learn": "Review your CRAG. Plan web search fallback with Tavily.", "code": "BUILD (6hrs): Add adaptive routing \u2014 web search fallback via Tavily if docs not relevant. Architecture diagram. GitHub push.", "linkedin": "Post LinkedIn Day 14: 5 Agentic AI Use Cases Startups Can Actually Charge For", "apply": null, "resource": "tavily.com \u2014 free API tier for web search. Draw diagram in draw.io.", "project": "Project 3 \u2014 Agentic RAG"}, {"day": 29, "date": "2026-04-21", "phase": "Phase 1: RAG Mastery", "week": "Week 4", "title": "W4 Mon \u2014 FastAPI Basics", "learn": "Read: FastAPI official tutorial \u2014 first steps, path params, request body, Pydantic models.", "code": "Code: Build FastAPI app with 3 endpoints: GET /health, POST /chat (takes question, returns answer). Run locally.", "linkedin": null, "apply": null, "resource": "fastapi.tiangolo.com/tutorial/first-steps", "project": "Project 4 \u2014 Live API"}, {"day": 30, "date": "2026-04-22", "phase": "Phase 1: RAG Mastery", "week": "Week 4", "title": "W4 Tue \u2014 FastAPI + LangGraph", "learn": "Watch: FastAPI course on enterprise Udemy. Watch async endpoints section.", "code": "Code: Wrap your Week 3 LangGraph CRAG agent in FastAPI. POST /chat calls the graph. Return streaming response.", "linkedin": "Post LinkedIn Day 15: How I Built a Document Intelligence Agent in a Weekend", "apply": null, "resource": "Search 'FastAPI' on enterprise Udemy \u2014 pick highest rated, watch 2hrs", "project": "Project 4 \u2014 Live API"}, {"day": 31, "date": "2026-04-23", "phase": "Phase 1: RAG Mastery", "week": "Week 4", "title": "W4 Wed \u2014 Docker", "learn": "Read: Docker get-started guide \u2014 what is a container, Dockerfile syntax, docker build and run.", "code": "Code: Write Dockerfile for FastAPI app. Build image locally. Run container. Test /chat endpoint inside Docker.", "linkedin": null, "apply": null, "resource": "docs.docker.com/get-started/overview", "project": "Project 4 \u2014 Live API"}, {"day": 32, "date": "2026-04-24", "phase": "Phase 1: RAG Mastery", "week": "Week 4", "title": "W4 Thu \u2014 Railway Deployment", "learn": "Read: Railway.app docs \u2014 deploying a Docker container. Create free Railway account.", "code": "Code: Deploy Dockerized FastAPI agent to Railway. Get a live HTTPS URL. Test it with Postman or curl.", "linkedin": "Post LinkedIn Day 16: The Difference Between Prompt Engineer and AI Agent Engineer", "apply": null, "resource": "docs.railway.app/guides/deploy", "project": "Project 4 \u2014 Live API"}, {"day": 33, "date": "2026-04-25", "phase": "Phase 1: RAG Mastery", "week": "Week 4", "title": "W4 Fri \u2014 Env Vars + Security", "learn": "Read: python-dotenv docs. Understand .env files, .gitignore, never commit API keys.", "code": "Code: Add proper environment variable management. Create .env.example. Verify no secrets in GitHub. Add /docs.", "linkedin": null, "apply": null, "resource": "pypi.org/project/python-dotenv", "project": "Project 4 \u2014 Live API"}, {"day": 34, "date": "2026-04-26", "phase": "Phase 1: RAG Mastery", "week": "Week 4", "title": "W4 Sat \u2014 Project 4 Part A", "learn": "Review deployed agent. Plan error handling and robustness improvements.", "code": "BUILD (6hrs): Polish deployed agent. Error handling (try/except). Request logging. /health checks OpenAI API. Test 20 questions.", "linkedin": "Post LinkedIn Day 17: Memory in AI Agents: Why Beginner Agents Are Broken", "apply": null, "resource": "Your existing codebase. Focus on robustness, not new features.", "project": "Project 4 \u2014 Live API"}, {"day": 35, "date": "2026-04-27", "phase": "Phase 1: RAG Mastery", "week": "Week 4", "title": "W4 Sun \u2014 Project 4 Launch + Loom", "learn": "Review the full Phase 1 \u2014 you have 4 projects deployed.", "code": "BUILD (6hrs): Write API README with curl examples. Record 2-min Loom demo. LinkedIn post: share the LIVE URL.", "linkedin": "POST: 'I just deployed my first AI agent API live. Here is the link and architecture.' SHARE THE LIVE URL.", "apply": null, "resource": "loom.com \u2014 free screen recording. Share your Railway URL.", "project": "Project 4 \u2014 Live API"}, {"day": 36, "date": "2026-04-28", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 5", "title": "W5 Mon \u2014 CrewAI Basics", "learn": "Read: CrewAI docs \u2014 Core Concepts: Agents, Tasks, Crew, Tools.", "code": "Code: Install CrewAI. Build simplest crew: 2 agents (researcher + writer), 2 tasks, run sequentially.", "linkedin": null, "apply": null, "resource": "docs.crewai.com/introduction", "project": "Project 5 \u2014 Business Intel"}, {"day": 37, "date": "2026-04-29", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 5", "title": "W5 Tue \u2014 CrewAI Tools", "learn": "Watch: Search 'CrewAI tutorial 2025' on YouTube \u2014 pick a video under 30 min.", "code": "Code: Add Tavily web search tool to researcher agent. Add file write tool to writer. Agents search AND save.", "linkedin": "Post LinkedIn Day 18: I Analyzed 50 Agentic AI Job Postings", "apply": null, "resource": "YouTube \u2014 'CrewAI tutorial 2025' (top result, under 30min)", "project": "Project 5 \u2014 Business Intel"}, {"day": 38, "date": "2026-04-30", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 5", "title": "W5 Wed \u2014 Hierarchical Crews", "learn": "Read: CrewAI docs \u2014 Process types. Sequential vs hierarchical. When to use manager agent.", "code": "Code: Convert sequential crew to hierarchical. Add manager agent that assigns tasks and reviews outputs.", "linkedin": null, "apply": null, "resource": "docs.crewai.com/concepts/crews#crew-attributes", "project": "Project 5 \u2014 Business Intel"}, {"day": 39, "date": "2026-05-01", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 5", "title": "W5 Thu \u2014 Custom Tools", "learn": "Read: LangChain tools docs \u2014 creating custom tools with @tool decorator.", "code": "Code: Create 3 custom tools: web_search, read_file, write_file. Give different tools to different agents.", "linkedin": "Post LinkedIn Day 19: How Tool Calling Works in AI Agents: A Visual Guide", "apply": null, "resource": "python.langchain.com/docs/how_to/custom_tools", "project": "Project 5 \u2014 Business Intel"}, {"day": 40, "date": "2026-05-02", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 5", "title": "W5 Fri \u2014 CrewAI Memory", "learn": "Read: CrewAI docs \u2014 Memory types and kickoff with inputs. Crew output structure.", "code": "Code: Build 3-agent crew: Researcher \u2192 Analyst \u2192 Writer. Each takes previous agent's output. Run on business topic.", "linkedin": null, "apply": null, "resource": "docs.crewai.com/concepts/memory", "project": "Project 5 \u2014 Business Intel"}, {"day": 41, "date": "2026-05-03", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 5", "title": "W5 Sat \u2014 Project 5 Part A", "learn": "Review 3-agent architecture. Plan the business intel report system.", "code": "BUILD (6hrs): 3-Agent Research system. Agent 1: Tavily search. Agent 2: analyze+structure. Agent 3: format report. Input: company name.", "linkedin": "Post LinkedIn Day 20: Building a Customer Support Agent for a SaaS Startup", "apply": null, "resource": "docs.crewai.com \u2014 use as reference while building", "project": "Project 5 \u2014 Business Intel"}, {"day": 42, "date": "2026-05-04", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 5", "title": "W5 Sun \u2014 Project 5 Part B", "learn": "Test your crew with 3 different company names.", "code": "BUILD (6hrs): Add markdown output saving. Test 5 companies. Architecture diagram. GitHub push. LinkedIn post.", "linkedin": "POST: '3 AI agents collaborating like a research team. Here is how I designed each role and why order matters.'", "apply": null, "resource": "No new resources \u2014 use what you built.", "project": "Project 5 \u2014 Business Intel"}, {"day": 43, "date": "2026-05-05", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 6", "title": "W6 Mon \u2014 Human-in-the-Loop", "learn": "Read: LangGraph docs \u2014 Human-in-the-loop. interrupt_before, interrupt_after, Command class.", "code": "Code: Add human approval step to Week 3 CRAG agent. Agent pauses. Human types 'approve' or 'reject'.", "linkedin": null, "apply": null, "resource": "langchain-ai.github.io/langgraph/how-tos/human_in_the_loop", "project": "Project 6 \u2014 Business Workflow"}, {"day": 44, "date": "2026-05-06", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 6", "title": "W6 Tue \u2014 Parallel Execution", "learn": "Read: LangGraph docs \u2014 parallel execution with Send API. Fan-out, fan-in patterns.", "code": "Code: Build graph that runs 3 retrieval nodes in parallel, collects results, synthesizes. Measure latency.", "linkedin": "Post LinkedIn Day 21: My Biggest Technical Failure Building an AI Agent", "apply": null, "resource": "langchain-ai.github.io/langgraph/how-tos/branching", "project": "Project 6 \u2014 Business Workflow"}, {"day": 45, "date": "2026-05-07", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 6", "title": "W6 Wed \u2014 LangSmith Tracing", "learn": "Read: LangSmith quickstart docs. Create free account at smith.langchain.com.", "code": "Code: Add LangSmith tracing to ALL previous projects. Set LANGCHAIN_TRACING_V2=true. View traces.", "linkedin": null, "apply": null, "resource": "docs.smith.langchain.com/how_to_guides/tracing/trace_with_langchain", "project": "Project 6 \u2014 Business Workflow"}, {"day": 46, "date": "2026-05-08", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 6", "title": "W6 Thu \u2014 Streaming Agents", "learn": "Read: LangGraph docs \u2014 streaming. astream() vs astream_events(). Stream agent thoughts.", "code": "Code: Add streaming to FastAPI endpoint. Client receives tokens as agent generates them. Test in browser.", "linkedin": "Post LinkedIn Day 22: How I Would Design AI Agent Architecture for an Early Startup", "apply": null, "resource": "langchain-ai.github.io/langgraph/how-tos/streaming-tokens", "project": "Project 6 \u2014 Business Workflow"}, {"day": 47, "date": "2026-05-09", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 6", "title": "W6 Fri \u2014 SqliteSaver Persistence", "learn": "Read: LangGraph docs \u2014 persistence with SqliteSaver. thread_id for multi-user sessions.", "code": "Code: Replace MemorySaver with SqliteSaver. Each user gets own thread_id. Agent remembers across restarts.", "linkedin": null, "apply": null, "resource": "langchain-ai.github.io/langgraph/how-tos/persistence", "project": "Project 6 \u2014 Business Workflow"}, {"day": 48, "date": "2026-05-10", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 6", "title": "W6 Sat \u2014 Project 6 Part A", "learn": "Review human-in-the-loop pattern. Plan business workflow agent.", "code": "BUILD (6hrs): Business workflow agent. Reads email summary, drafts reply, pauses for human approval, saves to file.", "linkedin": "Post LinkedIn Day 23: OpenAI vs Anthropic vs Open Source for Production Agents", "apply": null, "resource": "LangGraph docs + LangSmith dashboard.", "project": "Project 6 \u2014 Business Workflow"}, {"day": 49, "date": "2026-05-11", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 6", "title": "W6 Sun \u2014 Project 6 LangSmith Screenshots", "learn": "Review your LangSmith traces carefully.", "code": "BUILD (6hrs): Screenshot LangSmith traces. Add to README. GitHub push. LinkedIn post with trace screenshot.", "linkedin": "POST: 'Here is the LangSmith trace of my AI agent making decisions. This is what debugging actually looks like.'", "apply": null, "resource": "smith.langchain.com \u2014 screenshot dashboard", "project": "Project 6 \u2014 Business Workflow"}, {"day": 50, "date": "2026-05-12", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 7", "title": "W7 Mon \u2014 Docker Compose", "learn": "Read: Docker Compose docs \u2014 docker-compose.yml syntax, services, volumes, env_file.", "code": "Code: Write docker-compose.yml for FastAPI + Redis services. Run both with docker-compose up.", "linkedin": null, "apply": null, "resource": "docs.docker.com/compose/gettingstarted", "project": "Project 7 \u2014 Production AWS API"}, {"day": 51, "date": "2026-05-13", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 7", "title": "W7 Tue \u2014 AWS EC2", "learn": "Read: AWS EC2 getting started. Watch 'AWS EC2 tutorial for beginners 2025' on YouTube (30min).", "code": "Code: Launch t2.micro EC2 instance (free tier). SSH in. Install Docker. Deploy docker-compose app. Get public IP.", "linkedin": "Post LinkedIn Day 24: How to Interview for an Agentic AI Role", "apply": null, "resource": "YouTube \u2014 'AWS EC2 tutorial for beginners 2025' + aws.amazon.com free tier", "project": "Project 7 \u2014 Production AWS API"}, {"day": 52, "date": "2026-05-14", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 7", "title": "W7 Wed \u2014 Async Python", "learn": "Read: Python asyncio docs \u2014 async/await, event loop, asyncio.gather for concurrency.", "code": "Code: Convert FastAPI endpoints to async. Run 3 agent calls concurrently with asyncio.gather. Measure latency.", "linkedin": null, "apply": null, "resource": "docs.python.org/3/library/asyncio.html", "project": "Project 7 \u2014 Production AWS API"}, {"day": 53, "date": "2026-05-15", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 7", "title": "W7 Thu \u2014 Redis Caching", "learn": "Read: Redis-py docs quickstart. SET, GET, EXPIRE. Use case: caching LLM responses.", "code": "Code: Add Redis caching to FastAPI app. Same question within 1hr \u2192 return cached response. Log cache hits.", "linkedin": "Post LinkedIn Day 25: What Nobody Tells You About Deploying AI Agents", "apply": null, "resource": "redis-py.readthedocs.io/en/stable/examples/connection_examples.html", "project": "Project 7 \u2014 Production AWS API"}, {"day": 54, "date": "2026-05-16", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 7", "title": "W7 Fri \u2014 Cost Control + Token Counting", "learn": "Read: OpenAI usage dashboard. Understand token pricing. tiktoken library.", "code": "Code: Add token counting to every LLM call. Log cost per request. Model selection: simple\u2192gpt-4o-mini, complex\u2192gpt-4o.", "linkedin": null, "apply": null, "resource": "platform.openai.com/docs/guides/production-best-practices", "project": "Project 7 \u2014 Production AWS API"}, {"day": 55, "date": "2026-05-17", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 7", "title": "W7 Sat \u2014 Project 7 Part A", "learn": "Review your full stack: FastAPI + CrewAI + Redis + Docker + AWS.", "code": "BUILD (6hrs): Production Multi-Agent API on AWS. Take Week 5 CrewAI project. Wrap async FastAPI. Add Redis. Dockerize. Deploy EC2.", "linkedin": "Post LinkedIn Day 26: Demo Day: Live AI Agent Demo Video", "apply": null, "resource": "Everything from weeks 1-7. AWS free tier + Redis + LangSmith.", "project": "Project 7 \u2014 Production AWS API"}, {"day": 56, "date": "2026-05-18", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 7", "title": "W7 Sun \u2014 Project 7 Load Testing", "learn": "Review load test results and LangSmith traces.", "code": "BUILD (6hrs): Load test with 10 concurrent requests. Check traces. Screenshot cost per 100 requests. Full README. GitHub.", "linkedin": "POST: 'Production AI agent architecture on AWS. Here are the actual latency and cost numbers.'", "apply": null, "resource": "vegeta load testing tool (free CLI). LangSmith dashboard.", "project": "Project 7 \u2014 Production AWS API"}, {"day": 57, "date": "2026-05-19", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 8", "title": "W8 Mon \u2014 Streamlit Basics", "learn": "Read: Streamlit docs \u2014 getting started, st.chat_message, st.chat_input, st.session_state.", "code": "Code: Build basic Streamlit chat UI connecting to FastAPI backend. Users type questions, see answers stream.", "linkedin": null, "apply": null, "resource": "docs.streamlit.io/get-started/tutorials/create-a-multipage-app", "project": "SaaS \u2014 Document Intelligence"}, {"day": 58, "date": "2026-05-20", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 8", "title": "W8 Tue \u2014 Streamlit File Upload", "learn": "Watch: Streamlit YouTube channel \u2014 'Build a chat app' official video.", "code": "Code: Add file uploader to Streamlit app. User uploads PDF \u2192 gets embedded \u2192 can chat with it immediately.", "linkedin": "Post LinkedIn Day 27: Open Source Drop: My Multi-Agent Framework", "apply": null, "resource": "YouTube \u2014 Streamlit official channel 'Build LLM apps'", "project": "SaaS \u2014 Document Intelligence"}, {"day": 59, "date": "2026-05-21", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 8", "title": "W8 Wed \u2014 Multi-doc Support", "learn": "Read: Streamlit secrets management docs.", "code": "Code: Add multi-document support. User uploads 3 PDFs. All indexed together. Conversation remembers which doc answered.", "linkedin": "APPLY: Set up Wellfound + LinkedIn Jobs profiles. Apply to 3 AI roles today. Tailor each message.", "apply": null, "resource": "docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/secrets-management", "project": "SaaS \u2014 Document Intelligence"}, {"day": 60, "date": "2026-05-22", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 8", "title": "W8 Thu \u2014 Streamlit Deploy", "learn": "Read: Streamlit Community Cloud deploy docs. Create free account at share.streamlit.io.", "code": "Code: Deploy Streamlit app to Streamlit Community Cloud. Get public URL like yourname.streamlit.app.", "linkedin": "APPLY: Apply to 2 more AI roles. Send 5 personalized LinkedIn DMs to AI startup founders.", "apply": null, "resource": "docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app", "project": "SaaS \u2014 Document Intelligence"}, {"day": 61, "date": "2026-05-23", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 8", "title": "W8 Fri \u2014 Usage Tracking + Apply", "learn": "Read: LangChain evaluation docs overview.", "code": "Code: Add basic usage tracking. Log: uploads, questions, response time. Display in sidebar.", "linkedin": "APPLY: Apply to 5 AI jobs total this week. Follow up on any applications older than 7 days.", "apply": "5 job apps", "resource": "wellfound.com, linkedin.com/jobs \u2014 apply to roles today", "project": "SaaS \u2014 Document Intelligence"}, {"day": 62, "date": "2026-05-24", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 8", "title": "W8 Sat \u2014 SaaS Polish Day", "learn": "Think like a user, not a developer. What's confusing? What's broken?", "code": "BUILD (6hrs): Finalize Document Intelligence app. Document list sidebar, clear conversation button, response sources, error handling.", "linkedin": "Post LinkedIn Day 28: Full Case Study: AI Agent for [Industry]", "apply": null, "resource": "Your own Streamlit app. Test as a user for 1 hour.", "project": "SaaS \u2014 Document Intelligence"}, {"day": 63, "date": "2026-05-25", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 8", "title": "W8 Sun \u2014 SaaS Launch Day", "learn": "Prepare your LinkedIn launch post. Make it a story, not a feature list.", "code": "BUILD (6hrs): Share live Streamlit URL on LinkedIn. Apply to 5 more jobs. This post gets the most DMs.", "linkedin": "POST: 'I built and shipped a live AI SaaS product. Here is the link, the architecture, and what I learned.'", "apply": "5 job apps", "resource": "Your live streamlit app URL \u2014 share it publicly.", "project": "SaaS \u2014 Document Intelligence"}, {"day": 64, "date": "2026-05-26", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 9", "title": "W9 Mon \u2014 RAGAS Evaluation", "learn": "Read: RAGAS documentation \u2014 faithfulness, answer relevancy, context precision, context recall.", "code": "Code: Install RAGAS. Run eval on Week 2 RAG project. Generate 20 Q&A pairs. Score each metric.", "linkedin": null, "apply": null, "resource": "docs.ragas.io/en/latest/getstarted/rag_testset_generation.html", "project": "Project 9 \u2014 Evaluation Report"}, {"day": 65, "date": "2026-05-27", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 9", "title": "W9 Tue \u2014 Improve Scores", "learn": "Read: RAGAS scores interpretation \u2014 what does 0.6 faithfulness mean? How to improve.", "code": "Code: Improve lowest-scoring metric. Better chunking, more context, stricter prompts. Re-run RAGAS. Show improvement.", "linkedin": "Post LinkedIn Day 29: Week 4 Build Log: Shipped, Broke, What's Next", "apply": "5 job apps", "resource": "docs.ragas.io/en/latest/concepts/metrics/index.html", "project": "Project 9 \u2014 Evaluation Report"}, {"day": 66, "date": "2026-05-28", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 9", "title": "W9 Wed \u2014 LangSmith Evaluations", "learn": "Read: LangSmith evaluations docs \u2014 custom evaluators, dataset creation, automated eval runs.", "code": "Code: Set up LangSmith dataset with 20 Q&A pairs. Run automated evaluation. Schedule on every code change.", "linkedin": "APPLY: Apply to 5 EU startups from your target list. Use Dealroom.co for finding EU AI startups.", "apply": null, "resource": "docs.smith.langchain.com/how_to_guides/evaluation/evaluate_llm_application", "project": "Project 9 \u2014 Evaluation Report"}, {"day": 67, "date": "2026-05-29", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 9", "title": "W9 Thu \u2014 Retry Logic", "learn": "Read: Tenacity library docs for retry logic. Understand exponential backoff.", "code": "Code: Add tenacity retry decorator to all OpenAI API calls. Test by hitting rate limit. Verify graceful retry.", "linkedin": "CONNECT: Send 10 cold DMs to AI startup founders today. Use the 3-sentence formula.", "apply": null, "resource": "tenacity.readthedocs.io/en/latest", "project": "Project 9 \u2014 Evaluation Report"}, {"day": 68, "date": "2026-05-30", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 9", "title": "W9 Fri \u2014 GitHub Cleanup + CI", "learn": "Read: GitHub Actions quickstart.", "code": "Code: Clean up ALL GitHub repos. Add requirements.txt, .env.example, README with demo link. Set up basic CI.", "linkedin": "APPLY: Apply to 5 more jobs. Write follow-ups to Week 8 applications.", "apply": "5 job apps", "resource": "docs.github.com/en/actions/writing-workflows/quickstart", "project": "Project 9 \u2014 Evaluation Report"}, {"day": 69, "date": "2026-05-31", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 9", "title": "W9 Sat \u2014 RAGAS Report Weekend", "learn": "Review all evaluation scores. What story do the numbers tell?", "code": "BUILD (6hrs): Run RAGAS on Week 2 project. Document baseline scores, what you changed, improved scores. Create comparison table.", "linkedin": "Post LinkedIn Day 30: My RAG Pipeline: From PDF to Production in 48 Hours", "apply": null, "resource": "RAGAS is free. Record mock interview on Loom.", "project": "Project 9 \u2014 Evaluation Report"}, {"day": 70, "date": "2026-06-01", "phase": "Phase 2: Multi-Agent + Production", "week": "Week 9", "title": "W9 Sun \u2014 RAGAS Post + Apply", "learn": "Prepare the RAGAS numbers post \u2014 data + improvement story = high engagement.", "code": "BUILD (6hrs): Write LinkedIn post with actual RAGAS numbers. Post the comparison table as an image. Apply to 5 more jobs.", "linkedin": "POST: 'I evaluated my RAG pipeline with RAGAS. Before and after scores, what I changed, and why it worked.'", "apply": "5 job apps", "resource": "Write post, share RAGAS comparison table as image.", "project": "Project 9 \u2014 Evaluation Report"}, {"day": 64, "date": "2026-05-26", "phase": "Phase 3: Depth + Portfolio", "week": "Week 10", "title": "W10 Mon \u2014 GPT-4o Vision", "learn": "Read: OpenAI vision docs \u2014 how to send images to GPT-4o. Base64 encoding.", "code": "Code: Send screenshot to GPT-4o, ask it to describe. Extract text from photo of handwritten note.", "linkedin": null, "apply": "10 job apps", "resource": "platform.openai.com/docs/guides/vision", "project": "Multimodal SaaS"}, {"day": 65, "date": "2026-05-27", "phase": "Phase 3: Depth + Portfolio", "week": "Week 10", "title": "W10 Tue \u2014 PDF Image Extraction", "learn": "Read: pdfplumber docs \u2014 extract images from PDFs.", "code": "Code: Extract all images from a PDF. For each image: pass to GPT-4o vision. Get description. Store alongside text.", "linkedin": "Post LinkedIn Day 31: I Connected My AI Agent to 5 Real APIs", "apply": "10 job apps", "resource": "github.com/jsvine/pdfplumber#extracting-images", "project": "Multimodal SaaS"}, {"day": 66, "date": "2026-05-28", "phase": "Phase 3: Depth + Portfolio", "week": "Week 10", "title": "W10 Wed \u2014 Whisper Voice Input", "learn": "Read: OpenAI Whisper API docs \u2014 audio formats, transcription endpoint.", "code": "Code: Record 30-second voice question (phone). Send to Whisper API. Get transcript. Pass to RAG agent. Return answer.", "linkedin": "CONNECT: Send 15 personalized DMs to AI startup founders/CTOs today.", "apply": null, "resource": "platform.openai.com/docs/guides/speech-to-text", "project": "Multimodal SaaS"}, {"day": 67, "date": "2026-05-29", "phase": "Phase 3: Depth + Portfolio", "week": "Week 10", "title": "W10 Thu \u2014 Streamlit Audio", "learn": "Read: Streamlit audio recorder component docs.", "code": "Code: Add voice input to Streamlit app. User clicks mic \u2192 records \u2192 Whisper transcribes \u2192 agent answers.", "linkedin": "Post LinkedIn Day 32: Build With Me: SaaS AI Agent Tool in Public", "apply": "10 job apps", "resource": "github.com/stefanrmmr/streamlit-audio-recorder", "project": "Multimodal SaaS"}, {"day": 68, "date": "2026-05-30", "phase": "Phase 3: Depth + Portfolio", "week": "Week 10", "title": "W10 Fri \u2014 Table Extraction", "learn": "Read: pdfplumber \u2014 table extraction section.", "code": "Code: Add table extraction to PDF processor. Use pdfplumber to extract tables as DataFrames. Include in RAG context.", "linkedin": "APPLY: Apply to 5 Australia + NZ companies from your target list.", "apply": "10 job apps", "resource": "plumber.readthedocs.io \u2014 table extraction section", "project": "Multimodal SaaS"}, {"day": 69, "date": "2026-05-31", "phase": "Phase 3: Depth + Portfolio", "week": "Week 10", "title": "W10 Sat \u2014 Multimodal Part A", "learn": "Review GPT-4o vision + Whisper + pdfplumber integration plan.", "code": "BUILD (6hrs): Upgrade Document Intelligence SaaS. Now supports text, image understanding, table extraction, voice input.", "linkedin": "Post LinkedIn Day 33: How I Handle Agent Failures Gracefully in Production", "apply": null, "resource": "GPT-4o + Whisper + pdfplumber + your existing RAG pipeline.", "project": "Multimodal SaaS"}, {"day": 70, "date": "2026-06-01", "phase": "Phase 3: Depth + Portfolio", "week": "Week 10", "title": "W10 Sun \u2014 Multimodal Deploy + Demo", "learn": "Deploy updated app. Create demo GIF or video.", "code": "BUILD (6hrs): Deploy to Streamlit Cloud. Record demo GIF: voice input \u2192 agent answer + image understanding.", "linkedin": "POST: 'I built an agent that can see images, read tables, and understand voice \u2014 all in one pipeline. Here is the demo.'", "apply": null, "resource": "screentogif.com (free). Deploy on streamlit.io.", "project": "Multimodal SaaS"}, {"day": 71, "date": "2026-06-02", "phase": "Phase 3: Depth + Portfolio", "week": "Week 11", "title": "W11 Mon \u2014 Slack Bot Basics", "learn": "Read: Slack API docs \u2014 Bot tokens, Events API, slash commands. Create test workspace.", "code": "Code: Create basic Slack bot that responds to @mentions. When mentioned: call RAG agent, return answer in thread.", "linkedin": null, "apply": "10 job apps", "resource": "api.slack.com/quickstart", "project": "Slack AI Agent"}, {"day": 72, "date": "2026-06-03", "phase": "Phase 3: Depth + Portfolio", "week": "Week 11", "title": "W11 Tue \u2014 Slack Events API", "learn": "Read: Slack Events API \u2014 event subscriptions, challenge verification, event types.", "code": "Code: Add event subscription to Slack bot. Handle message.channels events. Use ngrok for local testing.", "linkedin": "Post LinkedIn Day 34: Agent Cost Optimization: Cut My OpenAI Bill by 60%", "apply": "10 job apps", "resource": "ngrok.com (free tier) + api.slack.com/events", "project": "Slack AI Agent"}, {"day": 73, "date": "2026-06-04", "phase": "Phase 3: Depth + Portfolio", "week": "Week 11", "title": "W11 Wed \u2014 Gmail API", "learn": "Read: Gmail API Python quickstart. OAuth2 flow. Scopes and credentials.json.", "code": "Code: Connect to Gmail API. Read last 5 emails. Pass to agent: 'Summarize these emails and identify action items.'", "linkedin": "CONNECT: Send 20 DMs to AI startup founders this week. 2-3 sentences each, mention their specific product.", "apply": null, "resource": "developers.google.com/gmail/api/quickstart/python", "project": "Slack AI Agent"}, {"day": 74, "date": "2026-06-05", "phase": "Phase 3: Depth + Portfolio", "week": "Week 11", "title": "W11 Thu \u2014 Notion API", "learn": "Read: Notion API docs \u2014 creating pages, reading databases, block types.", "code": "Code: Agent reads a Notion page, answers questions, and can update a Notion page with a summary.", "linkedin": "Post LinkedIn Day 35: My Full Portfolio of AI Agents: Visual Gallery", "apply": "10 job apps", "resource": "developers.notion.com/docs/getting-started", "project": "Slack AI Agent"}, {"day": 75, "date": "2026-06-06", "phase": "Phase 3: Depth + Portfolio", "week": "Week 11", "title": "W11 Fri \u2014 Webhooks + Background Tasks", "learn": "Read: FastAPI Background Tasks for async webhook handling.", "code": "Code: Build webhook endpoint in FastAPI. When POST arrives: trigger agent workflow, process async, store result.", "linkedin": "APPLY: Apply to 5 Middle East / Singapore AI companies from your target list.", "apply": null, "resource": "fastapi.tiangolo.com/tutorial/background-tasks", "project": "Slack AI Agent"}, {"day": 76, "date": "2026-06-07", "phase": "Phase 3: Depth + Portfolio", "week": "Week 11", "title": "W11 Sat \u2014 Slack Agent Complete", "learn": "Plan the full Slack bot deployment to Railway.", "code": "BUILD (6hrs): Complete Slack bot with @mention trigger, thread responses, source citations, typing indicator. Deploy to Railway.", "linkedin": "Post LinkedIn Day 36: 30 Days Building AI Agents: 7 Things I Wish I Knew", "apply": null, "resource": "api.slack.com + your Railway deployment from Week 4.", "project": "Slack AI Agent"}, {"day": 77, "date": "2026-06-08", "phase": "Phase 3: Depth + Portfolio", "week": "Week 11", "title": "W11 Sun \u2014 Slack Demo Video", "learn": "Prepare 2-minute Slack demo script.", "code": "BUILD (6hrs): Record 2-min Slack demo video. Post on LinkedIn. Slack bot demos get massive engagement.", "linkedin": "POST: 'I built an AI agent that lives inside Slack and answers questions from your knowledge base. Here is the 2-min demo.'", "apply": null, "resource": "Loom for demo video. Your test Slack workspace.", "project": "Slack AI Agent"}, {"day": 78, "date": "2026-06-09", "phase": "Phase 3: Depth + Portfolio", "week": "Week 12", "title": "W12 Mon \u2014 Capstone Planning", "learn": "Plan your capstone carefully. Choose ONE: AI meeting summarizer OR competitor research agent OR AI code reviewer.", "code": "BUILD: Set up capstone project. GitHub repo. README with problem statement. Stub out main components. 1-page spec.", "linkedin": null, "apply": "10 job apps", "resource": "Your own planning. No external resources needed.", "project": "CAPSTONE"}, {"day": 79, "date": "2026-06-10", "phase": "Phase 3: Depth + Portfolio", "week": "Week 12", "title": "W12 Tue \u2014 Capstone Core Feature", "learn": "No new learning. Execute your plan.", "code": "BUILD (2hrs): Build core functionality of capstone. Core feature must work by end of day.", "linkedin": "Post LinkedIn Day 37: I Recorded a 10-Minute Demo of My Best AI Agent", "apply": "10 job apps", "resource": "Build from your Week 1-11 knowledge.", "project": "CAPSTONE"}, {"day": 80, "date": "2026-06-11", "phase": "Phase 3: Depth + Portfolio", "week": "Week 12", "title": "W12 Wed \u2014 Capstone LangSmith + Error Handling", "learn": "No new learning. Execute.", "code": "BUILD (2hrs): Add LangSmith tracing. Add error handling. Add async. Test with 10 realistic inputs.", "linkedin": null, "apply": "10 job apps", "resource": "Your existing codebase + LangSmith dashboard.", "project": "CAPSTONE"}, {"day": 81, "date": "2026-06-12", "phase": "Phase 3: Depth + Portfolio", "week": "Week 12", "title": "W12 Thu \u2014 Capstone Deploy", "learn": "No new learning. Deploy.", "code": "BUILD (2hrs): Deploy capstone to AWS EC2 or Streamlit Cloud. Get live URL. Fix what breaks.", "linkedin": "CONNECT: Follow up on all DMs sent 2+ weeks ago.", "apply": "10 job apps", "resource": "AWS EC2 (from Week 7) or Streamlit Cloud.", "project": "CAPSTONE"}, {"day": 82, "date": "2026-06-13", "phase": "Phase 3: Depth + Portfolio", "week": "Week 12", "title": "W12 Fri \u2014 Capstone README + Apply", "learn": "No new learning.", "code": "BUILD (2hrs): Write full README, architecture diagram, API docs, example inputs/outputs. GitHub Actions CI.", "linkedin": "APPLY: Apply to 10 jobs this week target. Write follow-up to all 2+ week-old applications.", "apply": "10 job apps", "resource": "draw.io for architecture. GitHub Actions free.", "project": "CAPSTONE"}, {"day": 83, "date": "2026-06-14", "phase": "Phase 3: Depth + Portfolio", "week": "Week 12", "title": "W12 Sat \u2014 Capstone Polish", "learn": "User-test for 3 hours. Pretend you are a founder using it.", "code": "BUILD (6hrs): Polish capstone. Fix pain points. Add usage analytics. Record 5-min Loom walkthrough: problem, demo, architecture.", "linkedin": "Post LinkedIn Day 38: Collaboration: Looking for Dev to Co-Build Open Source Agent", "apply": null, "resource": "loom.com for recording.", "project": "CAPSTONE"}, {"day": 84, "date": "2026-06-15", "phase": "Phase 3: Depth + Portfolio", "week": "Week 12", "title": "W12 Sun \u2014 Capstone Launch", "learn": "Write a 1000-word technical blog post about your architecture decisions.", "code": "BUILD (6hrs): Publish on Medium or Dev.to. LinkedIn post about capstone. PIN this post to your LinkedIn profile.", "linkedin": "POST: 'I spent a week building my best AI project. Here is the live demo, the architecture, and the hardest problem I solved.' PIN IT.", "apply": null, "resource": "medium.com or dev.to (free publishing). medium.com is better for reach.", "project": "CAPSTONE"}, {"day": 85, "date": "2026-06-16", "phase": "Phase 3: Depth + Portfolio", "week": "Week 13", "title": "W13 Mon \u2014 Open Source Contribution", "learn": "Browse: github.com/langchain-ai/langchain/issues \u2014 filter 'good first issue'.", "code": "Code: Fork repo. Fix one issue (even a docs typo). Open clean PR with clear description. This is your OSS contribution.", "linkedin": null, "apply": "10 job apps", "resource": "github.com/langchain-ai/langchain/issues", "project": "OSS + Profile"}, {"day": 86, "date": "2026-06-17", "phase": "Phase 3: Depth + Portfolio", "week": "Week 13", "title": "W13 Tue \u2014 Technical Article", "learn": "Read: 3 technical blog posts by AI engineers (Medium \u2014 'LangGraph production', 'RAG evaluation').", "code": "Write: Your own technical article. Draft in Google Docs. 800-1000 words about the most interesting thing you built.", "linkedin": "Post LinkedIn Day 39: I Audited 10 Agentic AI Products on Product Hunt", "apply": "10 job apps", "resource": "medium.com/tag/langchain \u2014 read 3 articles for format inspiration", "project": "OSS + Profile"}, {"day": 87, "date": "2026-06-18", "phase": "Phase 3: Depth + Portfolio", "week": "Week 13", "title": "W13 Wed \u2014 GitHub Repo Polish", "learn": "No new learning.", "code": "Polish: Update EVERY GitHub repo. Consistent README format, requirements.txt, .env.example, screenshots. Recruiters judge in 30 seconds.", "linkedin": "CONNECT: Send 10 cold outreach messages to AI startup founders/CTOs. Mention their specific product.", "apply": null, "resource": "Your own GitHub. github.com/your-username", "project": "OSS + Profile"}, {"day": 88, "date": "2026-06-19", "phase": "Phase 3: Depth + Portfolio", "week": "Week 13", "title": "W13 Thu \u2014 LinkedIn Optimization", "learn": "No new learning.", "code": "Update LinkedIn: New headline + About section + Featured section with 3 best projects and live links. Think: what does a founder see in 10 seconds?", "linkedin": "Post LinkedIn Day 40: My AI Agent Testing Framework", "apply": "10 job apps", "resource": "Your LinkedIn profile.", "project": "OSS + Profile"}, {"day": 89, "date": "2026-06-20", "phase": "Phase 3: Depth + Portfolio", "week": "Week 13", "title": "W13 Fri \u2014 Portfolio PDF + Mass Apply", "learn": "No new learning.", "code": "Write: 1-page portfolio PDF. Name, 5 projects with one-line descriptions and links, tech stack, target roles. Save as PDF.", "linkedin": "APPLY: Apply to 10 jobs today. Send 10 cold outreach to founders. Most aggressive apply day.", "apply": "10 job apps", "resource": "canva.com (free template) or Google Docs.", "project": "OSS + Profile"}, {"day": 90, "date": "2026-06-21", "phase": "Phase 3: Depth + Portfolio", "week": "Week 13", "title": "W13 Sat \u2014 Publish Article + Mock Interview", "learn": "Publish your technical article on Medium.", "code": "Publish article. Share on LinkedIn. Respond to EVERY comment on your previous posts. Send follow-ups on 2-week-old applications. Mock interview timed: build LangGraph agent from scratch in 30 minutes with NO docs.", "linkedin": "Post LinkedIn Day 41: Building a Multi-Agent System: What I Learned", "apply": null, "resource": "medium.com for publishing. pramp.com for mock interviews.", "project": "OSS + Profile"}, {"day": 91, "date": "2026-06-22", "phase": "Phase 3: Depth + Portfolio", "week": "Week 13", "title": "W13 Sun \u2014 Communication Practice", "learn": "No tech resources.", "code": "Call non-technical friend or family member. Explain one of your projects to them. Ask: 'What would you want from this?' Their confusion = your communication gap. Fix it in your LinkedIn content.", "linkedin": "Post LinkedIn Day 42: Phase 3 Wrap-Up: Everything I Built", "apply": "5 job apps", "resource": "No tech resources. Just practice explaining clearly.", "project": "OSS + Profile"}, {"day": 92, "date": "2026-06-23", "phase": "Phase 4: Interview Blitz", "week": "Week 14", "title": "W14 Mon \u2014 System Design: RAG at Scale", "learn": "Read: 'Designing Data-Intensive Applications' Ch1 summary (free online). Scalability, reliability.", "code": "PRACTICE OUT LOUD: 'Design a RAG system for 1M documents.' Draw on paper: vector DB, chunking, API, monitoring.", "linkedin": null, "apply": "10 job apps", "resource": "Search 'DDIA Chapter 1 summary' \u2014 many free summaries online", "project": "Interview Prep"}, {"day": 93, "date": "2026-06-24", "phase": "Phase 4: Interview Blitz", "week": "Week 14", "title": "W14 Tue \u2014 System Design: Customer Support Agent", "learn": "Read: AI system design patterns \u2014 caching, async, rate limiting, graceful degradation.", "code": "PRACTICE OUT LOUD: 'Design a customer support agent for 10,000 users.' Cover concurrency, cost, failure, privacy.", "linkedin": "Post LinkedIn Day 43: Hot Take: Most Companies Claiming Agentic AI Aren't", "apply": "10 job apps", "resource": "Search 'AI system design interview 2025' on Medium", "project": "Interview Prep"}, {"day": 94, "date": "2026-06-25", "phase": "Phase 4: Interview Blitz", "week": "Week 14", "title": "W14 Wed \u2014 Live Coding Practice", "learn": "No new reading. Review your own projects.", "code": "45-minute timer. Build basic LangGraph agent from scratch with NO documentation open. Grade: did it work? How many times stuck?", "linkedin": null, "apply": "10 job apps", "resource": "Your own code \u2014 memory only. Close all docs.", "project": "Interview Prep"}, {"day": 95, "date": "2026-06-26", "phase": "Phase 4: Interview Blitz", "week": "Week 14", "title": "W14 Thu \u2014 RAG vs Fine-Tuning", "learn": "Read: 'RAG vs Fine-tuning' \u2014 find 2 articles with different perspectives.", "code": "PRACTICE: Cost estimation. For each of your 7 projects: cost per 1,000 queries, per 10,000 users/month. Write down and MEMORIZE.", "linkedin": "Post LinkedIn Day 44: AI Agents Will Hit Enterprise Mainstream in 18 Months", "apply": "10 job apps", "resource": "Search 'RAG vs fine-tuning when to use' \u2014 read 2 contrasting opinions", "project": "Interview Prep"}, {"day": 96, "date": "2026-06-27", "phase": "Phase 4: Interview Blitz", "week": "Week 14", "title": "W14 Fri \u2014 Project Verbal Explanations", "learn": "No new reading.", "code": "For each of your 7 projects: prepare 2-min verbal explanation: what, why, how, what went wrong, what you'd change. Record yourself. Listen back.", "linkedin": "APPLY: Apply to 10 jobs. Follow up on all Week 12-13 applications.", "apply": "10 job apps", "resource": "loom.com \u2014 record explanations. Listen critically.", "project": "Interview Prep"}, {"day": 97, "date": "2026-06-28", "phase": "Phase 4: Interview Blitz", "week": "Week 14", "title": "W14 Sat \u2014 Mock Interview Day 1", "learn": "Prepare mentally. Review your system design notes.", "code": "FULL MOCK (6hrs): Find a friend. 45-minute technical interview: system design (20min) + live coding LangGraph (20min) + project deep-dive (5min). Record it. Watch back same day.", "linkedin": "Post LinkedIn Day 45: Agentic AI Frameworks Nobody's Talking About", "apply": null, "resource": "pramp.com for structured mock interviews with real devs globally.", "project": "Interview Prep"}, {"day": 98, "date": "2026-06-29", "phase": "Phase 4: Interview Blitz", "week": "Week 14", "title": "W14 Sun \u2014 Fix Mock Interview Weaknesses", "learn": "Address specific weaknesses only. No new learning.", "code": "Fix what the mock interview exposed. If stuck on system design \u2014 practice that scenario again. If live coding slow \u2014 do another timed session.", "linkedin": "POST: 'How I would answer the most common Agentic AI interview question: Design a production RAG system for 50,000 users.'", "apply": null, "resource": "Address specific weaknesses only. No new learning.", "project": "Interview Prep"}, {"day": 99, "date": "2026-06-30", "phase": "Phase 4: Interview Blitz", "week": "Week 15", "title": "W15 Mon \u2014 STAR Stories", "learn": "Read: STAR method for behavioral interviews \u2014 Situation, Task, Action, Result.", "code": "Write: 6 STAR stories: (1) Biggest failure (2) Most proud of (3) Learning fast under pressure (4) Working independently (5) Explaining to non-tech (6) Disagreeing with a decision.", "linkedin": null, "apply": "10 job apps", "resource": "Search 'STAR method behavioral interview' \u2014 read one good guide", "project": "Interview Prep"}, {"day": 100, "date": "2026-07-01", "phase": "Phase 4: Interview Blitz", "week": "Week 15", "title": "W15 Tue \u2014 Founder Outreach Blitz", "learn": "No new reading.", "code": "OUTREACH: Write 20 personalized LinkedIn messages to AI startup founders/CTOs. 2-3 sentences each. Mention their specific product. Send all 20 today.", "linkedin": "Post LinkedIn Day 46: Why Remote AI Engineers from India Are In Demand in 2025", "apply": "10 job apps", "resource": "linkedin.com \u2014 research each founder, write personalized messages", "project": "Interview Prep"}, {"day": 101, "date": "2026-07-02", "phase": "Phase 4: Interview Blitz", "week": "Week 15", "title": "W15 Wed \u2014 Remote Work Pitch", "learn": "Read: Remote work best practices \u2014 async communication, documentation, timezone management.", "code": "PRACTICE: Prepare 3-min verbal answer: 'How do you work effectively in a fully remote, async environment?' Be specific \u2014 tools, habits, communication style.", "linkedin": null, "apply": "10 job apps", "resource": "Search 'remote work best practices async communication'", "project": "Interview Prep"}, {"day": 102, "date": "2026-07-03", "phase": "Phase 4: Interview Blitz", "week": "Week 15", "title": "W15 Thu \u2014 Salary Negotiation", "learn": "Read: Salary negotiation guide \u2014 'never give a number first', anchoring, counter-offer strategy.", "code": "PRACTICE: Salary roleplay. 'What is your expected salary?' Practice saying: 'I'm flexible and focused on fit. What is the budgeted range?' Repeat until natural.", "linkedin": "Post LinkedIn Day 47: I Disagree With 'AI Will Take Developer Jobs'", "apply": "10 job apps", "resource": "Search 'tech salary negotiation guide' \u2014 levels.fyi has good content", "project": "Interview Prep"}, {"day": 103, "date": "2026-07-04", "phase": "Phase 4: Interview Blitz", "week": "Week 15", "title": "W15 Fri \u2014 Questions to Ask Interviewers", "learn": "No new reading.", "code": "Prepare 5 sharp questions: 'What does your AI agent infrastructure look like today?' / 'What is the biggest technical challenge your team is facing?' / 'How do you measure success of AI features?'", "linkedin": "APPLY: Apply to 10 jobs. Follow up on all outstanding applications from 2+ weeks ago.", "apply": "10 job apps", "resource": "wellfound.com + linkedin.com/jobs \u2014 new search today", "project": "Interview Prep"}, {"day": 104, "date": "2026-07-05", "phase": "Phase 4: Interview Blitz", "week": "Week 15", "title": "W15 Sat \u2014 Mock Interview Day 2", "learn": "Prepare mentally. Review STAR stories.", "code": "FULL BEHAVIORAL MOCK (6hrs): 45-minutes. All 6 STAR stories delivered. Salary negotiation roleplay. Questions to ask. Record it. Are you using 'I' not 'we'? Specific numbers in every answer?", "linkedin": "Post LinkedIn Day 48: Why Most AI Agent POCs Never Make It to Production", "apply": null, "resource": "pramp.com or interviewing.io for real mock partners.", "project": "Interview Prep"}, {"day": 105, "date": "2026-07-06", "phase": "Phase 4: Interview Blitz", "week": "Week 15", "title": "W15 Sun \u2014 Transparency Post + Respond", "learn": "Write from your real experience. No research needed.", "code": "Write and publish: 'I have been applying for 6 weeks. Here is what I have learned about what startups actually want.' Real, specific insights.", "linkedin": "POST: Real insights about your 6-week job search. Transparency gets more engagement than any technical post.", "apply": null, "resource": "Write from your real experience.", "project": "Interview Prep"}, {"day": 106, "date": "2026-07-07", "phase": "Phase 4: Interview Blitz", "week": "Week 16", "title": "W16 Mon \u2014 Evaluate Warm Leads", "learn": "Read: How to evaluate a job offer \u2014 equity, remote policy, team size, tech debt, growth.", "code": "ACTION: Review your application tracker. Identify 5 warmest leads. Send personalized follow-ups to each. Make it easy for them to say yes.", "linkedin": null, "apply": "10 job apps", "resource": "levels.fyi for salary benchmarking. Your own tracker spreadsheet.", "project": "OFFER CLOSE"}, {"day": 107, "date": "2026-07-08", "phase": "Phase 4: Interview Blitz", "week": "Week 16", "title": "W16 Tue \u2014 Take-Home Assessment Sim", "learn": "No new reading.", "code": "SIMULATE: 3-hour timer. Build RAG agent that answers questions about a provided document. No asking for clarification. Ship it.", "linkedin": "Post LinkedIn Day 49: Agentic AI in APAC: Opportunity Nobody in Silicon Valley Watches", "apply": "10 job apps", "resource": "Simulate the most common take-home assessment format.", "project": "OFFER CLOSE"}, {"day": 108, "date": "2026-07-09", "phase": "Phase 4: Interview Blitz", "week": "Week 16", "title": "W16 Wed \u2014 Competing Offers Strategy + EU Apply", "learn": "Read: How to negotiate when you have competing offers. Counter-offer email templates.", "code": "ACTION: Apply to 10 more jobs. Focus on EU startups on dealroom.co, Australian tech companies, Singapore AI startups.", "linkedin": null, "apply": "10 job apps", "resource": "dealroom.co for EU startups, linkedin.com/jobs for AU/SG roles", "project": "OFFER CLOSE"}, {"day": 109, "date": "2026-07-10", "phase": "Phase 4: Interview Blitz", "week": "Week 16", "title": "W16 Thu \u2014 Final Dress Rehearsal", "learn": "No new reading.", "code": "FINAL MOCK (2hrs): Full 60-minute interview. System design + live coding + behavioral + your questions + salary negotiation. This is your dress rehearsal.", "linkedin": "Post LinkedIn Day 50: My Honest Assessment of Every Major LLM Provider", "apply": "10 job apps", "resource": "pramp.com \u2014 request a senior engineer as mock interviewer.", "project": "OFFER CLOSE"}, {"day": 110, "date": "2026-07-11", "phase": "Phase 4: Interview Blitz", "week": "Week 16", "title": "W16 Fri \u2014 References + LinkedIn Final Update", "learn": "No new reading.", "code": "ACTION: Apply to 10 jobs. Brief your 2 references \u2014 tell them what role you're going for and what to emphasize. Update LinkedIn 'Open to Work' (recruiters only).", "linkedin": "APPLY: Apply to 10 jobs. Ensure featured section shows your 3 best live projects.", "apply": "10 job apps", "resource": "linkedin.com \u2014 profile settings + featured section update.", "project": "OFFER CLOSE"}, {"day": 111, "date": "2026-07-12", "phase": "Phase 4: Interview Blitz", "week": "Week 16", "title": "W16 Sat \u2014 Evaluate Offers / Final Prep", "learn": "Trust the process. Stay calm.", "code": "If you have offers: evaluate carefully. If none yet: continue. You started applying at Week 8 \u2014 you're only in Week 8-9 of applying. Average search at this level: 6-10 weeks.", "linkedin": "Post LinkedIn Day 51: What EU Startups Want vs What US Startups Want", "apply": null, "resource": "Your own notes and criteria. Trust the process.", "project": "OFFER CLOSE"}, {"day": 112, "date": "2026-07-13", "phase": "Phase 4: Interview Blitz", "week": "Week 16", "title": "W16 Sun \u2014 Day 112: The Transformation Post", "learn": "Write from memory and your own tracking spreadsheet.", "code": "WRITE YOUR DAY 112 POST: '16 weeks ago I decided to get a remote Agentic AI job. Here is everything I built, learned, and what happened.' Include: projects built, live URLs, LinkedIn follower growth, applications sent, interviews received, offers received.", "linkedin": "POST: Your most-viewed post ever. This is a permanent record of your growth. 16 weeks. Every day. Now collect what you've earned.", "apply": null, "resource": "Write from memory. This post needs to be true.", "project": "OFFER CLOSE"}, {"day": 113, "date": "2026-07-14", "phase": "Phase 4+: Apply + Convert", "week": "Week 17", "title": "Day 113 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Keep applying (10/week). Follow up obsessively. Convert leads to interviews.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 114, "date": "2026-07-15", "phase": "Phase 4+: Apply + Convert", "week": "Week 17", "title": "Day 114 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Prepare for every interview specifically \u2014 research the company, the tech stack, the founders.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 115, "date": "2026-07-16", "phase": "Phase 4+: Apply + Convert", "week": "Week 17", "title": "Day 115 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: If you receive an offer: evaluate, negotiate, and decide. Don't wait for perfect.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 116, "date": "2026-07-17", "phase": "Phase 4+: Apply + Convert", "week": "Week 17", "title": "Day 116 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Every day without an offer is another day to improve your system design answers.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 117, "date": "2026-07-18", "phase": "Phase 4+: Apply + Convert", "week": "Week 17", "title": "Day 117 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Stay on LinkedIn. Post every 2-3 days. Your audience compounds every week.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 118, "date": "2026-07-19", "phase": "Phase 4+: Apply + Convert", "week": "Week 17", "title": "Day 118 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Apply to every reasonable role. Volume + quality = offer pipeline.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 119, "date": "2026-07-20", "phase": "Phase 4+: Apply + Convert", "week": "Week 17", "title": "Day 119 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Keep applying (10/week). Follow up obsessively. Convert leads to interviews.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 120, "date": "2026-07-21", "phase": "Phase 4+: Apply + Convert", "week": "Week 18", "title": "Day 120 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Prepare for every interview specifically \u2014 research the company, the tech stack, the founders.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 121, "date": "2026-07-22", "phase": "Phase 4+: Apply + Convert", "week": "Week 18", "title": "Day 121 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: If you receive an offer: evaluate, negotiate, and decide. Don't wait for perfect.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 122, "date": "2026-07-23", "phase": "Phase 4+: Apply + Convert", "week": "Week 18", "title": "Day 122 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Every day without an offer is another day to improve your system design answers.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 123, "date": "2026-07-24", "phase": "Phase 4+: Apply + Convert", "week": "Week 18", "title": "Day 123 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Stay on LinkedIn. Post every 2-3 days. Your audience compounds every week.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 124, "date": "2026-07-25", "phase": "Phase 4+: Apply + Convert", "week": "Week 18", "title": "Day 124 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Apply to every reasonable role. Volume + quality = offer pipeline.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 125, "date": "2026-07-26", "phase": "Phase 4+: Apply + Convert", "week": "Week 18", "title": "Day 125 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Keep applying (10/week). Follow up obsessively. Convert leads to interviews.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 126, "date": "2026-07-27", "phase": "Phase 4+: Apply + Convert", "week": "Week 18", "title": "Day 126 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Prepare for every interview specifically \u2014 research the company, the tech stack, the founders.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 127, "date": "2026-07-28", "phase": "Phase 4+: Apply + Convert", "week": "Week 19", "title": "Day 127 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: If you receive an offer: evaluate, negotiate, and decide. Don't wait for perfect.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 128, "date": "2026-07-29", "phase": "Phase 4+: Apply + Convert", "week": "Week 19", "title": "Day 128 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Every day without an offer is another day to improve your system design answers.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 129, "date": "2026-07-30", "phase": "Phase 4+: Apply + Convert", "week": "Week 19", "title": "Day 129 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Stay on LinkedIn. Post every 2-3 days. Your audience compounds every week.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 130, "date": "2026-07-31", "phase": "Phase 4+: Apply + Convert", "week": "Week 19", "title": "Day 130 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Apply to every reasonable role. Volume + quality = offer pipeline.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 131, "date": "2026-08-01", "phase": "Phase 4+: Apply + Convert", "week": "Week 19", "title": "Day 131 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Keep applying (10/week). Follow up obsessively. Convert leads to interviews.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 132, "date": "2026-08-02", "phase": "Phase 4+: Apply + Convert", "week": "Week 19", "title": "Day 132 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Prepare for every interview specifically \u2014 research the company, the tech stack, the founders.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 133, "date": "2026-08-03", "phase": "Phase 4+: Apply + Convert", "week": "Week 19", "title": "Day 133 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: If you receive an offer: evaluate, negotiate, and decide. Don't wait for perfect.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 134, "date": "2026-08-04", "phase": "Phase 4+: Apply + Convert", "week": "Week 20", "title": "Day 134 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Every day without an offer is another day to improve your system design answers.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 135, "date": "2026-08-05", "phase": "Phase 4+: Apply + Convert", "week": "Week 20", "title": "Day 135 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Stay on LinkedIn. Post every 2-3 days. Your audience compounds every week.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 136, "date": "2026-08-06", "phase": "Phase 4+: Apply + Convert", "week": "Week 20", "title": "Day 136 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Apply to every reasonable role. Volume + quality = offer pipeline.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 137, "date": "2026-08-07", "phase": "Phase 4+: Apply + Convert", "week": "Week 20", "title": "Day 137 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Keep applying (10/week). Follow up obsessively. Convert leads to interviews.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 138, "date": "2026-08-08", "phase": "Phase 4+: Apply + Convert", "week": "Week 20", "title": "Day 138 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Prepare for every interview specifically \u2014 research the company, the tech stack, the founders.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 139, "date": "2026-08-09", "phase": "Phase 4+: Apply + Convert", "week": "Week 20", "title": "Day 139 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: If you receive an offer: evaluate, negotiate, and decide. Don't wait for perfect.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 140, "date": "2026-08-10", "phase": "Phase 4+: Apply + Convert", "week": "Week 20", "title": "Day 140 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Every day without an offer is another day to improve your system design answers.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 141, "date": "2026-08-11", "phase": "Phase 4+: Apply + Convert", "week": "Week 21", "title": "Day 141 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Stay on LinkedIn. Post every 2-3 days. Your audience compounds every week.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 142, "date": "2026-08-12", "phase": "Phase 4+: Apply + Convert", "week": "Week 21", "title": "Day 142 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Apply to every reasonable role. Volume + quality = offer pipeline.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 143, "date": "2026-08-13", "phase": "Phase 4+: Apply + Convert", "week": "Week 21", "title": "Day 143 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Keep applying (10/week). Follow up obsessively. Convert leads to interviews.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 144, "date": "2026-08-14", "phase": "Phase 4+: Apply + Convert", "week": "Week 21", "title": "Day 144 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Prepare for every interview specifically \u2014 research the company, the tech stack, the founders.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 145, "date": "2026-08-15", "phase": "Phase 4+: Apply + Convert", "week": "Week 21", "title": "Day 145 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: If you receive an offer: evaluate, negotiate, and decide. Don't wait for perfect.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 146, "date": "2026-08-16", "phase": "Phase 4+: Apply + Convert", "week": "Week 21", "title": "Day 146 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Every day without an offer is another day to improve your system design answers.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 147, "date": "2026-08-17", "phase": "Phase 4+: Apply + Convert", "week": "Week 21", "title": "Day 147 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Stay on LinkedIn. Post every 2-3 days. Your audience compounds every week.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 148, "date": "2026-08-18", "phase": "Phase 4+: Apply + Convert", "week": "Week 22", "title": "Day 148 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Apply to every reasonable role. Volume + quality = offer pipeline.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 149, "date": "2026-08-19", "phase": "Phase 4+: Apply + Convert", "week": "Week 22", "title": "Day 149 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Keep applying (10/week). Follow up obsessively. Convert leads to interviews.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 150, "date": "2026-08-20", "phase": "Phase 4+: Apply + Convert", "week": "Week 22", "title": "Day 150 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Prepare for every interview specifically \u2014 research the company, the tech stack, the founders.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 151, "date": "2026-08-21", "phase": "Phase 4+: Apply + Convert", "week": "Week 22", "title": "Day 151 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: If you receive an offer: evaluate, negotiate, and decide. Don't wait for perfect.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 152, "date": "2026-08-22", "phase": "Phase 4+: Apply + Convert", "week": "Week 22", "title": "Day 152 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Every day without an offer is another day to improve your system design answers.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}, {"day": 153, "date": "2026-08-23", "phase": "Phase 4+: Apply + Convert", "week": "Week 22", "title": "Day 153 \u2014 Apply + Follow Up", "learn": "Review weakest interview area. Practice it for 30 minutes.", "code": "Apply to 5-10 roles. Send follow-up messages. Prepare for scheduled interviews.", "linkedin": "Post: Stay on LinkedIn. Post every 2-3 days. Your audience compounds every week.", "apply": "10 job apps", "resource": "Your tracker, your projects, your knowledge.", "project": "OFFER CLOSE"}];
+
+const ROADMAP_WEEKS = [
+  {week:1, phase:"Phase 1", title:"RAG Fundamentals", goal:"Build your first working RAG pipeline from scratch", tasks:["Load PDF with PyPDFLoader + chunk with RecursiveCharacterTextSplitter","Create FAISS vector store, run similarity search","Switch to ChromaDB, persist to disk","Build full RAG chain with LCEL","Add conversation memory (ConversationBufferMemory)","Weekend: Project 1 — working Q&A from 3 docs + GitHub + LinkedIn post"]},
+  {week:2, phase:"Phase 1", title:"Advanced RAG — Pinecone + Hybrid Search", goal:"Deploy to cloud vector DB, add production retrieval patterns", tasks:["Migrate ChromaDB project to Pinecone","Implement BM25 + EnsembleRetriever","Add Cohere reranking after retrieval","Implement ConversationSummaryMemory","Add streaming output with LCEL","Weekend: Project 2 — multi-doc research assistant"]},
+  {week:3, phase:"Phase 1", title:"LangGraph — The Framework That Gets You Hired", goal:"Build your first stateful agent with self-correction", tasks:["Build simplest LangGraph: 3 nodes with state passing","Conditional routing — if topic A → node A else → node B","Add MemorySaver checkpointing","Build CRAG skeleton: retrieve → grade → conditional","Add hallucination grader node","Weekend: Project 3 — Full Agentic RAG with CRAG + adaptive routing"]},
+  {week:4, phase:"Phase 1", title:"FastAPI + Docker + First Live Deployment", goal:"Get your agent live on the internet with a real URL", tasks:["Build FastAPI app: GET /health, POST /chat","Wrap LangGraph agent in FastAPI with streaming","Write Dockerfile, build + test container locally","Deploy Dockerized app to Railway, get HTTPS URL","Add .env management, secure secrets","Weekend: Project 4 — polish deployed agent, record Loom demo, share live URL"]},
+  {week:5, phase:"Phase 2", title:"CrewAI — Multi-Agent Systems", goal:"Build your first crew of collaborating AI agents", tasks:["Install CrewAI, build 2-agent crew (researcher + writer)","Add Tavily web search + file write tools","Convert to hierarchical crew with manager agent","Create 3 custom tools: web_search, read_file, write_file","Build 3-agent crew: Researcher → Analyst → Writer","Weekend: Project 5 — 3-agent Business Intelligence Report system"]},
+  {week:6, phase:"Phase 2", title:"Advanced LangGraph + LangSmith Observability", goal:"Human-in-the-loop + production monitoring", tasks:["Add human approval step with interrupt_before","Build parallel 3-retrieval nodes with Send API","Add LangSmith tracing to ALL previous projects","Add streaming with astream_events to FastAPI","Replace MemorySaver with SqliteSaver","Weekend: Project 6 — Business workflow agent with human approval + LangSmith traces"]},
+  {week:7, phase:"Phase 2", title:"Production: Docker Compose + AWS + Async Python", goal:"Real cloud deployment with monitoring and cost control", tasks:["Write docker-compose.yml with FastAPI + Redis","Launch EC2 t2.micro, deploy docker-compose app","Convert FastAPI endpoints to async, use asyncio.gather","Add Redis caching for LLM responses","Add token counting and cost logging","Weekend: Project 7 — Production Multi-Agent API on AWS (flagship project)"]},
+  {week:8, phase:"Phase 2", title:"SaaS Product + Streamlit + START APPLYING", goal:"First demo-able product + job applications begin", tasks:["Build Streamlit chat UI connecting to FastAPI backend","Add PDF file uploader → embed → chat","Multi-document support, source citation","Deploy to Streamlit Community Cloud, get public URL","Apply to 5 AI jobs on Wellfound + LinkedIn TODAY","Weekend: Launch Document Intelligence SaaS app publicly"]},
+  {week:9, phase:"Phase 2", title:"Evaluation + Observability + Apply 5 Jobs/Week", goal:"Make agents measurably better + stay in job hunt mode", tasks:["Install RAGAS, run eval on Week 2 project (20 Q&A pairs)","Improve lowest-scoring metric, re-run RAGAS","Set up LangSmith dataset + automated evaluation","Add tenacity retry decorator to all OpenAI calls","Apply to 5 more jobs + follow up on Week 8 applications","Weekend: RAGAS report + mock technical interview"]},
+  {week:10, phase:"Phase 3", title:"Multimodal Agents + Voice Input", goal:"GPT-4o vision + Whisper = top 5% of applicants", tasks:["Send screenshot to GPT-4o, extract text from handwritten note","Extract images from PDF → pass to GPT-4o vision","Record voice question → Whisper API → RAG agent answer","Add voice input to Streamlit app","Add table extraction with pdfplumber","Weekend: Upgrade Document Intelligence SaaS with multimodal support"]},
+  {week:11, phase:"Phase 3", title:"Real-World Integrations — Slack + APIs + Webhooks", goal:"Agents that live inside tools people already use", tasks:["Create Slack bot that responds to @mentions with RAG","Handle message.channels events with ngrok","Connect to Gmail API, summarize last 5 emails","Agent reads + updates Notion pages","Build FastAPI webhook endpoint with Background Tasks","Weekend: Complete Slack AI Agent deployed to Railway"]},
+  {week:12, phase:"Phase 3", title:"Capstone Project — Your Best Complete Product", goal:"The project you lead every interview with", tasks:["Choose capstone: AI meeting summarizer OR competitor research agent OR AI code reviewer","Set up project structure, GitHub repo, spec doc","Build core functionality (must work by end of day)","Add LangSmith tracing + error handling + async","Deploy capstone to AWS EC2 or Streamlit Cloud","Weekend: Polish capstone, user-test 3 hours, record 5-min Loom walkthrough"]},
+  {week:13, phase:"Phase 3", title:"Open Source + Profile Polish + 10 Applications", goal:"Maximum visibility + job hunt at full speed", tasks:["Find LangChain GitHub 'good first issue', submit PR","Write 800-1000 word technical article about what you built","Polish ALL GitHub repos: README, requirements.txt, screenshots","Update LinkedIn: new headline, About section, Featured projects","Apply to 10 jobs + send 10 cold outreach messages to founders","Weekend: Publish article on Medium, mock technical interview (30 min LangGraph from scratch)"]},
+  {week:14, phase:"Phase 4", title:"System Design + Live Coding Prep", goal:"Practice explaining your systems out loud every day", tasks:["Out loud: 'Design RAG system for 1M documents' — draw on paper","Out loud: 'Design customer support agent for 10,000 users'","Timed 45-min live coding: LangGraph agent with NO docs open","Prepare 3-min verbal answer: RAG vs Fine-tuning","Cost estimation: price per 1,000 queries for all 7 projects","Weekend: Full mock interview (45 min) — system design + live coding + project deep-dive"]},
+  {week:15, phase:"Phase 4", title:"Behavioral Prep + Aggressive Outreach", goal:"Convert warm followers into conversations and referrals", tasks:["Write 6 STAR stories (failure, proud, learning fast, independent, explain to non-tech, disagreement)","Send 20 personalized LinkedIn DMs to AI startup founders/CTOs","Prepare 3-min verbal answer: remote work best practices","Salary negotiation roleplay: practice never giving a number first","Apply to 10 jobs + follow up on all Week 12-13 applications","Weekend: Full behavioral interview mock (45 min) + record it"]},
+  {week:16, phase:"Phase 4", title:"Full Send — Convert to Offers", goal:"Close the deals. One offer changes everything.", tasks:["Review application tracker, send personalized follow-ups to 5 warmest leads","3-hour take-home simulation: RAG agent for provided document (no clarification)","Apply to 10 more jobs: EU startups on dealroom.co, AU/SG companies","Final mock interview — full 60 min: design + coding + behavioral + negotiation","Update LinkedIn Open to Work (recruiters only), ensure featured section is current","Day 112: Write your career transformation post — the most-viewed post you'll ever write"]},
+];
+
+// ===== STORAGE HELPERS =====
+const load = (k, def) => { try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e) { return def; } };
+const save = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+let jobs = load('jobs', []);
+let companyStatus = load('companyStatus', {});
+let liStatus = load('liStatus', {});
+let portalStatus = load('portalStatus', {});
+let weekStatus = load('weekStatus', {});
+
+// ===== COUNTDOWN =====
+function updateCountdown() {
+  const target = new Date('2026-08-24T00:00:00+05:30');
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) { document.getElementById('cd-days').textContent = '0'; return; }
+  const days = Math.floor(diff / 86400000);
+  const hrs = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  document.getElementById('cd-days').textContent = days;
+  document.getElementById('cd-hrs').textContent = hrs;
+  document.getElementById('cd-mins').textContent = mins;
+}
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+// ===== TAB SWITCHING =====
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'jobs') renderJobs();
+  if (name === 'companies') renderCompanies();
+  if (name === 'linkedin') renderLinkedIn();
+  if (name === 'portals') renderPortals();
+  if (name === 'roadmap') renderRoadmap();
+}
+
+// ===== JOBS TAB =====
+function addJob() {
+  const company = document.getElementById('j-company').value.trim();
+  if (!company) { document.getElementById('j-msg').textContent = 'Company name required'; return; }
+  const job = {
+    id: Date.now(),
+    company,
+    role: document.getElementById('j-role').value.trim(),
+    portal: document.getElementById('j-portal').value.trim(),
+    date: document.getElementById('j-date').value,
+    status: document.getElementById('j-status').value,
+    salary: document.getElementById('j-salary').value.trim(),
+    url: document.getElementById('j-url').value.trim(),
+    followup: document.getElementById('j-followup').value,
+    notes: document.getElementById('j-notes').value.trim(),
+  };
+  jobs.unshift(job);
+  save('jobs', jobs);
+  ['j-company','j-role','j-portal','j-salary','j-url','j-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('j-msg').textContent = '✓ Added!';
+  setTimeout(() => document.getElementById('j-msg').textContent = '', 2000);
+  renderJobs();
+}
+
+function updateJobStatus(id, status) {
+  const job = jobs.find(j => j.id === id);
+  if (job) { job.status = status; save('jobs', jobs); renderJobs(); }
+}
+
+function deleteJob(id) {
+  jobs = jobs.filter(j => j.id !== id);
+  save('jobs', jobs);
+  renderJobs();
+}
+
+function showNotes(notes) {
+  document.getElementById('modal-notes-content').textContent = notes || 'No notes.';
+  document.getElementById('notes-modal').style.display = 'flex';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('notes-modal')) document.getElementById('notes-modal').style.display = 'none';
+}
+
+function renderJobs() {
+  const search = document.getElementById('j-search').value.toLowerCase();
+  const filterStatus = document.getElementById('j-filter-status').value;
+  let filtered = jobs.filter(j => {
+    const matchSearch = !search || j.company.toLowerCase().includes(search) || (j.role||'').toLowerCase().includes(search);
+    const matchStatus = !filterStatus || j.status === filterStatus;
+    return matchSearch && matchStatus;
+  });
+
+  const stats = { applied:0, interview:0, offer:0, rejected:0, 'following-up':0 };
+  jobs.forEach(j => { if (stats[j.status] !== undefined) stats[j.status]++; });
+
+  document.getElementById('job-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${jobs.length}</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:#9b7dff">${stats.applied}</div><div class="stat-label">Applied</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent4)">${stats['following-up']}</div><div class="stat-label">Following Up</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent4)">${stats.interview}</div><div class="stat-label">Interviews</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent2)">${stats.offer}</div><div class="stat-label">Offers 🎉</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent3)">${stats.rejected}</div><div class="stat-label">Rejected</div></div>
+  `;
+
+  const tbody = document.getElementById('jobs-table');
+  const empty = document.getElementById('jobs-empty');
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = filtered.map(j => `
+    <tr>
+      <td><strong>${j.company}</strong></td>
+      <td>${j.role || '—'}</td>
+      <td>${j.date || '—'}</td>
+      <td>
+        <select class="badge" style="background:none;border:none;cursor:pointer;font-size:11px;" onchange="updateJobStatus(${j.id}, this.value)">
+          <option value="applied" ${j.status==='applied'?'selected':''}>Applied</option>
+          <option value="following-up" ${j.status==='following-up'?'selected':''}>Following Up</option>
+          <option value="interview" ${j.status==='interview'?'selected':''}>Interview</option>
+          <option value="offer" ${j.status==='offer'?'selected':''}>Offer 🎉</option>
+          <option value="rejected" ${j.status==='rejected'?'selected':''}>Rejected</option>
+        </select>
+      </td>
+      <td>${j.salary || '—'}</td>
+      <td style="color:${j.followup && new Date(j.followup) <= new Date() ? 'var(--accent3)' : 'inherit'}">${j.followup || '—'}</td>
+      <td>${j.portal || '—'}</td>
+      <td style="display:flex;gap:4px;align-items:center;">
+        ${j.url ? `<a href="${j.url}" target="_blank" class="btn btn-sm" style="background:var(--surface2);color:var(--accent);text-decoration:none;">↗</a>` : ''}
+        ${j.notes ? `<button class="btn btn-sm" style="background:var(--surface2);color:var(--muted);" onclick="showNotes('${j.notes.replace(/'/g,"\\'")}')">📝</button>` : ''}
+        <button class="btn btn-sm btn-danger" onclick="deleteJob(${j.id})">✕</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function exportJobs() {
+  const rows = [['Company','Role','Portal','Date','Status','Salary','Follow-up','URL','Notes']];
+  jobs.forEach(j => rows.push([j.company,j.role,j.portal,j.date,j.status,j.salary,j.followup,j.url,j.notes]));
+  const csv = rows.map(r => r.map(c => `"${(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'job-applications.csv';
+  a.click();
+}
+
+// ===== COMPANIES TAB =====
+function renderCompanies() {
+  const search = document.getElementById('c-search').value.toLowerCase();
+  const region = document.getElementById('c-region').value;
+  const dmFilter = document.getElementById('c-filter-dm').value;
+
+  let companies = [];
+  if (!region || region === 'startups') {
+    STARTUPS.forEach(c => companies.push({name: c.Company, meta: c.Category, url: c.Website, source: 'startup'}));
+  }
+  if (!region || (region !== 'startups' && REGIONAL[region])) {
+    const src = region && region !== 'startups' ? {[region]: REGIONAL[region]} : REGIONAL;
+    Object.entries(src).forEach(([reg, list]) => list.forEach(c => companies.push({name: c['Company Name'], meta: `${c.Country} · ${c['Focus Area']}`, url: '', source: reg})));
+  }
+
+  if (search) companies = companies.filter(c => c.name.toLowerCase().includes(search) || c.meta.toLowerCase().includes(search));
+  if (dmFilter) companies = companies.filter(c => (companyStatus[c.name]?.dm || 'pending') === dmFilter);
+
+  const dmSent = Object.values(companyStatus).filter(s => s.dm === 'sent').length;
+  const connected = Object.values(companyStatus).filter(s => s.dm === 'connected').length;
+  document.getElementById('company-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${companies.length}</div><div class="stat-label">Showing</div></div>
+    <div class="stat-card"><div class="stat-num">${STARTUPS.length + Object.values(REGIONAL).reduce((a,b)=>a+b.length,0)}</div><div class="stat-label">Total</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent2)">${dmSent}</div><div class="stat-label">DMs Sent</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent4)">${connected}</div><div class="stat-label">Connected</div></div>
+  `;
+
+  const list = document.getElementById('companies-list');
+  if (companies.length === 0) { list.innerHTML = '<div class="empty"><div class="empty-icon">🏢</div>No companies match your filter.</div>'; return; }
+
+  list.innerHTML = companies.slice(0, 200).map(c => {
+    const s = companyStatus[c.name] || {};
+    const dm = s.dm || 'pending';
+    return `
+    <div class="company-card">
+      <div>
+        <div class="company-name">${c.name}</div>
+        <div class="company-meta">${c.meta}</div>
+      </div>
+      <div class="company-actions">
+        <span class="badge ${dm === 'connected' ? 'badge-offer' : dm === 'sent' ? 'badge-applied' : 'badge-not-applied'}">${dm === 'connected' ? '✓ Connected' : dm === 'sent' ? 'DM Sent' : 'Pending'}</span>
+        <select onchange="setCompanyDM('${c.name.replace(/'/g,"\\'")}', this.value)" style="width:auto;padding:4px 8px;font-size:11px;">
+          <option value="pending" ${dm==='pending'?'selected':''}>Pending</option>
+          <option value="sent" ${dm==='sent'?'selected':''}>DM Sent</option>
+          <option value="connected" ${dm==='connected'?'selected':''}>Connected</option>
+        </select>
+        ${c.url ? `<a href="${c.url}" target="_blank" class="btn btn-sm" style="background:var(--surface2);color:var(--accent);text-decoration:none;">↗</a>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  if (companies.length > 200) list.innerHTML += `<div style="text-align:center;padding:16px;color:var(--muted);font-size:11px;">Showing 200 of ${companies.length} — use filters to narrow down</div>`;
+}
+
+function setCompanyDM(name, status) {
+  if (!companyStatus[name]) companyStatus[name] = {};
+  companyStatus[name].dm = status;
+  save('companyStatus', companyStatus);
+  renderCompanies();
+}
+
+// ===== LINKEDIN TAB =====
+function renderLinkedIn() {
+  const done = Object.values(liStatus).filter(s => s.done).length;
+  const posted = Object.values(liStatus).filter(s => s.done).length;
+  document.getElementById('li-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent2)">${done}</div><div class="stat-label">Posted</div></div>
+    <div class="stat-card"><div class="stat-num">${60 - done}</div><div class="stat-label">Remaining</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--accent4)">${Object.values(liStatus).filter(s=>s.engagement).length}</div><div class="stat-label">Tracked Engagement</div></div>
+    <div class="stat-card"><div class="stat-num">${Math.round(done/60*100)}%</div><div class="stat-label">Complete</div></div>
+  `;
+  document.getElementById('li-progress-label').textContent = `Progress: ${done} of 60 posts done`;
+  document.getElementById('li-progress-bar').style.width = (done/60*100) + '%';
+
+  let currentPhase = '';
+  const container = document.getElementById('linkedin-posts');
+  container.innerHTML = LINKEDIN_POSTS.map(p => {
+    const s = liStatus[p.day] || {};
+    let phaseHeader = '';
+    if (p.phase !== currentPhase) { currentPhase = p.phase; phaseHeader = `<div class="phase-header">${p.phase}</div>`; }
+    return `${phaseHeader}
+    <div class="post-card" style="${s.done ? 'opacity:0.6;' : ''}">
+      <button class="toggle-done ${s.done ? 'done' : ''}" onclick="togglePost(${p.day})">✓</button>
+      <div class="post-info">
+        <div class="post-title">Day ${p.day}: ${p.title}</div>
+        <div class="post-hook">${p.hook}</div>
+        <div class="post-status">
+          <span class="badge" style="background:var(--surface2);color:var(--muted);">${p.format}</span>
+          ${s.done ? '<span class="badge badge-offer">✓ Posted</span>' : ''}
+          <input placeholder="Likes / engagement notes" value="${s.engagement||''}" oninput="saveEngagement(${p.day}, this.value)" style="width:160px;font-size:11px;padding:3px 8px;" />
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togglePost(day) {
+  if (!liStatus[day]) liStatus[day] = {};
+  liStatus[day].done = !liStatus[day].done;
+  save('liStatus', liStatus);
+  renderLinkedIn();
+}
+
+function saveEngagement(day, val) {
+  if (!liStatus[day]) liStatus[day] = {};
+  liStatus[day].engagement = val;
+  save('liStatus', liStatus);
+}
+
+// ===== PORTALS TAB =====
+function renderPortals() {
+  const search = document.getElementById('p-search').value.toLowerCase();
+  const filter = document.getElementById('p-filter').value;
+
+  let filtered = PORTALS.filter(p => {
+    const ps = portalStatus[p.Name] || {};
+    const matchSearch = !search || p.Name.toLowerCase().includes(search);
+    const matchFilter = !filter ||
+      (filter === 'account' && ps.account) ||
+      (filter === 'no-account' && !ps.account) ||
+      (filter === 'free' && p['Paid/Free'] === 'free') ||
+      (filter === 'paid' && p['Paid/Free'] === 'paid');
+    return matchSearch && matchFilter;
+  });
+
+  const accountCount = Object.values(portalStatus).filter(s => s.account).length;
+  document.getElementById('portals-grid').innerHTML = filtered.map(p => {
+    const ps = portalStatus[p.Name] || {};
+    return `
+    <div class="portal-card">
+      <div class="portal-name">${p.Name}</div>
+      <div class="portal-meta">${p['Paid/Free'] || 'free'}</div>
+      ${p.URL && p.URL !== '' ? `<a href="${p.URL}" target="_blank" class="portal-link">${p.URL.replace('https://','')}</a>` : '<span style="color:var(--muted);font-size:11px;">URL not listed</span>'}
+      <div class="account-check">
+        <input type="checkbox" id="portal-${p.Name.replace(/\s/g,'_')}" ${ps.account?'checked':''} onchange="togglePortal('${p.Name.replace(/'/g,"\\'")}', this.checked)" />
+        <label for="portal-${p.Name.replace(/\s/g,'_')}" style="cursor:pointer;color:${ps.account ? 'var(--accent2)' : 'var(--muted)'}">Account made</label>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togglePortal(name, val) {
+  if (!portalStatus[name]) portalStatus[name] = {};
+  portalStatus[name].account = val;
+  save('portalStatus', portalStatus);
+}
+
+// ===== ROADMAP TAB =====
+function renderRoadmap() {
+  const today = new Date('2026-03-23');
+  const startDate = new Date('2026-03-24');
+  const weeksElapsed = Math.floor((today - startDate) / (7 * 86400000));
+
+  const container = document.getElementById('roadmap-weeks');
+  container.innerHTML = ROADMAP_WEEKS.map((w, i) => {
+    const ws = weekStatus[w.week] || {};
+    const tasksComplete = ws.tasks || [];
+    const pct = Math.round(tasksComplete.length / w.tasks.length * 100);
+    const isCurrent = i === weeksElapsed;
+    const isPast = i < weeksElapsed;
+
+    return `
+    <div style="background:var(--card);border:1px solid ${isCurrent ? 'var(--accent)' : 'var(--border)'};border-radius:12px;padding:16px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:${isCurrent?'var(--accent)':isPast?'var(--accent2)':'var(--muted)'}">W${w.week}</div>
+        <div style="flex:1;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">${w.title}</div>
+          <div style="font-size:11px;color:var(--muted);">${w.phase} · ${w.goal}</div>
+        </div>
+        ${isCurrent ? '<span class="badge badge-interview">← Current Week</span>' : ''}
+        ${isPast && pct === 100 ? '<span class="badge badge-offer">✓ Done</span>' : ''}
+        <div style="font-size:12px;color:var(--accent2);">${pct}%</div>
+      </div>
+      <div class="progress-track" style="margin-bottom:10px;"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        ${w.tasks.map((task, ti) => `
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;line-height:1.4;">
+            <input type="checkbox" ${tasksComplete.includes(ti)?'checked':''} onchange="toggleTask(${w.week},${ti},this.checked)" style="width:auto;margin-top:2px;flex-shrink:0;" />
+            <span style="color:${tasksComplete.includes(ti)?'var(--muted)':'var(--text)'};text-decoration:${tasksComplete.includes(ti)?'line-through':'none'}">${task}</span>
+          </label>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleTask(week, taskIdx, checked) {
+  if (!weekStatus[week]) weekStatus[week] = { tasks: [] };
+  const tasks = weekStatus[week].tasks;
+  if (checked && !tasks.includes(taskIdx)) tasks.push(taskIdx);
+  if (!checked) weekStatus[week].tasks = tasks.filter(t => t !== taskIdx);
+  save('weekStatus', weekStatus);
+  renderRoadmap();
+}
+
+// ===== INIT =====
+renderJobs();
+
+
+// ===== DAILY TASKS TAB =====
+let dailyStatus = load('dailyStatus', {});
+// today's day number: days since Mar 24 2026
+function getTodayDayNum() {
+  const start = new Date('2026-03-24T00:00:00+05:30');
+  const now = new Date();
+  const diff = Math.floor((now - start) / 86400000) + 1;
+  return Math.max(1, Math.min(diff, 160));
+}
+
+let viewingDay = getTodayDayNum();
+
+function getDayData(n) {
+  return ROADMAP_DAYS_FULL.find(d => d.day === n) || ROADMAP_DAYS_FULL[n-1];
+}
+
+function renderDailyTab() {
+  const todayNum = getTodayDayNum();
+  const dayData = getDayData(viewingDay);
+  if (!dayData) return;
+
+  // Compute stats
+  const doneCount = Object.values(dailyStatus).filter(s => s && s.allDone).length;
+  const streak = computeStreak(todayNum);
+  const pct = Math.round(doneCount / 154 * 100);
+
+  // Phase color
+  const phaseColorMap = {
+    'Pre-Week': '#888888',
+    'Phase 1: RAG Mastery': '#7c5cfc',
+    'Phase 2: Multi-Agent + Production': '#00e5a0',
+    'Phase 3: Depth + Portfolio': '#ffd93d',
+    'Phase 4: Interview Blitz': '#ff6b6b',
+    'Phase 4+: Apply + Convert': '#ff8c42',
+  };
+  const pc = phaseColorMap[dayData.phase] || '#7c5cfc';
+  const isToday = viewingDay === todayNum;
+  const ds = dailyStatus[viewingDay] || {};
+
+  // Header stats
+  document.getElementById('daily-header-stats').innerHTML = `
+    <div class="stats-row" style="margin-bottom:14px;">
+      <div class="stat-card">
+        <div class="stat-num" style="color:#ffd93d">${todayNum}</div>
+        <div class="stat-label">Today is Day</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#00e5a0">${doneCount}</div>
+        <div class="stat-label">Days Done</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#7c5cfc">${streak}</div>
+        <div class="stat-label">Day Streak 🔥</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">${154 - todayNum}</div>
+        <div class="stat-label">Days Left</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="color:#ff6b6b">${pct}%</div>
+        <div class="stat-label">Complete</div>
+      </div>
+    </div>
+    <div class="week-bar">
+      <div class="week-label">Overall Progress: ${doneCount} of 154 days completed</div>
+      <div class="progress-track"><div class="progress-fill" id="daily-progress-fill" style="width:${pct}%"></div></div>
+    </div>
+  `;
+
+  // Nav row
+  document.getElementById('daily-nav-row').innerHTML = `
+    <button class="btn" style="background:var(--surface2);color:var(--muted);" onclick="navDay(-7)">◀◀ Week</button>
+    <button class="btn" style="background:var(--surface2);color:var(--muted);" onclick="navDay(-1)">◀ Prev</button>
+    <div style="flex:1;text-align:center;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:${pc};">
+      Day ${viewingDay} ${isToday ? '← TODAY' : ''}
+    </div>
+    <button class="btn" style="background:var(--surface2);color:var(--muted);" onclick="navDay(1)">Next ▶</button>
+    <button class="btn" style="background:var(--surface2);color:var(--muted);" onclick="navDay(7)">Week ▶▶</button>
+    <button class="btn btn-primary" onclick="goToToday()">Go to Today</button>
+  `;
+
+  // Task definitions for this day
+  const tasks = buildTaskList(dayData);
+  const completedTasks = ds.tasks || [];
+  const allDone = tasks.length > 0 && completedTasks.length >= tasks.length;
+
+  // Day date formatting
+  const dayDate = new Date(dayData.date + 'T00:00:00');
+  const dateStr = dayDate.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+
+  document.getElementById('daily-main-card').innerHTML = `
+    <div style="background:var(--card);border:1px solid ${allDone ? '#00e5a0' : isToday ? pc : 'var(--border)'};border-radius:14px;overflow:hidden;">
+      <!-- Day header -->
+      <div style="background:${pc}18;border-bottom:1px solid ${pc}44;padding:16px 20px;">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:${pc};line-height:1;">D${viewingDay}</div>
+          <div style="flex:1;">
+            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);">${dayData.title}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">${dateStr}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;font-family:'Syne',sans-serif;font-weight:600;color:${pc};">${dayData.phase}</div>
+            <div style="font-size:10px;color:var(--muted);">${dayData.week} · ${dayData.project}</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          ${allDone ? '<span class="badge badge-offer">✓ Day Complete!</span>' : `<span style="font-size:11px;color:var(--muted);">${completedTasks.length}/${tasks.length} tasks done</span>`}
+          ${isToday ? `<span class="badge badge-interview">← Today</span>` : ''}
+          ${viewingDay < getTodayDayNum() && !allDone ? '<span class="badge badge-rejected">Missed day</span>' : ''}
+        </div>
+      </div>
+
+      <!-- Tasks -->
+      <div style="padding:16px 20px;">
+        ${tasks.map((task, i) => {
+          const done = completedTasks.includes(i);
+          const taskColors = {LEARN:'#3b82f6',CODE:'#8b5cf6',BUILD:'#10b981',APPLY:'#f59e0b',POST:'#ec4899',CONNECT:'#06b6d4',RESOURCE:'#6b6b80'};
+          const tc = taskColors[task.type] || '#6b6b80';
+          return `
+          <div onclick="toggleDailyTask(${viewingDay},${i})" style="display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:10px;border:1px solid ${done ? tc+'44' : 'var(--border)'};background:${done ? tc+'11' : 'var(--surface2)'};margin-bottom:8px;cursor:pointer;transition:all 0.2s;">
+            <div style="width:22px;height:22px;border-radius:50%;border:2px solid ${done ? tc : 'var(--border)'};background:${done ? tc : 'none'};display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:12px;color:${done ? '#000' : 'transparent'};">✓</div>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:10px;color:${tc};background:${tc}22;padding:2px 8px;border-radius:10px;">${task.type}</span>
+                ${task.duration ? `<span style="font-size:10px;color:var(--muted);">${task.duration}</span>` : ''}
+              </div>
+              <div style="font-size:12px;color:${done ? 'var(--muted)' : 'var(--text)'};line-height:1.5;text-decoration:${done ? 'line-through' : 'none'};">${task.text}</div>
+              ${task.resource ? `<div style="font-size:10px;color:#3b82f6;margin-top:4px;font-style:italic;">📎 ${task.resource}</div>` : ''}
+            </div>
+          </div>`;
+        }).join('')}
+
+        ${tasks.length === 0 ? '<div style="text-align:center;padding:20px;color:var(--muted);">No tasks defined for this day.</div>' : ''}
+
+        <!-- Notes section -->
+        <div style="margin-top:14px;">
+          <div style="font-family:'Syne',sans-serif;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:600;">📝 DAILY NOTES</div>
+          <textarea placeholder="What did you actually do today? What got stuck? What did you learn? Be honest." 
+            style="width:100%;min-height:80px;font-size:12px;" 
+            oninput="saveDailyNote(${viewingDay}, this.value)">${ds.note || ''}</textarea>
+        </div>
+
+        <!-- Mark complete button -->
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+          ${!allDone ? `<button class="btn btn-success" onclick="markDayComplete(${viewingDay})">Mark All Done ✓</button>` : `<button class="btn btn-danger" onclick="unmarkDay(${viewingDay})">Unmark</button>`}
+          <button class="btn" style="background:var(--surface2);color:var(--muted);" onclick="navDay(1)">Next Day →</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Streak heatmap (last 30 days)
+  renderStreakHeatmap(todayNum);
+}
+
+function buildTaskList(dayData) {
+  const tasks = [];
+  const isWeekend = new Date(dayData.date + 'T00:00:00').getDay() === 0 || new Date(dayData.date + 'T00:00:00').getDay() === 6;
+  
+  if (dayData.learn) tasks.push({type: isWeekend ? 'BUILD' : 'LEARN', text: dayData.learn, duration: isWeekend ? '6 hrs total' : '1 hr AM', resource: null});
+  if (dayData.code) tasks.push({type: isWeekend ? 'BUILD' : 'CODE', text: dayData.code, duration: isWeekend ? '' : '2 hrs PM', resource: dayData.resource});
+  if (dayData.linkedin) tasks.push({type: 'POST', text: dayData.linkedin, duration: '30 min', resource: 'linkedin.com'});
+  if (dayData.apply) tasks.push({type: 'APPLY', text: dayData.apply, duration: '1 hr', resource: 'wellfound.com + linkedin.com/jobs'});
+  return tasks;
+}
+
+function toggleDailyTask(dayNum, taskIdx) {
+  if (!dailyStatus[dayNum]) dailyStatus[dayNum] = {tasks: [], note: ''};
+  const tasks = dailyStatus[dayNum].tasks;
+  if (tasks.includes(taskIdx)) {
+    dailyStatus[dayNum].tasks = tasks.filter(t => t !== taskIdx);
+  } else {
+    tasks.push(taskIdx);
+  }
+  // Auto-mark done if all tasks complete
+  const dayData = getDayData(dayNum);
+  const totalTasks = buildTaskList(dayData).length;
+  dailyStatus[dayNum].allDone = dailyStatus[dayNum].tasks.length >= totalTasks;
+  save('dailyStatus', dailyStatus);
+  renderDailyTab();
+}
+
+function markDayComplete(dayNum) {
+  const dayData = getDayData(dayNum);
+  const totalTasks = buildTaskList(dayData).length;
+  if (!dailyStatus[dayNum]) dailyStatus[dayNum] = {tasks: [], note: ''};
+  dailyStatus[dayNum].tasks = Array.from({length: totalTasks}, (_, i) => i);
+  dailyStatus[dayNum].allDone = true;
+  save('dailyStatus', dailyStatus);
+  renderDailyTab();
+}
+
+function unmarkDay(dayNum) {
+  if (!dailyStatus[dayNum]) dailyStatus[dayNum] = {tasks: [], note: ''};
+  dailyStatus[dayNum].tasks = [];
+  dailyStatus[dayNum].allDone = false;
+  save('dailyStatus', dailyStatus);
+  renderDailyTab();
+}
+
+function saveDailyNote(dayNum, note) {
+  if (!dailyStatus[dayNum]) dailyStatus[dayNum] = {tasks: [], note: ''};
+  dailyStatus[dayNum].note = note;
+  save('dailyStatus', dailyStatus);
+}
+
+function navDay(delta) {
+  viewingDay = Math.max(1, Math.min(160, viewingDay + delta));
+  renderDailyTab();
+}
+
+function goToToday() {
+  viewingDay = getTodayDayNum();
+  renderDailyTab();
+}
+
+function computeStreak(todayNum) {
+  let streak = 0;
+  for (let i = todayNum; i >= 1; i--) {
+    if (dailyStatus[i] && dailyStatus[i].allDone) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function renderStreakHeatmap(todayNum) {
+  const start = Math.max(1, todayNum - 29);
+  const cells = [];
+  for (let i = start; i <= Math.min(todayNum, 160); i++) {
+    const done = dailyStatus[i] && dailyStatus[i].allDone;
+    const isToday = i === todayNum;
+    const dayD = getDayData(i);
+    const dateStr = dayD ? dayD.date : '';
+    cells.push(`<div title="Day ${i}: ${dateStr}" onclick="viewingDay=${i};renderDailyTab();" style="width:28px;height:28px;border-radius:5px;background:${done ? '#00e5a0' : isToday ? '#7c5cfc44' : '#1a1a24'};border:${isToday ? '2px solid #7c5cfc' : '1px solid #2a2a3a'};cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;color:${done ? '#000' : '#6b6b80'};font-family:'Syne',sans-serif;font-weight:700;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">${i}</div>`);
+  }
+  document.getElementById('daily-streak-row').innerHTML = `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;">
+      <div style="font-family:'Syne',sans-serif;font-size:11px;color:var(--muted);margin-bottom:10px;font-weight:600;">PROGRESS MAP — Last 30 Days (click any day to jump)</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;">${cells.join('')}</div>
+      <div style="display:flex;gap:16px;margin-top:10px;font-size:10px;color:var(--muted);">
+        <span><span style="display:inline-block;width:12px;height:12px;background:#00e5a0;border-radius:3px;margin-right:4px;vertical-align:middle;"></span>Done</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:#7c5cfc44;border:2px solid #7c5cfc;border-radius:3px;margin-right:4px;vertical-align:middle;"></span>Today</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:#1a1a24;border:1px solid #2a2a3a;border-radius:3px;margin-right:4px;vertical-align:middle;"></span>Not done</span>
+      </div>
+    </div>
+  `;
+}
+
+// Patch switchTab to init daily
+const _origSwitchTab = switchTab;
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'jobs') renderJobs();
+  if (name === 'companies') renderCompanies();
+  if (name === 'linkedin') renderLinkedIn();
+  if (name === 'portals') renderPortals();
+  if (name === 'roadmap') renderRoadmap();
+  if (name === 'daily') renderDailyTab();
+}
+
+</script>
+</body>
+</html>
